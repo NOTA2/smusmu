@@ -1,0 +1,285 @@
+require('date-utils');
+var cheerio = require('cheerio');
+var request = require('request');
+var xml2js = require('xml2js');
+var parser = new xml2js.Parser();
+var sky = ['', '맑고(해),\n', '구름이 조금있고,\n', '구름이 많으며(구름),\n', '흐리며(구름),\n'];
+var skybefore = ['', '맑다가(해)', '구름이 조금있다가', '구름이 많았다가(구름)', '흐렸다가(구름)(구름)'];
+var skyafter = ['', '맑아(해)질 것', '구름이 조금 생길 것', '구름이 많아(구름)질 것', '흐려질(구름)(구름) 것'];
+var ptybefore = ['없다가(꺄아)', '비(비)가 오다가 ', '진눈깨비(비)(눈)가 오다가', '진눈깨비(눈)가 오다가', '눈(눈)이 오다가'];
+var ptyafter = ['그칠 것(꺄아)', '비(비)가 올 것', '진눈깨비(비)(눈)가 올 것', '진눈깨비(눈)가 올 것', '눈(눈)이 올 것'];
+var grade = ['', '좋음', '보통', '나쁨', '매우나쁨'];
+var grade2 = ['', '(꺄아)', '(아잉)', '(아픔)', '(아픔)'];
+var weather = {
+  t1h: 0, //현재온도
+  nsky: 0, //현재구름
+  npyt: 0, //현재강수
+  nwsd: 0, //현재풍속
+  tmn: -999, //최저기온
+  tmx: -999, //최고기온
+  sky: [0, 0], //구름상태
+  pty: [0, 0, 0], //강수상태  마지막에는 시간 기록
+  pop: [0, 0, 0], //강수확률  마지막에는 시간 기록
+  r12: 0.0, //12시간 예상 강수량
+  s12: 0.0, //12시간 예상 적렬량
+  pm1024: 0,
+  pm2524: 0,
+  khai: 0
+};
+var changepop, changepty, changesky;
+//최저, 최고, 현재 기온
+//습도, 강수 확률
+//구름/강수 상태
+//강수량
+
+// 현재 : 기온(T1H), 구름(SKY), 강수(PTY)
+// 예보 : 최저(TMN), 최고(TMX), 구름(SKY), 강수(PTY), 강수확률(POP), 12시간 예상 강수(적설)량(r12, s12)
+
+// 하늘상태(SKY) 코드 : 맑음(1), 구름조금(2), 구름많음(3), 흐림(4)
+// 강수형태(PTY) 코드 : 없음(0), 비(1), 비/눈(2), 눈(3)
+// 여기서 비/눈은 비와 눈이 섞여 오는 것을 의미 (진눈개비)
+
+var nx = 60;
+var ny = 127;
+var apikey = "6Y7o1gvV5TWTKeDxsFl%2F3YsCXN3qDxq3bccYLAOOEsrfZ9CQOTlPbtJ74Ue1Y6V4zmfYED5paHt%2F2ynuM%2FosRg%3D%3D";
+
+//현재 기상정보를 가져오는 API
+var urlNow = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastGrib?ServiceKey=" + apikey + "&nx=" + nx + "&ny=" + ny;
+//기상 예보 정보를 가져오는 API
+var urlForecast = 'http://www.kma.go.kr/wid/queryDFS.jsp?gridx=60&gridy=127'
+//미세먼지 정보를 가져오는 API
+//var urlDust = "http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=종로구&dataTerm=daily&pageNo=1&numOfRows=20&ServiceKey=" + apikey + "&ver=1.3"
+var urlDust = "http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=%EC%A2%85%EB%A1%9C%EA%B5%AC&dataTerm=daily&pageNo=1&numOfRows=10&ServiceKey=f2OCf2DcSvyA9cZqBvgN3g%2FlH%2FJVkSdp7e8bZfYnvBDX6EPvM%2B0h4FgXQIuFXKBgisZHoHx3CA2KZgFyaMUe9w%3D%3D&ver=1.3"
+
+exports.search = function(keyword) {
+  //현재 시간을 구한다.
+  var dt = new Date();
+  var ymd = dt.toFormat("YYYYMMDD");
+  var time = dt.toFormat("HH24MI");
+  changepop = 0;
+  changepty = 0;
+  changesky = 0;
+
+  urlNow = urlNow + "&base_date=" + ymd + "&base_time=" + time + "&numOfRows=20";
+
+  console.log(urlNow + '\n');
+  console.log(urlForecast+'\n');
+  console.log(urlDust+'\n');
+
+  return new Promise(function(resolve, reject) {
+    var weatherResult = '';
+    var nowData;
+    var forecastData;
+    var dustData;
+
+    request(urlNow, function(error1, response1, htmlNow) {
+      if (!error1 && response1.statusCode == 200) {
+
+        //현재 날씨 데이터 받아오기
+        parser.parseString(htmlNow, function(err, result) {
+          end = result.response.body[0].items[0].item.length;
+          nowData = result.response.body[0].items[0];
+          for (i = 0; i < end; i++) {
+            if (nowData.item[i].category[0] == 'T1H')
+              weather.t1h = nowData.item[i].obsrValue[0];
+
+            else if (nowData.item[i].category[0] == 'SKY')
+              weather.nsky = nowData.item[i].obsrValue[0];
+
+            else if (nowData.item[i].category[0] == 'PTY')
+              weather.npyt = nowData.item[i].obsrValue[0] >> 0;
+
+            else if (nowData.item[i].category[0] == 'WSD')
+              weather.nwsd = parseFloat(nowData.item[i].obsrValue[0]);
+          }
+        });
+
+        //예보 날씨 데이터 받아오기
+        request(urlForecast, function(error2, response2, htmlForecast) {
+          if (!error2 && response2.statusCode == 200) {
+
+            parser.parseString(htmlForecast, function(err, result) {
+              forecastData = result.wid.body[0].data;
+
+              for (i = 0; i < forecastData.length; i++) {
+                //20시 이후에는 내일 날씨를 알려준다.
+                if ((parseInt(time) > 2000) || (parseInt(time) < 241)) {
+                  getWeatherData(forecastData, i, '1');
+                } else {
+                  getWeatherData(forecastData, i, '0');
+                }
+              }
+            });
+
+
+            request(urlDust, function(error3, response3, htmlDust) {
+              if (!error3 && response3.statusCode == 200) {
+
+                parser.parseString(htmlDust, function(err, result) {
+                  dustData = result.response.body[0].items[0].item[0];
+
+                  weather.pm1024 = dustData.pm10Grade[0] >> 0;
+                  weather.pm2524 = dustData.pm25Grade[0] >> 0;
+                  weather.khai = dustData.khaiGrade[0] >> 0;
+                });
+
+                weatherResult = setWeatherResult(time);
+                resolve(weatherResult);
+              }
+            });
+          }
+        });
+      }
+    });
+  });
+}
+
+function getWeatherData(forecastData, i, day) {
+  if (forecastData[i].day[0] == day) {
+    //최고온도 갱신
+    if ((forecastData[i].tmn[0] >> 0) != -999)
+      weather.tmn = forecastData[i].tmn[0] >> 0;
+    //최저온도 갱신
+    if ((forecastData[i].tmx[0] >> 0) != -999)
+      weather.tmx = forecastData[i].tmx[0] >> 0;
+
+    //하늘 상태 갱신
+    if (i != 0 && changesky == 0) { //두번재 부터는 앞의 값과 다를 경우 값을 추가
+      weather.sky[1] = forecastData[i].sky[0] >> 0;
+      if ((forecastData[i].sky[0] >> 0) != weather.sky[0])
+        changesky = 1;
+    } else if (i == 0)
+      weather.sky[0] = forecastData[i].sky[0] >> 0;
+
+    //강수확률 갱신
+    if (i != 0 && changepop == 0) { //두번재 부터는 앞의 값과 다를 경우 값을 추가
+      weather.pop[1] = forecastData[i].pop[0] >> 0;
+      weather.pop[2] = forecastData[i].hour[0];
+      if ((forecastData[i].pop[0] >> 0) != weather.pop[0])
+        changepop = 1;
+    } else if (i == 0)
+      weather.pop[0] = forecastData[i].pop[0] >> 0;
+
+    //강수 상태 갱신
+    if (i != 0 && changepty == 0) { //두번재 부터는 앞의 값과 다를 경우 값을 추가
+      weather.pty[1] = forecastData[i].pty[0] >> 0;
+      weather.pty[2] = forecastData[i].hour[0];
+      if ((forecastData[i].pty[0] >> 0) != weather.pty[0])
+        changepty = 1;
+    } else if (i == 0)
+      weather.pty[0] = forecastData[i].pty[0] >> 0;
+
+    if ((forecastData[i].pty[0] >> 0) != 0) {
+      weather.r12 = parseFloat(forecastData[i].r12[0]);
+      weather.s12 = parseFloat(forecastData[i].s12[0]);
+    }
+  }
+}
+
+
+
+
+
+function setWeatherResult(time) {
+  result = ''
+  result += '현재 기온은 ' + weather.t1h + '℃ 입니다.\n';
+  result += "하늘은 " + sky[weather.nsky];
+  switch (weather.npyt) {
+    case 0:
+      result += '비는 오지 않습니다.(꺄아)\n';
+      break;
+    case 1:
+      result += '비(비)가 내립니다.\n';
+      break;
+    case 2:
+      result += '진눈개비(비)(눈)가 내립니다.\n';
+      break;
+    case 3:
+      result += '눈(눈)이 내립니다.\n';
+  }
+
+  if (weather.nwsd < 4)
+    result += '바람은 약하게 불고 있습니다.(뿌듯)\n';
+  else if (weather.nwsd >= 4 && weather.nwsd < 9)
+    result += '바람은 약간 강하게 불고 있습니다.(졸려)\n';
+  else if (weather.nwsd >= 9 && weather.nwsd < 14)
+    result += '바람은 강하게 불고 있습니다.(깜짝)\n';
+  else if (weather.nwsd >= 14)
+    result += '바람은 매우 강하게 불고 있습니다.(깜짝)\n';
+
+  result += '\n';
+
+  result += '오늘 하루동안 '
+  result += '미세먼지는 [' + grade[weather.pm1024] + ']단계'+grade2[weather.pm1024]+'이고,\n'
+  result += '초 미세먼지는 [' + grade[weather.pm2524] + ']단계'+ grade2[weather.pm2524]+'입니다.\n'
+  result += '통합대기환경지수(CAI)는 ['+grade[weather.khai] + ']단계'+ grade2[weather.khai]+'입니다.\n';
+
+  result += '\n';
+
+  //여기서 부터는 예보
+  if (parseInt(time) > 2000)
+    result += '내일 날씨 예보입니다.\n';
+  else
+    result += '현재시간 이후, 오늘 날씨 예보입니다.\n오늘 ';
+
+
+  if (weather.tmn == -999 && weather.tmx == -999)
+    result += '최저/최고기온 정보가 없습니다.(흑흑)\n';
+  else{
+    if (weather.tmn == -999)
+      result += '최고기온은 ' + weather.tmx + '℃ 이고,\n최저기온 정보는 없습니다.(흑흑)\n';
+
+    else if (weather.tmx == -999)
+      result += '최저기온은 ' + weather.tmn + '℃ 이고,\n최고기온 정보는 없습니다.(흑흑)\n';
+
+    else
+      result += '최저기온은 ' + weather.tmn + '℃ 이고,\n최고기온은 ' + weather.tmx + '℃ 입니다.\n';
+  }
+
+  if (weather.sky[0] == weather.sky[1])
+    result += '하늘은 대체로 ' + sky[weather.sky[0]];
+  else
+    result += '하늘은 ' + skybefore[weather.sky[0]] + ' ' + skyafter[weather.sky[1]] + "으로 예상됩니다.\n";
+
+
+
+  if (weather.pty[0] == weather.pty[1]) {
+    switch (weather.pty[0]) {
+      case 0:
+        result += '비는 오지 않을 것으로 예상됩니다.\n';
+        break;
+      case 1:
+        result += '비(비)가 올 것으로 예상됩니다.\n';
+        break;
+      case 2:
+      case 3:
+        result += '진눈개비(비)(눈)가 섞여 내릴 것으로 예상됩니다.\n';
+        break;
+      case 4:
+        result += '눈(눈)이 올 것으로 예상됩니다.\n';
+    }
+  } else {
+    result += '비 예보는 ' + ptybefore[weather.pty[0]] + ' ' + weather.pty[2] + '시 에는 ' + ptyafter[weather.pop[1]] + '으로 예상됩니다.\n'
+  }
+
+  if (weather.pop[0] == weather.pop[1])
+    result += '강수 확률은 ' + weather.pop[0] + '% 입니다.\n'
+  else
+    result += '강수 확률은 ' + weather.pop[0] + '%에서 ' + weather.pop[2] + '시에는 ' + weather.pop[1] + '%로 바뀔 것으로 보입니다.\n'
+
+
+  if ((weather.r12 >= 0.1 && weather.r12 < 1) || (weather.s12 >= 0.1 && weather.s12 < 1))
+    result += '예상 강수(적설)량은 0.1mm 이상, 1mm 미만입니다.\n';
+  else if ((weather.r12 >= 1 && weather.r12 < 5) || (weather.s12 >= 1 && weather.s12 < 5))
+    result += '예상 강수(적설)량은 1mm 이상, 5mm 미만입니다.\n';
+  else if ((weather.r12 >= 5 && weather.r12 < 10) || (weather.s12 >= 5 && weather.s12 < 10))
+    result += '예상 강수(적설)량은 5mm 이상, 10mm 미만입니다.\n';
+  else if ((weather.r12 >= 10 && weather.r12 < 25) || (weather.s12 >= 10 && weather.s12 < 25))
+    result += '예상 강수(적설)량은 10mm 이상, 25mm 미만입니다.\n';
+  else if ((weather.r12 >= 25 && weather.r12 < 50) || (weather.s12 >= 25 && weather.s12 < 50))
+    result += '예상 강수(적설)량은 25mm 이상, 50mm 미만입니다.\n';
+  else if ((weather.r12 >= 50) || (weather.s12 >= 50))
+    result += '예상 강수(적설)량은 50mm 이상입니다.\n';
+
+  return result;
+}
