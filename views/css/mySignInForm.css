@@ -1,0 +1,20 @@
+@charset "utf-8";
+@import url(https://fonts.googleapis.com/earlyaccess/jejugothic.css);
+
+
+/* css reset */
+div,span,body{margin:0;padding:0}
+
+body {
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+#wrap{clear:both;float:left;width:100%;background:#2A3C78}
+#container{clear:both;width:800px;_border:1px solid #fff;margin:3% auto}
+#container h1{clear:both;float:left;width:100%;text-align:center;color:#fff}
+#container h1 a{color:#fff;text-decoration:none}
+.line{clear:both;float:left;width:100%;border:1px solid #fff;margin-bottom:3%}
+.line p{float:left;min-width:100px;margin-left:3%;color:#fff}
+.line .inputArea{float:left;}
+.line .inputArea input{float:left;width:370px;height:30px;margin:10px 0 0 0;padding-left:10px}
+.submit{clear:both;float:left;width:100%;height:50px;background:#fff;border:0;font-size:20px;color:#2A3C78}

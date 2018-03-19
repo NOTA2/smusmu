@@ -1,0 +1,25 @@
+doctype html
+html(lang='ko')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    script(type='text/javascript', src='http://code.jquery.com/jquery-2.1.0.min.js')
+    script(type='text/javascript', src='./js/mySignInForm.js')
+    link(rel='stylesheet', href='/css/mySignInForm.css')
+    title smusmu 학생회 관리 페이지
+  body
+    #wrap
+      #container
+        h1.title 스뮤스뮤(smusmu) 학생회 관리 페이지.
+        form(name='singIn', action='./signIn.php', method='post', onsubmit='return checkSubmit()')
+          .line
+            p 아이디
+            .inputArea
+              input.memberId(type='text', name='memberId')
+          .line
+            p 비밀번호
+            .inputArea
+              input.memberPw(type='password', name='memberPw')
+          .line
+            input.submit(type='submit', value='로그인')

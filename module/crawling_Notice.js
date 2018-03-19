@@ -1,12 +1,5 @@
 var cheerio = require('cheerio');
 var request = require('request');
-var GoogleURL = require('google-url');
-var deasync = require('deasync');
-
-var googleShortURLApikey = "AIzaSyBS0v_OtW7snmwlXe_qf04BLMsn_gw0i00";
-googleUrl = new GoogleURL({
-  key: googleShortURLApikey
-});
 
 
 exports.search = function(keyword) {
@@ -28,32 +21,31 @@ exports.search = function(keyword) {
         //게시판에 글이 존재 한다면 출력
         if ($("#boardList > li > a").length > 0) {
           //배열로 초기화
-          jbAry = new Array();
+          jbAry = new Array(3);
+          //제목 배열만 따로 빼야되기 때문에 이런식으로 배열을 구성함
+          jbAry[0] = new Array(); //제목만 있는 배열
+          jbAry[1] = new Array(); //모바일 url만 있는 배열
+          jbAry[2] = new Array(); //PC url만 있는 배열
+
           $("#boardList").children().each(function(idx, el) {
-            if(idx==4)
+            if(idx==10)
               return false; // break;
 
-            //게시글 제목, URL 2개를 저장해야 되므로 각 요소에 2개의 배열 추가
-            jbAry[idx] = new Array(2);
-
             title = $(el).children("a").children("strong").text().trim();
-            title = title.split('\n')[2];
+            title = title.split('\n')[2];   //제목 앞뒤로 짜름
 
-            jbAry[idx][0] = title.substring(8, title.length);
+            jbAry[0][idx] = title.substring(8, title.length);   //배열에 제목 추가
             longUrl = "http://www.smu.ac.kr/mbs/mobile/jsp/board/" + $(el).children("a").attr("href");
+            longUrl2 = "https://www.smu.ac.kr/mbs/smu/jsp/board/" + $(el).children("a").attr("href").replace('mobile_050100000000','smu_040100000000')
+            jbAry[1][idx] = longUrl;
+            jbAry[2][idx] = longUrl2;
 
-            googleUrl.shorten(longUrl, function(err, shortUrl) {
-              jbAry[idx][1] = shortUrl.substring(8, result.length);
-            });
 
-            while (jbAry[idx][1] == undefined)
-              deasync.runLoopOnce();
 
           });
         } else
           jbAry = '[등록된 게시물이 없습니다.]\n'
 
-          console.log(jbAry);
         resolve(jbAry);
       }
 

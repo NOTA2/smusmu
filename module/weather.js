@@ -18,22 +18,22 @@ var weather = {
   tmn: -999, //최저기온
   tmx: -999, //최고기온
   sky: [0, 0], //구름상태
-  pty: [0, 0, 0], //강수상태  마지막에는 시간 기록
-  pop: [0, 0, 0], //강수확률  마지막에는 시간 기록
-  r12: 0.0, //12시간 예상 강수량
-  s12: 0.0, //12시간 예상 적렬량
+  pty: [0, 0, 0, 0], //강수상태  마지막에는 시간 기록
+  pop: [0, 0, 0, 0], //강수확률  마지막에는 시간 기록
+  r06: 0.0, //12시간 예상 강수량
+  s06: 0.0, //12시간 예상 적렬량
   pm1024: 0,
   pm2524: 0,
   khai: 0
 };
-var changepop, changepty, changesky;
+var changepop, changepty, changesky, on;
 //최저, 최고, 현재 기온
 //습도, 강수 확률
 //구름/강수 상태
 //강수량
 
 // 현재 : 기온(T1H), 구름(SKY), 강수(PTY)
-// 예보 : 최저(TMN), 최고(TMX), 구름(SKY), 강수(PTY), 강수확률(POP), 12시간 예상 강수(적설)량(r12, s12)
+// 예보 : 최저(TMN), 최고(TMX), 구름(SKY), 강수(PTY), 강수확률(POP), 12시간 예상 강수(적설)량(r06, s06)
 
 // 하늘상태(SKY) 코드 : 맑음(1), 구름조금(2), 구름많음(3), 흐림(4)
 // 강수형태(PTY) 코드 : 없음(0), 비(1), 비/눈(2), 눈(3)
@@ -56,11 +56,22 @@ exports.search = function(keyword) {
   var dt = new Date();
   var ymd = dt.toFormat("YYYYMMDD");
   var time = dt.toFormat("HH24MI");
+
+  if(time[2] == '0' || time[2] == '1'){
+      temp = dt.getTime() - (21*60*1000);
+      dt.setTime(temp);
+      ymd = dt.toFormat("YYYYMMDD");
+      time = dt.toFormat("HH24MI");
+  }
+
   changepop = 0;
   changepty = 0;
   changesky = 0;
-
+  on =0;
   urlNow = urlNow + "&base_date=" + ymd + "&base_time=" + time + "&numOfRows=20";
+
+  weather.r06 = 0.0;
+  weather.s06 = 0.0;
 
   console.log(urlNow + '\n');
   console.log(urlForecast+'\n');
@@ -71,6 +82,7 @@ exports.search = function(keyword) {
     var nowData;
     var forecastData;
     var dustData;
+
 
     request(urlNow, function(error1, response1, htmlNow) {
       if (!error1 && response1.statusCode == 200) {
@@ -109,6 +121,7 @@ exports.search = function(keyword) {
                   getWeatherData(forecastData, i, '0');
                 }
               }
+
             });
 
 
@@ -144,35 +157,41 @@ function getWeatherData(forecastData, i, day) {
       weather.tmx = forecastData[i].tmx[0] >> 0;
 
     //하늘 상태 갱신
-    if (i != 0 && changesky == 0) { //두번재 부터는 앞의 값과 다를 경우 값을 추가
+    if (on == 1 && i != 0 && changesky == 0) { //두번재 부터는 앞의 값과 다를 경우 값을 추가
       weather.sky[1] = forecastData[i].sky[0] >> 0;
       if ((forecastData[i].sky[0] >> 0) != weather.sky[0])
         changesky = 1;
-    } else if (i == 0)
+    } else if (on == 0)
       weather.sky[0] = forecastData[i].sky[0] >> 0;
 
+
     //강수확률 갱신
-    if (i != 0 && changepop == 0) { //두번재 부터는 앞의 값과 다를 경우 값을 추가
-      weather.pop[1] = forecastData[i].pop[0] >> 0;
-      weather.pop[2] = forecastData[i].hour[0];
+    if (on == 1 && i != 0 && changepop == 0) { //두번재 부터는 앞의 값과 다를 경우 값을 추가
+      weather.pop[2] = forecastData[i].pop[0] >> 0;
+      weather.pop[3] = forecastData[i].hour[0];
       if ((forecastData[i].pop[0] >> 0) != weather.pop[0])
         changepop = 1;
-    } else if (i == 0)
+    } else if (on == 0){
       weather.pop[0] = forecastData[i].pop[0] >> 0;
-
+      weather.pop[1] = forecastData[i].hour[0];
+    }
     //강수 상태 갱신
-    if (i != 0 && changepty == 0) { //두번재 부터는 앞의 값과 다를 경우 값을 추가
-      weather.pty[1] = forecastData[i].pty[0] >> 0;
-      weather.pty[2] = forecastData[i].hour[0];
+    if (on == 1 && i != 0 && changepty == 0) { //두번재 부터는 앞의 값과 다를 경우 값을 추가
+      weather.pty[2] = forecastData[i].pty[0] >> 0;
+      weather.pty[3] = forecastData[i].hour[0];
       if ((forecastData[i].pty[0] >> 0) != weather.pty[0])
         changepty = 1;
-    } else if (i == 0)
+    } else if (on == 0){
       weather.pty[0] = forecastData[i].pty[0] >> 0;
+      weather.pty[1] = forecastData[i].hour[0];
+    }
 
     if ((forecastData[i].pty[0] >> 0) != 0) {
-      weather.r12 = parseFloat(forecastData[i].r12[0]);
-      weather.s12 = parseFloat(forecastData[i].s12[0]);
+      weather.r06 = parseFloat(forecastData[i].r06[0]);
+      weather.s06 = parseFloat(forecastData[i].s06[0]);
     }
+
+    on=1;
   }
 }
 
@@ -243,7 +262,7 @@ function setWeatherResult(time) {
 
 
 
-  if (weather.pty[0] == weather.pty[1]) {
+  if (weather.pty[0] == weather.pty[2]) {
     switch (weather.pty[0]) {
       case 0:
         result += '비는 오지 않을 것으로 예상됩니다.\n';
@@ -259,26 +278,26 @@ function setWeatherResult(time) {
         result += '눈(눈)이 올 것으로 예상됩니다.\n';
     }
   } else {
-    result += '비 예보는 ' + ptybefore[weather.pty[0]] + ' ' + weather.pty[2] + '시 에는 ' + ptyafter[weather.pop[1]] + '으로 예상됩니다.\n'
+    result += '비 예보는 '+weather.pty[1]+ '시에는 ' + ptybefore[weather.pty[0]] + ' ' + weather.pty[3] + '시에는 ' + ptyafter[weather.pty[2]] + '으로 예상됩니다.\n'
   }
 
-  if (weather.pop[0] == weather.pop[1])
+  if (weather.pop[0] == weather.pop[2])
     result += '강수 확률은 ' + weather.pop[0] + '% 입니다.\n'
   else
-    result += '강수 확률은 ' + weather.pop[0] + '%에서 ' + weather.pop[2] + '시에는 ' + weather.pop[1] + '%로 바뀔 것으로 보입니다.\n'
+    result += '강수 확률은 '+ weather.pop[1] +'시에는 ' + weather.pop[0] + '%에서 ' + weather.pop[3] + '시에는 ' + weather.pop[2] + '%로 바뀔 것으로 보입니다.\n'
 
 
-  if ((weather.r12 >= 0.1 && weather.r12 < 1) || (weather.s12 >= 0.1 && weather.s12 < 1))
-    result += '예상 강수(적설)량은 0.1mm 이상, 1mm 미만입니다.\n';
-  else if ((weather.r12 >= 1 && weather.r12 < 5) || (weather.s12 >= 1 && weather.s12 < 5))
-    result += '예상 강수(적설)량은 1mm 이상, 5mm 미만입니다.\n';
-  else if ((weather.r12 >= 5 && weather.r12 < 10) || (weather.s12 >= 5 && weather.s12 < 10))
-    result += '예상 강수(적설)량은 5mm 이상, 10mm 미만입니다.\n';
-  else if ((weather.r12 >= 10 && weather.r12 < 25) || (weather.s12 >= 10 && weather.s12 < 25))
-    result += '예상 강수(적설)량은 10mm 이상, 25mm 미만입니다.\n';
-  else if ((weather.r12 >= 25 && weather.r12 < 50) || (weather.s12 >= 25 && weather.s12 < 50))
-    result += '예상 강수(적설)량은 25mm 이상, 50mm 미만입니다.\n';
-  else if ((weather.r12 >= 50) || (weather.s12 >= 50))
+  if ((weather.r06 >= 0.1 && weather.r06 < 1) || (weather.s06 >= 0.1 && weather.s06 < 1))
+    result += '예상 강수(적설)량은 0.1 ~ 1mm 입니다.\n';
+  else if ((weather.r06 >= 1 && weather.r06 < 5) || (weather.s06 >= 1 && weather.s06 < 5))
+    result += '예상 강수(적설)량은 1 ~ 5mm 입니다.\n';
+  else if ((weather.r06 >= 5 && weather.r06 < 10) || (weather.s06 >= 5 && weather.s06 < 10))
+    result += '예상 강수(적설)량은 5 ~ 10mm 입니다.\n';
+  else if ((weather.r06 >= 10 && weather.r06 < 25) || (weather.s06 >= 10 && weather.s06 < 25))
+    result += '예상 강수(적설)량은 10 ~ 25mm 입니다.\n';
+  else if ((weather.r06 >= 25 && weather.r06 < 50) || (weather.s06 >= 25 && weather.s06 < 50))
+    result += '예상 강수(적설)량은 25 ~ 50mm 입니다.\n';
+  else if ((weather.r06 >= 50) || (weather.s06 >= 50))
     result += '예상 강수(적설)량은 50mm 이상입니다.\n';
 
   return result;

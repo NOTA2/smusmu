@@ -18,7 +18,7 @@ exports.search = function(keyword) {
         var jbAry = new Array();
 
         // 식단이 나타나는 테이블의 존재 유무를 따져서 식단이 존재하는지 검사
-        if ($("table").hasClass("info_table_type11") == true) {
+        if ($("table").hasClass("info_table_type11")) {
           $(".subj").each(function(idx, el) {
             jbAry[idx] = $(el).text().trim();
           });
@@ -49,8 +49,12 @@ exports.search = function(keyword) {
              temp='';
           }
           resolve(eatAry);
-        } else {  //신단이 등록되지 않았다면
-          resolve('등록된 식단이 없습니다.');
+        } else {  //식단이 등록되지 않았다면
+          eatAry = new Array(5);
+          for(i=0; i<eatAry.length;i++){
+            eatAry[i] = '등록된 식단이 없습니다.';
+          }
+          resolve(eatAry);
         }
       }
     });
