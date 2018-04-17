@@ -50,7 +50,6 @@ const PHN = 80;  //전화번호 기능
 const PHNO = 81;
 const PHNP = 82;
 const PHNC = 89;
-var mode = MAIN;
 
 const mainstr = '스뮤스뮤 사용하기'
 const firststr = '처음으로'
@@ -65,9 +64,9 @@ const phstr = '전화번호 검색'
 const backstr = '뒤로가기'
 
 var mainbutton = [explanationbt, eatstr, ntcstr, wtrstr, salstr, calstr];
-var ntcbutton = ["최근 글 보기", "글 검색하기", firststr];
-var calbutton = ["월 별 검색", "일정 검색", firststr];
-var phbutton = ["기관 검색", "인명 검색", firststr];
+var ntcbutton = [firststr, "최근 글 보기", "글 검색하기"];
+var calbutton = [firststr, "월 별 검색", "일정 검색"];
+var phbutton = [firststr, "기관 검색", "인명 검색"];
 var daystr = ['월', '화', '수', '목', '금', '토', '일'];
 
 
@@ -93,17 +92,15 @@ var eatT = ''; //밀관 식단
 var eatH = ''; //행복기숙사 식단
 var weatherResult = ''; //날씨 정보
 var seoulAssemblyResult; //집회정보 저장
-var rentalResult;
 var calendarResult; //학사정보 저장
+var rentalResult;
 
-
-
-setResultEat(); //최소 서버 실행시 학식 정보 업데이트
+//최소 서버 실행시
+setResultEat(); //학식 정보 업데이트
 setResultWeather(); //날씨 정보 최초 업데이트
 setResultRental(); //대여물품 정보 최초 업데이트
 setseoulAssembly();  //시위정보 최초 업데이트
 setCalendar();  //학사일정 최초 업데이트
-makeweek();
 
 //매일 마다 학식 정보가 업데이트 되게 한다.
 var ruleEat = new schedule.RecurrenceRule();
@@ -254,7 +251,7 @@ app.post('/message', (req, res) => {
         },
         "keyboard": {
           type: 'buttons',
-          buttons: ["미래백년관(오늘)", "미래백년관(일주일)","밀레니엄관(오늘)","밀레니엄관(일주일)","홍제기숙사(오늘)","홍제기숙사(일주일)", firststr]
+          buttons: [firststr, "미래백년관(오늘)", "미래백년관(일주일)","밀레니엄관(오늘)","밀레니엄관(일주일)","홍제기숙사(오늘)","홍제기숙사(일주일)"]
         }
       };
     }
@@ -368,7 +365,7 @@ app.post('/message', (req, res) => {
           },
           "keyboard": {
             type: 'buttons',
-            buttons: ["대여 물품 목록", "대여 물품 현황", firststr]
+            buttons: [firststr, "대여 물품 목록", "대여 물품 현황"]
           }
         };
       }
@@ -380,14 +377,13 @@ app.post('/message', (req, res) => {
         seoulAssemblyResult = new Array();
         seoulAssemblyResult[0] = new Array();
       }
-
       massage = {
         "message": {
           "text": result
         },
         "keyboard": {
           type: 'buttons',
-          buttons: seoulAssemblyResult[0].concat([firststr])
+          buttons: seoulAssemblyResult[0]
         }
       };
     }
@@ -405,7 +401,7 @@ app.post('/message', (req, res) => {
         },
         "keyboard": {
           type: 'buttons',
-          buttons: seoulAssemblyResult[0].concat([firststr])
+          buttons: seoulAssemblyResult[0]
         }
       };
     }
@@ -562,7 +558,7 @@ function setMode(content, mode){
     mode = EAT;
   else if (content == ntcstr)
     mode = NTC;
-  else if (content == ntcbutton[0] || content == ntcbutton[1])
+  else if (content == ntcbutton[1] || content == ntcbutton[2])
     mode = NTCL
   else if (content == wtrstr)
     mode = WTR;
@@ -572,9 +568,9 @@ function setMode(content, mode){
     mode = SAL;
   else if(content == calstr)
     mode = CAL;
-  else if (content == calbutton[0])
-    mode = CALM
   else if (content == calbutton[1])
+    mode = CALM
+  else if (content == calbutton[2])
     mode = CALS
   else if(content == phstr)
     mode = PHN;
@@ -741,6 +737,7 @@ function setseoulAssembly(){
   console.log(time);
 
   beforeseoulAssemblyResult = seoulAssemblyResult;
+
   seoulAssembly.search()
     .then(temp => {
       seoulAssemblyResult = temp;
@@ -751,8 +748,9 @@ function setseoulAssembly(){
     }
 
     day = (d.getMonth() + 1) + '월 ' + d.getDate() +'일';
-
+    
     if(seoulAssemblyResult.length != 0){
+      result[0].push(firststr);
       result[0].push(day);
       result[1] = new Array();
       result[1].push(seoulAssemblyResult[0]);
@@ -804,7 +802,6 @@ function resultSetDetailNotice(keyword, resultarr) {
   cNoticeContents.search(url)
     .then(temp => {
       content = temp
-      console.log(temp);
     });
 
   while (content == '') {
