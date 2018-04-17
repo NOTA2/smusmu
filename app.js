@@ -75,11 +75,6 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-//템플릿 엔진 설정 및 폴더 설정
-app.set('view engine', 'jade');
-app.set('views', './views');
-app.locals.pretty = true;     //jade로 웹페이지를 만들기 때문에 태그를 깔끔하게 정리해주는 설정
-
 console.log('APIs initialize');
 
 //서버를 계속 유지
@@ -139,6 +134,12 @@ fs.watch('/home/ubuntu/asset/stock.json', function(){
 **********************************
 *********************************/
 
+
+//템플릿 엔진 설정 및 폴더 설정
+app.set('view engine', 'jade');
+app.set('views', './views');
+app.locals.pretty = true;     //jade로 웹페이지를 만들기 때문에 태그를 깔끔하게 정리해주는 설정
+app.use(express.static('public'));
 
 
 //jade의 index파일로 연결
@@ -748,7 +749,7 @@ function setseoulAssembly(){
     }
 
     day = (d.getMonth() + 1) + '월 ' + d.getDate() +'일';
-    
+
     if(seoulAssemblyResult.length != 0){
       result[0].push(firststr);
       result[0].push(day);
