@@ -1,4 +1,5 @@
 require('date-utils');
+const fs = require('fs');
 var cheerio = require('cheerio');
 var request = require('request');
 var xml2js = require('xml2js');
@@ -41,15 +42,18 @@ var changepop, changepty, changesky, on;
 
 var nx = 60;
 var ny = 127;
-var apikey = "6Y7o1gvV5TWTKeDxsFl%2F3YsCXN3qDxq3bccYLAOOEsrfZ9CQOTlPbtJ74Ue1Y6V4zmfYED5paHt%2F2ynuM%2FosRg%3D%3D";
+const weather_apikey = fs.readFileSync('key/weather_apikey', 'utf-8');
+const dust_apikey = fs.readFileSync('key/dust_apikey', 'utf-8');
+
 
 //현재 기상정보를 가져오는 API
-var urlNow = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastGrib?ServiceKey=" + apikey + "&nx=" + nx + "&ny=" + ny;
+var urlNow = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastGrib?ServiceKey=" + weather_apikey.trim() + "&nx=" + nx + "&ny=" + ny;
+
 //기상 예보 정보를 가져오는 API
 var urlForecast = 'http://www.kma.go.kr/wid/queryDFS.jsp?gridx=60&gridy=127'
+
 //미세먼지 정보를 가져오는 API
-//var urlDust = "http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=종로구&dataTerm=daily&pageNo=1&numOfRows=20&ServiceKey=" + apikey + "&ver=1.3"
-var urlDust = "http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=%EC%A2%85%EB%A1%9C%EA%B5%AC&dataTerm=daily&pageNo=1&numOfRows=10&ServiceKey=f2OCf2DcSvyA9cZqBvgN3g%2FlH%2FJVkSdp7e8bZfYnvBDX6EPvM%2B0h4FgXQIuFXKBgisZHoHx3CA2KZgFyaMUe9w%3D%3D&ver=1.3"
+var urlDust = "http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=%EC%A2%85%EB%A1%9C%EA%B5%AC&dataTerm=daily&pageNo=1&numOfRows=10&ServiceKey=" + dust_apikey.trim() + "&ver=1.3"
 
 exports.search = function(keyword) {
   //현재 시간을 구한다.
@@ -124,7 +128,7 @@ exports.search = function(keyword) {
 
             });
 
-
+            //미세먼지 정보 가져오기
             request(urlDust, function(error3, response3, htmlDust) {
               if (!error3 && response3.statusCode == 200) {
 
@@ -198,7 +202,7 @@ function getWeatherData(forecastData, i, day) {
 
 
 
-
+//문장을 완성하는 함수
 function setWeatherResult(time) {
   result = ''
   result += '현재 기온은 ' + weather.t1h + '℃ 입니다.\n';

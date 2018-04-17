@@ -48,6 +48,9 @@ exports.search = function(keyword) {
              eatAry[i]=temp;
              temp='';
           }
+
+          eatAry[5] = '오늘은 식당이 운영되지 않습니다.\n'
+          eatAry[6] = '오늘은 식당이 운영되지 않습니다.\n'
           resolve(eatAry);
         } else {  //식단이 등록되지 않았다면
           eatAry = new Array(5);
