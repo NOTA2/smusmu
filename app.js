@@ -6,6 +6,7 @@ var app = express();
 var schedule = require('node-schedule');
 const fs = require('fs');
 
+
 var cEat = require('./module/crawling_Eat');
 var chEat = require('./module/crawling_Eat_happy');
 var cNotice = require('./module/crawling_Notice');
@@ -51,7 +52,24 @@ const PHNO = 81;
 const PHNP = 82;
 const PHNC = 89;
 
-const mainstr = '스뮤스뮤 사용하기'
+var mainstr;
+var firstmsg;
+require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+  if(''+add ==  '172.31.19.68'){
+    console.log(''+add);
+    mainstr = '공가미 사용하기';
+    firstmsg = '원하는 버튼을 선택해주세요.';
+    explanation = '상명대(서울) 공대 학우들을 위한 정보!\n공가미입니다.\n\n' + explanation;
+    console.log('공가미 서버');
+  }
+  else{
+    console.log(''+add);
+    mainstr = '스뮤스뮤 사용하기';
+    firstmsg = '원하는 버튼을 선택해주스뮤!';
+    explanation = '상명대(서울) 학우들을 위한 정보!\n스뮤스뮤입니다.\n\n' + explanation;
+    console.log('스뮤스뮤 서버');
+  }
+});
 const firststr = '처음으로'
 const explanationbt = '사용법 확인!'
 const eatstr = '학식정보'
@@ -148,9 +166,26 @@ app.get('/', function(req, res){
 });
 
 app.post('/signIn', function(req, res){
+  var memberId = req.body.memberId;
+  var memberPw = req.body.memberPw;
+
+  if(checkMember(memberId, memberPw)){   //아이디와 비밀번호가 일치하면
+    res.redirect('/home');
+  }
+  else{   //일치하지 않으면
+    res.redirect('/');
+  }
+});
+
+
+app.get('/home', function(req, res){
   res.render('home');
 });
 
+
+function checkMember(id, pw){
+  return false;
+}
 
 /*********************************
 여기서 부터는 카카오톡 응답 관련 코드
@@ -193,7 +228,7 @@ app.post('/message', (req, res) => {
   if (user[idx].mode == MAIN) {
     massage = {
       "message": {
-        "text": '원하는 버튼을 선택해주스뮤!'
+        "text": firstmsg
       },
       "keyboard": {
         type: 'buttons',
@@ -299,6 +334,7 @@ app.post('/message', (req, res) => {
           else {
             user[idx].noticeArr = result;
             user[idx].mode = NTCR;
+
             massage = {
               "message": {
                 "text": user[idx].noticeArr[3]
