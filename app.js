@@ -47,14 +47,14 @@ function setIp(){
 }
 
 //설명글 텍스트 파일 로드
-var explanation = fs.readFileSync('explanation/explanation.txt', 'utf8');
-var explanation_eat = fs.readFileSync('explanation/explanation_eat.txt', 'utf8');
-var explanation_where = fs.readFileSync('explanation/explanation_where.txt', 'utf8');
-var explanation_pn = fs.readFileSync('explanation/explanation_pn.txt', 'utf8');
-var explanation_rental = fs.readFileSync('explanation/explanation_rental.txt', 'utf8');
-var explanation_notice = fs.readFileSync('explanation/explanation_notice.txt', 'utf8');
-var explanation_seoulAssembly = fs.readFileSync('explanation/explanation_seoulAssembly.txt', 'utf8');
-var explanation_cal = fs.readFileSync('explanation/explanation_cal.txt', 'utf8');
+var explanation = fs.readFileSync('asset/explanation/explanation.txt', 'utf8');
+var explanation_eat = fs.readFileSync('asset/explanation/explanation_eat.txt', 'utf8');
+var explanation_where = fs.readFileSync('asset/explanation/explanation_where.txt', 'utf8');
+var explanation_pn = fs.readFileSync('asset/explanation/explanation_pn.txt', 'utf8');
+var explanation_rental = fs.readFileSync('asset/explanation/explanation_rental.txt', 'utf8');
+var explanation_notice = fs.readFileSync('asset/explanation/explanation_notice.txt', 'utf8');
+var explanation_seoulAssembly = fs.readFileSync('asset/explanation/explanation_seoulAssembly.txt', 'utf8');
+var explanation_cal = fs.readFileSync('asset/explanation/explanation_cal.txt', 'utf8');
 
 /*********************************
 초기 설정 코드
@@ -85,12 +85,12 @@ setIp();
 const firststr = '처음으로'
 const explanationbt = '사용법 확인!'
 const eatstr = '학식정보'
+const foodMenustr = '학교 근처 식당 메뉴판'
 const ntcstr = '학교 공지사항'
 const wtrstr = '학교 날씨'
 const salstr = '서울시 집회정보'
 const calstr = '학사일정 검색'
 
-const foodMenustr = '학교 근처 식당 메뉴판'
 const rntstr = '학생회 대여 물품 현황'
 const phstr = '전화번호 검색'
 const backstr = '뒤로가기'
@@ -125,7 +125,7 @@ var rentalResult;
 
 //최소 서버 실행시
 setResultEat(); //학식 정보 업데이트
-if(ipadd !=  '52.78.151.4')
+if(ipadd !=  '52.78.151.4')     //테스트 서버일 땐 하지 않습니다.
   setResultWeather(); //날씨 정보 최초 업데이트
 setResultRental(); //대여물품 정보 최초 업데이트
 setseoulAssembly();  //시위정보 최초 업데이트
