@@ -4,8 +4,9 @@ var bodyParser = require('body-parser');
 var deasync = require('deasync');
 var app = express();
 var schedule = require('node-schedule');
+var cheerio = require('cheerio');
+var request = require('request');
 const fs = require('fs');
-
 
 var cEat = require('./module/crawling_Eat');
 var chEat = require('./module/crawling_Eat_happy');
@@ -19,6 +20,31 @@ var calendar = require('./module/calendar');
 var phonePeople = require('./module/phone_people');
 var user = new Array();
 var userCount = 0;
+var ipadd;
+
+
+function setIp(){
+  request("http://ip.ojj.kr/", function(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var $ = cheerio.load(body);
+      ipadd = $("body > center > h1 > font:nth-child(2)").text().trim()
+    }
+  });
+  if(ipadd ==  '52.78.69.176'){
+    console.log(ipadd);
+    mainstr = '공가미 사용하기';
+    firstmsg = '원하는 버튼을 선택해주세요.';
+    explanation = '상명대(서울) 공대 학우들을 위한 정보!\n공가미입니다.\n\n' + explanation;
+    console.log('공가미 서버');
+  }
+  else{
+    console.log(ipadd);
+    mainstr = '스뮤스뮤 사용하기';
+    firstmsg = '원하는 버튼을 선택해주스뮤!';
+    explanation = '상명대(서울) 학우들을 위한 정보!\n스뮤스뮤입니다.\n\n' + explanation;
+    console.log('스뮤스뮤 서버');
+  }
+}
 
 //설명글 텍스트 파일 로드
 var explanation = fs.readFileSync('explanation/explanation.txt', 'utf8');
@@ -51,41 +77,30 @@ const PHN = 80;  //전화번호 기능
 const PHNO = 81;
 const PHNP = 82;
 const PHNC = 89;
+const FDMN = 100;
 
 var mainstr;
 var firstmsg;
-require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-  if(''+add ==  '172.31.19.68'){
-    console.log(''+add);
-    mainstr = '공가미 사용하기';
-    firstmsg = '원하는 버튼을 선택해주세요.';
-    explanation = '상명대(서울) 공대 학우들을 위한 정보!\n공가미입니다.\n\n' + explanation;
-    console.log('공가미 서버');
-  }
-  else{
-    console.log(''+add);
-    mainstr = '스뮤스뮤 사용하기';
-    firstmsg = '원하는 버튼을 선택해주스뮤!';
-    explanation = '상명대(서울) 학우들을 위한 정보!\n스뮤스뮤입니다.\n\n' + explanation;
-    console.log('스뮤스뮤 서버');
-  }
-});
+setIp();
 const firststr = '처음으로'
 const explanationbt = '사용법 확인!'
 const eatstr = '학식정보'
 const ntcstr = '학교 공지사항'
 const wtrstr = '학교 날씨'
-const rntstr = '학생회 대여 물품 현황'
 const salstr = '서울시 집회정보'
 const calstr = '학사일정 검색'
+
+const foodMenustr = '학교 근처 식당 메뉴판'
+const rntstr = '학생회 대여 물품 현황'
 const phstr = '전화번호 검색'
 const backstr = '뒤로가기'
 
-var mainbutton = [explanationbt, eatstr, ntcstr, wtrstr, salstr, calstr];
+var mainbutton = [explanationbt, eatstr, foodMenustr, ntcstr, wtrstr, salstr, calstr];
 var ntcbutton = [firststr, "최근 글 보기", "글 검색하기"];
 var calbutton = [firststr, "월 별 검색", "일정 검색"];
 var phbutton = [firststr, "기관 검색", "인명 검색"];
 var daystr = ['월', '화', '수', '목', '금', '토', '일'];
+var foodMenubutton = foodMenuBtMake();
 
 
 app.use(bodyParser.json());
@@ -103,14 +118,15 @@ app.listen(80, function() {
 var eatR = ''; //미백관 식단
 var eatT = ''; //밀관 식단
 var eatH = ''; //행복기숙사 식단
-var weatherResult = ''; //날씨 정보
+var weatherResult = '날씨정보가 없습니다.'; //날씨 정보
 var seoulAssemblyResult; //집회정보 저장
 var calendarResult; //학사정보 저장
 var rentalResult;
 
 //최소 서버 실행시
 setResultEat(); //학식 정보 업데이트
-setResultWeather(); //날씨 정보 최초 업데이트
+if(ipadd !=  '52.78.151.4')
+  setResultWeather(); //날씨 정보 최초 업데이트
 setResultRental(); //대여물품 정보 최초 업데이트
 setseoulAssembly();  //시위정보 최초 업데이트
 setCalendar();  //학사일정 최초 업데이트
@@ -140,9 +156,9 @@ var scheduleEat = schedule.scheduleJob(ruleseoulAssembly, function() {
 });
 
 //stock.json 파일이 변경 될때마다 대여 물품 정보를 가져오는 함수를 실행한다.
-fs.watch('/home/ubuntu/asset/stock.json', function(){
-  setResultRental();
-});
+// fs.watch('/home/ubuntu/asset/stock.json', function(){
+//   setResultRental();
+// });
 
 
 
@@ -162,7 +178,12 @@ app.use(express.static('public'));
 
 //jade의 index파일로 연결
 app.get('/', function(req, res){
-  res.render('index');
+  var loginFail='';
+  if(req.query.mode == 1){
+    loginFail = '다시 입력해주세요.'
+  }
+
+  res.render('index', {loginFail:loginFail});
 });
 
 app.post('/signIn', function(req, res){
@@ -173,7 +194,8 @@ app.post('/signIn', function(req, res){
     res.redirect('/home');
   }
   else{   //일치하지 않으면
-    res.redirect('/');
+    console.log('redirect');
+    res.redirect(301, '/?mode=1');
   }
 });
 
@@ -184,8 +206,12 @@ app.get('/home', function(req, res){
 
 
 function checkMember(id, pw){
-  return false;
+  if(id == 'a')
+    return true;
+  else
+    return false;
 }
+
 
 /*********************************
 여기서 부터는 카카오톡 응답 관련 코드
@@ -410,17 +436,13 @@ app.post('/message', (req, res) => {
     if (_obj.content == salstr){
       result = explanation_seoulAssembly;
 
-      if(seoulAssemblyResult == '집회정보가 없습니다.'){
-        seoulAssemblyResult = new Array();
-        seoulAssemblyResult[0] = new Array();
-      }
       massage = {
         "message": {
           "text": result
         },
         "keyboard": {
           type: 'buttons',
-          buttons: seoulAssemblyResult[0]
+          buttons: seoulAssemblyResult.bt
         }
       };
     }
@@ -429,16 +451,16 @@ app.post('/message', (req, res) => {
 
       massage = {
         "message": {
-          "text": result[1][0],
+          "text": result.str,
           "photo": {
-            "url": result[1][1],
+            "url": result.img,
             "width": 640,
             "height": 480
           }
         },
         "keyboard": {
           type: 'buttons',
-          buttons: seoulAssemblyResult[0]
+          buttons: result.bt
         }
       };
     }
@@ -576,6 +598,35 @@ app.post('/message', (req, res) => {
         }
       }
     }
+  } else if(user[idx].mode == FDMN){
+
+    if(_obj.content == foodMenustr){
+      massage = {
+        "message": {
+          "text": '보고싶은 메뉴판을 누르뮤!'
+        }
+      };
+    }
+
+    else{
+      result = setResult(_obj.content, user[idx].mode);
+
+      massage = {
+        "message": {
+          "text": result.str,
+          "photo": {
+            "url": result.img1,
+            "width": 480,
+            "height": 640
+          }
+        }
+      };
+    }
+
+    massage.keyboard = {
+      type: 'buttons',
+      buttons: foodMenubutton
+    };
   }
 
   res.set({
@@ -611,6 +662,8 @@ function setMode(content, mode){
     mode = CALS
   else if(content == phstr)
     mode = PHN;
+  else if(content == foodMenustr)
+    mode = FDMN;
 
   return mode;
 }
@@ -654,16 +707,18 @@ function setResult(keyword, mode) {
         else
           result = resultSetNotice(keyword, temp);
       });
-  } else if (mode == WTR) {
+  } else if (bigMode(mode) == WTR) {
     result = weatherResult;
-  } else if (mode == RNT) {
+  } else if (bigMode(mode) == RNT) {
     result = getRentalResult(keyword, rentalResult);
-  } else if (mode == SAL){
-    result = getseoulAssembly(keyword);
+  } else if (bigMode(mode) == SAL){
+    result = seoulAssemblyResult;
   } else if (bigMode(mode) == CAL){
     result = getclaendar(keyword);
   } else if (bigMode(mode) == PHN){
     result = getphonearr(mode, keyword);
+  } else if (bigMode(mode) == FDMN){
+    result = getfoodMenu(keyword);
   }
 
   while (result == undefined)
@@ -757,16 +812,15 @@ function setResultWeather() {
     .then(temp => {
       weatherResult = temp;
     });
-
-
 }
 
 //집회 정보 업데이트
 function setseoulAssembly(){
   console.log("집회 정보 업데이트");
 
-  var result = new Array();
-  result[0] = new Array()
+  var result = new Object();
+  result.bt = new Array()
+
   var d = new Date();
   var day;
   var time = d.toFormat("YYYY-MM-DD HH24:MI:SS");
@@ -786,32 +840,17 @@ function setseoulAssembly(){
 
     day = (d.getMonth() + 1) + '월 ' + d.getDate() +'일';
 
-    if(seoulAssemblyResult.length != 0){
-      result[0].push(firststr);
-      result[0].push(day);
-      result[1] = new Array();
-      result[1].push(seoulAssemblyResult[0]);
-      result[1].push(seoulAssemblyResult[1]);
-    }
+    result.bt.push(firststr);
 
-    if(!result[0].length){
-      result = '집회정보가 없습니다.'
+    if(seoulAssemblyResult.check == true){
+      result.bt.push(day);
+      result.str = seoulAssemblyResult.str;
+      result.img = seoulAssemblyResult.img;
     }
 
     seoulAssemblyResult = result;
 }
 
-//집회 정보를 정리해서 가져온다.
-function getseoulAssembly(keyword){
-  var result;
-
-  for(i=1;i<seoulAssemblyResult.length;i++){
-    if(seoulAssemblyResult[0].indexOf(keyword) != -1){
-      result = seoulAssemblyResult;
-    }
-  }
-  return result;
-}
 
 //공지사항의 글 목록을 리턴
 function resultSetNotice(keyword, temp) {
@@ -943,7 +982,7 @@ function getphonearr(mode, keyword){
   else if(mode == PHNP){
     phonePeople.search(keyword)
       .then(temp => {
-        phonearr = temp
+        phonearr = temp;
       });
   }
 
@@ -966,5 +1005,31 @@ function getphonecontent(keyword, phArr){
   phoneResultStr += '전화번호	: ' + phArr[1][pidx];
 
   return phoneResultStr;
+}
 
+function foodMenuBtMake(){
+  var foodMenuJSON = fs.readFileSync('./asset/foodMenu.json', 'utf8');
+  var foodMenudatas = JSON.parse(foodMenuJSON);
+
+  return [firststr].concat(Object.keys(foodMenudatas));
+}
+
+function getfoodMenu(keyword){
+  var foodMenuJSON = fs.readFileSync('./asset/foodMenu.json', 'utf8');
+  var foodMenudatas = JSON.parse(foodMenuJSON);
+
+  var menuResult = new Object();
+
+  menuResult.str = foodMenudatas[keyword].str
+
+  menuResult.img1 = 'http://' + ipadd +foodMenudatas[keyword].img1;
+  menuResult.str += '앞 장 : '+menuResult.img1;
+
+
+  if(foodMenudatas[keyword].img2 != "none"){
+    menuResult.img2 = 'http://' + ipadd +foodMenudatas[keyword].img2;
+    menuResult.str += '\n'+'뒷 장 : '+menuResult.img2;
+  }
+
+  return menuResult;
 }

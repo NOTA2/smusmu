@@ -1,0 +1,36 @@
+{
+  "list": [{
+    "id" : "gonggam",
+      "name": "도킹",
+      "location": "학생회관 3층 326호",
+      "ex": "융합공과대학(공대) 학생회"
+    },
+    {
+      "id" : "insta",
+      "name": "인스타",
+      "location": "학생회관 3층 324호",
+      "ex": "인문사화과학대학(인사대) 학생회"
+    }],
+  "도킹": [{
+    "name": "우산",
+    "count": 8,
+    "totalCount": 20
+  }, {
+    "name": "보조배터리",
+    "count": 2,
+    "totalCount": 4
+  }, {
+    "name": "공학용계산기",
+    "count": 5,
+    "totalCount": 6
+  }, {
+    "name": "실험복",
+    "count": 3,
+    "totalCount": 4
+  }],
+  "인스타": [{
+    "name": "우산",
+    "count": 15,
+    "totalCount": 22
+  }]
+}

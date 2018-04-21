@@ -62,7 +62,7 @@ exports.search = function(keyword) {
   var time = dt.toFormat("HH24MI");
 
   if(time[2] == '0' || time[2] == '1'){
-      temp = dt.getTime() - (21*60*1000);
+      temp = dt.getTime() - (25*60*1000);
       dt.setTime(temp);
       ymd = dt.toFormat("YYYYMMDD");
       time = dt.toFormat("HH24MI");
@@ -131,15 +131,18 @@ exports.search = function(keyword) {
             //미세먼지 정보 가져오기
             request(urlDust, function(error3, response3, htmlDust) {
               if (!error3 && response3.statusCode == 200) {
+                try{
+                  parser.parseString(htmlDust, function(err, result) {
 
-                parser.parseString(htmlDust, function(err, result) {
-                  dustData = result.response.body[0].items[0].item[0];
+                    dustData = result.response.body[0].items[0].item[0];
 
-                  weather.pm1024 = dustData.pm10Grade[0] >> 0;
-                  weather.pm2524 = dustData.pm25Grade[0] >> 0;
-                  weather.khai = dustData.khaiGrade[0] >> 0;
-                });
-
+                    weather.pm1024 = dustData.pm10Grade[0] >> 0;
+                    weather.pm2524 = dustData.pm25Grade[0] >> 0;
+                    weather.khai = dustData.khaiGrade[0] >> 0;
+                  });
+                } catch(e){
+                  console.log('미세먼지 데이터 받기 실패');
+                }
                 weatherResult = setWeatherResult(time);
                 resolve(weatherResult);
               }
@@ -232,10 +235,15 @@ function setWeatherResult(time) {
 
   result += '\n';
 
-  result += '오늘 하루동안 '
-  result += '미세먼지는 [' + grade[weather.pm1024] + ']단계'+grade2[weather.pm1024]+'이고,\n'
-  result += '초 미세먼지는 [' + grade[weather.pm2524] + ']단계'+ grade2[weather.pm2524]+'입니다.\n'
-  result += '통합대기환경지수(CAI)는 ['+grade[weather.khai] + ']단계'+ grade2[weather.khai]+'입니다.\n';
+
+  try{
+    result += '오늘 하루동안 '
+    result += '미세먼지는 [' + grade[weather.pm1024] + ']단계'+grade2[weather.pm1024]+'이고,\n'
+    result += '초 미세먼지는 [' + grade[weather.pm2524] + ']단계'+ grade2[weather.pm2524]+'입니다.\n'
+    result += '통합대기환경지수(CAI)는 ['+grade[weather.khai] + ']단계'+ grade2[weather.khai]+'입니다.\n';
+  }  catch(e){
+    result += '미세먼지 데이터를 받아오지 못했어요 ㅠ\n'
+  }
 
   result += '\n';
 

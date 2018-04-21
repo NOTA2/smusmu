@@ -7,7 +7,7 @@ exports.search = function() {
 
   var url = "https://hongje.happydorm.or.kr/hongje/60/6050.kmc";
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve, reject ) {
     var body;
 
     (async function() {

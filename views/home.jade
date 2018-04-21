@@ -3,12 +3,28 @@ html(lang='ko')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width')
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css", integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4", crossorigin="anonymous")
+    link(rel="shortcut icon", href="favicon/favicon.ico")
     meta(http-equiv='X-UA-Compatible', content='ie=edge')
     script(type='text/javascript', src='http://code.jquery.com/jquery-2.1.0.min.js')
-    script(type='text/javascript', src='js/mySignInForm.js')
-    link(rel='stylesheet', href='css/main.css')
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js", integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ", crossorigin="anonymous")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js", integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm", crossorigin="anonymous")
+    script(type='text/javascript', src='js/prefixfree.min.js')
+    //link(rel='stylesheet',type="text/css", href='css/reset.css')
+    link(rel='stylesheet', href='css/base.css')
+    link(rel='stylesheet', href='css/home.css')
     title smusmu 학생회 관리 페이지
   body
     #wrap
+      #header
+        img(src="img/logo.png", alt="logo" width="35" height="35")
+        h2.title 스뮤스뮤 학생회 관리 페이지
       #container
-        h1.title 스뮤스뮤(smusmu) 학생회 관리 페이지.
+        #nav
+          ul.menu
+            li
+              a(href="#").link_gnb 홈
+            li
+              a(href="#").link_gnb 대여물품
+        #content

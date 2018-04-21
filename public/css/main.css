@@ -1,81 +1,77 @@
-@charset "utf-8";
-@import url(https://fonts.googleapis.com/earlyaccess/jejugothic.css);
-/* css reset */
-
-div, span, body {
-  margin: 0;
-  padding: 0
-}
-
-html {
-  font-size: 16px;
-}
-
-body {
-  font-family: 'Jeju Gothic', sans-serif;
-  background: #2A3C78;
-}
-
 #wrap {
   clear: both;
   max-width: 68rem;
+  height : 50rem;
   margin: 0 auto;
 }
 
 #container {
   clear: both;
-  width: 800px;
-  _border: 1px solid #fff;
-  margin: 3% auto
+  width: 70%;
+  height : 90%;
+  padding : 3%;
+  margin: 3% auto;
 }
 
-#container h1 {
+#container h1, h3 {
   clear: both;
   float: left;
   width: 100%;
   text-align: center;
-  color: #fff
+  padding : 0.2em;
+  margin: 1em 0;
 }
 
-#container h1 a {
-  color: #fff;
-  text-decoration: none
-}
-
-.line {
+.form-group {
   clear: both;
-  float: left;
-  width: 100%;
-  border: 1px solid #fff;
-  margin-bottom: 3%
+  color: #2A3C78;
+  text-align: center;
+  margin : 0.8em 1%;
+  padding: 1%;
 }
 
-.line p {
-  float: left;
-  min-width: 100px;
-  margin-left: 3%;
-  color: #fff
+input {
+  width: 80%;
+  padding : 1% 1%;
+  margin : 1% 0;
+  text-align: center;
+  font-size: 3rem;
+  color : #000;
+}
+
+form{
+  margin : 1% auto;
+  padding: 1%;
 }
 
 .line .inputArea {
   float: left;
 }
 
-.line .inputArea input {
-  float: left;
-  width: 370px;
-  height: 30px;
-  margin: 10px 0 0 0;
-  padding-left: 10px
-}
 
-.submit {
-  clear: both;
-  float: left;
-  width: 100%;
-  height: 50px;
-  background: #fff;
-  border: 0;
-  font-size: 20px;
-  color: #2A3C78
+/*스마트폰에 적용*/
+
+@media screen and (max-width:766px) {
+    body {
+      background: #2A3C78;
+    }
+    #container {
+      clear: both;
+      width: 90%;
+      height : 90%;
+      padding : 1em 1em;
+      margin: 5% auto;
+    }
+
+    h1{
+      color: #FFF;
+      font-size: 2rem;
+    }
+
+    .form-group.row {
+      clear: both;
+      text-align: left;
+      color: #FFF;
+      margin: 1rem 0;
+    }
 }

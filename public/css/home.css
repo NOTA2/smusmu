@@ -1,0 +1,89 @@
+dl, ul, ol, menu, li {
+    list-style: none;
+}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, textarea, p, blockquote, th, td, input, select, textarea, button {
+    margin: 0;
+    padding: 0;
+}
+
+ul, menu, dir {
+    display: block;
+    list-style-type: disc;
+}
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+a {
+    color: rgb(51, 51, 51);
+    text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+#header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9997;
+    min-width: 699px;
+    height: 3em;
+    padding: 7px;
+    border-bottom: 1px solid rgb(55,75,130);
+    background-color: rgb(42,60,120);
+}
+
+#header .title{
+  display: inline;
+  width: 50%
+  height: 100%;
+  padding: 5px 0.4em;
+  font-size: 1.3em;
+  color : #FFF;
+}
+
+#header img{
+  margin : 0 0 0 1em;
+}
+
+#nav {
+    position: fixed;
+    top: 3em;
+    left: 0;
+    bottom: 0;
+    z-index: 9997;
+    width: 220px;
+    border-right: 1px solid rgb(221,221,221);
+    background-color: rgb(255,255,255);
+}
+
+#nav ul.menu {
+    border-top: 1px solid rgb(221, 221, 221);
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+ul.menu .on .link_gnb {
+    font-weight: 100%;
+    font-size: 35px;
+    color: rgb(46, 172, 188);
+    background-color: rgb(249, 249, 250);
+    -webkit-font-smoothing: antialiased;
+}
+
+ul.menu li + li {
+    border-top: 1px solid rgb(238,238,238);
+}
+
+ul.menu .link_gnb {
+    display: block;
+    position: relative;
+    height: 49px;
+    padding-left: 32px;
+    font-size: 28px;
+    line-height: 50px;
+}
