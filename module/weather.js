@@ -92,41 +92,49 @@ exports.search = function(keyword) {
       if (!error1 && response1.statusCode == 200) {
 
         //현재 날씨 데이터 받아오기
-        parser.parseString(htmlNow, function(err, result) {
-          end = result.response.body[0].items[0].item.length;
-          nowData = result.response.body[0].items[0];
-          for (i = 0; i < end; i++) {
-            if (nowData.item[i].category[0] == 'T1H')
-              weather.t1h = nowData.item[i].obsrValue[0];
+        try{
+          parser.parseString(htmlNow, function(err, result) {
+            end = result.response.body[0].items[0].item.length;
+            nowData = result.response.body[0].items[0];
+            for (i = 0; i < end; i++) {
+              if (nowData.item[i].category[0] == 'T1H')
+                weather.t1h = nowData.item[i].obsrValue[0];
 
-            else if (nowData.item[i].category[0] == 'SKY')
-              weather.nsky = nowData.item[i].obsrValue[0];
+              else if (nowData.item[i].category[0] == 'SKY')
+                weather.nsky = nowData.item[i].obsrValue[0];
 
-            else if (nowData.item[i].category[0] == 'PTY')
-              weather.npyt = nowData.item[i].obsrValue[0] >> 0;
+              else if (nowData.item[i].category[0] == 'PTY')
+                weather.npyt = nowData.item[i].obsrValue[0] >> 0;
 
-            else if (nowData.item[i].category[0] == 'WSD')
-              weather.nwsd = parseFloat(nowData.item[i].obsrValue[0]);
-          }
-        });
+              else if (nowData.item[i].category[0] == 'WSD')
+                weather.nwsd = parseFloat(nowData.item[i].obsrValue[0]);
+            }
+          });
+        } catch(e){
+          console.log('현재 날씨 데이터 받아오기 실패');
+        }
 
         //예보 날씨 데이터 받아오기
         request(urlForecast, function(error2, response2, htmlForecast) {
           if (!error2 && response2.statusCode == 200) {
 
-            parser.parseString(htmlForecast, function(err, result) {
-              forecastData = result.wid.body[0].data;
+            try{
+              parser.parseString(htmlForecast, function(err, result) {
+                forecastData = result.wid.body[0].data;
 
-              for (i = 0; i < forecastData.length; i++) {
-                //20시 이후에는 내일 날씨를 알려준다.
-                if ((parseInt(time) > 2000) || (parseInt(time) < 241)) {
-                  getWeatherData(forecastData, i, '1');
-                } else {
-                  getWeatherData(forecastData, i, '0');
+                for (i = 0; i < forecastData.length; i++) {
+                  //20시 이후에는 내일 날씨를 알려준다.
+                  if ((parseInt(time) > 2000) || (parseInt(time) < 241)) {
+                    getForecastData(forecastData, i, '1');
+                  } else {
+                    getForecastData(forecastData, i, '0');
+                  }
                 }
-              }
+              });
+            }catch(e){
+              console.log('예보 날씨 데이터 받아오기 실패');
+            }
 
-            });
 
             //미세먼지 정보 가져오기
             request(urlDust, function(error3, response3, htmlDust) {
@@ -154,7 +162,8 @@ exports.search = function(keyword) {
   });
 }
 
-function getWeatherData(forecastData, i, day) {
+//예보정보를 다듬어서 반환한다.
+function getForecastData(forecastData, i, day) {
   if (forecastData[i].day[0] == day) {
     //최고온도 갱신
     if ((forecastData[i].tmn[0] >> 0) != -999)

@@ -11,21 +11,22 @@ exports.search = function(url) {
         var $ = cheerio.load(body);
         var content = '';
 
-        temp = $("#divView > p").toArray();
-
-        for(var i=0;i<temp.length;i++){
-          p = $(temp[i]).text().trim();
+        temp = $("#divView p").each(function(idx, el){
+          p = $(el).text().trim();
           content += p;
           if(p != '') content += '\n\n'
           if(content.length>1500){
             content += '...............\n링크를 통해 나머지 내용을 확인해 주세요.\n\n'
-            break;
+            return false;
           }
+        });
 
+        console.log($("#divView").text().trim());
+
+        if(content == ''){
+          content = '내용이 없거나 이미지로 구성되어 있습니다.\n링크를 통해 확인하세요\n\n'
         }
 
-        if(content == '')
-          content = '내용이 없거나 이미지로 구성되어 있습니다.\n링크를 통해 확인하세요\n\n'
 
         resolve(content);
       }

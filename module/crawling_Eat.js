@@ -1,10 +1,12 @@
 var cheerio = require('cheerio');
 var request = require('request');
+var deasync = require('deasync');
 
 exports.search = function(keyword) {
 
   var url;
-  if(keyword=='R')
+
+  if (keyword == '미래백년관 - ')
     url = "https://www.smu.ac.kr/mbs/smu/jsp/restaurant/restaurant.jsp?configIdx=27144&id=smu_040501000000";
   else
     url = "https://www.smu.ac.kr/mbs/smu/jsp/restaurant/restaurant.jsp?configIdx=27145&id=smu_040501020000";
@@ -15,50 +17,82 @@ exports.search = function(keyword) {
         //HTML body
         var $ = cheerio.load(body);
 
-        var jbAry = new Array();
+        var eatObj = new Object();
+        var tempArr = new Array();
+        eatObj.bt = new Array();
+        eatObj.contents = new Array();
+        var tableCheck = $("table").hasClass("info_table_type11");
 
         // 식단이 나타나는 테이블의 존재 유무를 따져서 식단이 존재하는지 검사
-        if ($("table").hasClass("info_table_type11")) {
-          $(".subj").each(function(idx, el) {
-            jbAry[idx] = $(el).text().trim();
-          });
+        while (tableCheck == false) {
+          var requestCheck = 0;
 
-          var temp='';
-          var eatAry = new Array();
+          thisweekmon = $("#subContents > div:nth-child(5)").text().replace(/ /gi, "").replace('▶', '').replace('◀', '').split('-');
+          thisweekmon = thisweekmon[0] + '-' + thisweekmon[1] + '-' + thisweekmon[2];
+          var d = new Date(thisweekmon.trim());
 
-          for(i=0; i<5;i++){
-            day=i;
-            if(keyword=='R'){
-              day*=4;
-              temp+='======중식======\n';
-              temp+='[뷔페식]\n';
-              temp+=jbAry[day];
-              temp+='\n\n[오늘의 메뉴]\n';
-              temp+=jbAry[day+1];
-              temp+='\n\n======석식======\n';
-              temp+=jbAry[day+3];
+          var rday = d.setDate(d.getDate() - 7)
+          rday = d.toFormat("YYYY-MM-DD");
+
+          var rurl = url + '&firstWeekDay=' + rday;
+
+          request(rurl, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+              console.log('저번주로 재접속');
+              //HTML body
+              $ = cheerio.load(body);
+              tableCheck = $("table").hasClass("info_table_type11");
+              requestCheck = 1;
             }
-            else{
-               day*=2;
-               temp+='======중식======\n';
-               temp+=jbAry[day];
-               temp+='\n\n[후식] : ';
-               temp+=jbAry[day+1];
-             }
-             eatAry[i]=temp;
-             temp='';
+          });
+          while (requestCheck == 0) {
+            deasync.runLoopOnce();
           }
-
-          eatAry[5] = '오늘은 식당이 운영되지 않습니다.\n'
-          eatAry[6] = '오늘은 식당이 운영되지 않습니다.\n'
-          resolve(eatAry);
-        } else {  //식단이 등록되지 않았다면
-          eatAry = new Array(5);
-          for(i=0; i<eatAry.length;i++){
-            eatAry[i] = '등록된 식단이 없습니다.';
-          }
-          resolve(eatAry);
         }
+
+        $(".th_type2").each(function(idx, el) {
+          temp = $(el).text().trim();
+          temp = temp.split('.');
+          month = temp[0];
+          date = temp[1].split(' ')[0];
+          day = temp[1].split(' ')[1];
+          eatObj.bt[idx] = keyword + ("00" + month).slice(-2) + '/' + ("00" + date).slice(-2) + ' ' + day;
+        });
+
+
+        $(".subj").each(function(idx, el) {
+          tempArr[idx] = $(el).text().trim();
+        });
+
+        var temp = '';
+
+
+        for (i = 0; i < 5; i++) {
+          day = i;
+
+          temp += eatObj.bt[i]+ '식단입니다.\n\n';
+          if (keyword == '미래백년관 - ') {
+            day *= 4;
+            temp += '======중식======\n';
+            temp += '[뷔페식]\n';
+            temp += tempArr[day];
+            temp += '\n\n[오늘의 메뉴]\n';
+            temp += tempArr[day + 1];
+            temp += '\n\n======석식======\n';
+            temp += tempArr[day + 3];
+          } else {
+            day *= 2;
+            temp += '======중식======\n';
+            temp += tempArr[day];
+            temp += '\n\n[후식] : ';
+            temp += tempArr[day + 1];
+          }
+          eatObj.contents[i] = temp;
+          temp = '';
+        }
+
+        eatObj.bt.unshift('뒤로가기');
+        resolve(eatObj);
       }
     });
   });

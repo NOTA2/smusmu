@@ -11,43 +11,43 @@ exports.crawling = function() {
         //HTML body
         var $ = cheerio.load(body);
 
+        calresultObj = new Object();
+        calresultObj.monthbt = new Array();
         resultarr = new Array();
 
         //학사일정이 있는 월 리스트를 생성
-        monthList = $("div.sub4_date > h3").toArray();
-        for (var i = 0; i < monthList.length; i++) {
-          monthList[i] = $(monthList[i]).text().trim();
-        }
-        monthList.unshift('뒤로가기')
+        calresultObj.monthbt.push('뒤로가기');
+        $("div.sub4_date > h3").each(function() {
+          monthstr = $(this).text().trim();
+          monthstr = monthstr.substring(0, monthstr.length-1);
+          monthstr = monthstr.split('년 ')[0] + '년 ' + ("00" + (monthstr.split('년 ')[1])).slice(-2)+'월';
 
-        //학사일정 내용 배열 생성
-        contentsList = new Array();
-
-        $("table.sub4_inf").each(function() {
-          var arrayOfThisRow = [];
-          var tableData = $(this).find('td');
-          if (tableData.length > 0) {
-            tableData.each(function() {
-              td = $(this).text().trim();
-              td= td.replace(/\t/g, "");
-              td= td.replace(/\n/g, "");
-
-              if(td.indexOf('~') != -1){
-                t1 = td.split('~')[0];
-                t2 = td.split('~')[1];
-                if(t1 == t2)
-                 td = t1;
-              }
-              arrayOfThisRow.push(td);
-            });
-            contentsList.push(arrayOfThisRow);
-          }
+          calresultObj.monthbt.push(monthstr);
         });
 
-        resultarr.push(monthList);
-        resultarr.push(contentsList);
+        //학사일정 내용 배열 생성
+        calresultObj.contents = new Array();
+        var idx = 0;
 
-        resolve(resultarr);
+        $("table.sub4_inf").find('td').each(function() {    //12개월을 구분하기 위해
+
+
+          td = $(this).text().trim();
+          td= td.replace(/\t/g, "").replace(/\n/g, "");
+
+          if(td.indexOf('~') != -1){    //기간인 경우
+            calresultObj.contents[idx] = new Object();
+            if(td.split('~')[0] == td.split('~')[1])
+             td = td.split('~')[0];
+
+            calresultObj.contents[idx].date = td;
+           }else{
+             calresultObj.contents[idx].content = td;
+             idx++;
+           }
+        });
+
+        resolve(calresultObj);
       }
 
     });

@@ -30,6 +30,9 @@ function setIp(){
       ipadd = $("body > center > h1 > font:nth-child(2)").text().trim()
     }
   });
+  while (ipadd == undefined) {
+    deasync.runLoopOnce();
+  }
   if(ipadd ==  '52.78.69.176'){
     console.log(ipadd);
     mainstr = '공가미 사용하기';
@@ -65,8 +68,10 @@ const EX = 1;
 const EAT = 20;
 const EATW = 21;
 const NTC = 30;
-const NTCL= 31;
-const NTCR= 32;
+const NTCLR= 31;
+const NTCS= 32;
+const NTCLS= 33;
+const NTCR= 34;
 const WTR = 40;
 const RNT = 50;
 const SAL = 60;
@@ -115,37 +120,44 @@ app.listen(80, function() {
   console.log('Connect 80 port');
 });
 
-var eatR = ''; //미백관 식단
-var eatT = ''; //밀관 식단
-var eatH = ''; //행복기숙사 식단
+var eat = new Object();
+eat.R;  //미백관 식단
+eat.T; //밀관 식단
+eat.H; //행복기숙사 식단
 var weatherResult = '날씨정보가 없습니다.'; //날씨 정보
 var seoulAssemblyResult; //집회정보 저장
 var calendarResult; //학사정보 저장
 var rentalResult;
 
+
+
+
 //최소 서버 실행시
 setResultEat(); //학식 정보 업데이트
 if(ipadd !=  '52.78.151.4')     //테스트 서버일 땐 하지 않습니다.
   setResultWeather(); //날씨 정보 최초 업데이트
-setResultRental(); //대여물품 정보 최초 업데이트
 setseoulAssembly();  //시위정보 최초 업데이트
 setCalendar();  //학사일정 최초 업데이트
 
+//setResultRental(); //대여물품 정보 최초 업데이트
+
+
 //매일 마다 학식 정보가 업데이트 되게 한다.
 var ruleEat = new schedule.RecurrenceRule();
-ruleEat.hour = 6;
-ruleEat.minute = 1;
+ruleEat.hour = new schedule.Range(6, 11, 1);
+ruleEat.minute = new schedule.Range(0, 59, 19);
 var scheduleEat = schedule.scheduleJob(ruleEat, function() {
   setResultEat();
 });
 
 //22분 마다 날씨 업데이트
-var ruleWeather = new schedule.RecurrenceRule();
-ruleWeather.minute = new schedule.Range(0, 59, 22);
-var scheduleEat = schedule.scheduleJob(ruleWeather, function() {
-  setResultWeather();
-});
-
+if(ipadd !=  '52.78.151.4'){     //테스트 서버일 땐 하지 않습니다.
+  var ruleWeather = new schedule.RecurrenceRule();
+  ruleWeather.minute = new schedule.Range(0, 59, 22);
+  var scheduleEat = schedule.scheduleJob(ruleWeather, function() {
+    setResultWeather();
+  });
+}
 //매일 6~9시에 5분 마다 집회정보 업데이트
 var ruleseoulAssembly = new schedule.RecurrenceRule();
 ruleseoulAssembly.dayOfWeek = [0, new schedule.Range(0,6)];
@@ -241,7 +253,7 @@ app.post('/message', (req, res) => {
     user[userCount] = {
       user_key: _obj.user_key,
       mode: 0,
-      noticeArr : [],
+      noticeObj : {page : 1, mode : NTC, keyword : ''},
       phoneArr : []
     }
     idx = userCount;
@@ -249,7 +261,7 @@ app.post('/message', (req, res) => {
     console.log(userCount + "번째 멤버 등록\n");
   }
 
-  user[idx].mode = setMode(_obj.content, user[idx].mode)
+  user[idx].mode = setMode(_obj.content, user[idx].mode);
 
   if (user[idx].mode == MAIN) {
     massage = {
@@ -279,16 +291,16 @@ app.post('/message', (req, res) => {
 
       //버튼을 생성하는 과정
       if((_obj.content).indexOf('미래백년관') != -1)
-        thisweek = makeweek("미래백년관 - ")
+        weekbt = eat.R.bt;
       else if((_obj.content).indexOf('밀레니엄관') != -1)
-        thisweek = makeweek("밀레니엄관 - ")
+        weekbt = eat.T.bt;
       else
-        thisweek = makeweek("홍제기숙사 - ")
+        weekbt = eat.H.bt;
 
       if(_obj.content.indexOf('일주일') != -1)
         result = '원하는 날을 선택해 주세요.'
       else
-        result = setResult(_obj.content, user[idx].mode);
+        result = setResult(_obj.content, user[idx]);
 
       massage = {
         "message": {
@@ -296,14 +308,14 @@ app.post('/message', (req, res) => {
         },
         "keyboard": {
           type: 'buttons',
-          buttons: thisweek
+          buttons: weekbt
         }
       };
     }
     //처음 학식 정보 버튼을 눌렀을때 혹은 오늘의 메뉴 버튼을 누른경
     else{
       if (_obj.content.indexOf('오늘') != -1)
-        result = setResult(_obj.content, user[idx].mode);
+        result = setResult(_obj.content, user[idx]);
       else
         result = explanation_eat;
 
@@ -318,9 +330,25 @@ app.post('/message', (req, res) => {
       };
     }
   } else if (bigMode(user[idx].mode) == NTC) {
-    if(user[idx].mode == NTC || user[idx].mode == NTCL){
+    //공지사항 글 클릭시 상세 내용을 출력
+    if(user[idx].mode == NTCR){
+      resultstr=resultSetDetailNotice(_obj.content, user[idx].noticeObj);
+
+      user[idx].mode = user[idx].noticeObj.mode;
+
+      massage = {
+        "message": {
+          "text": resultstr
+        },
+        "keyboard": {
+          type: 'buttons',
+          buttons: user[idx].noticeObj.bt
+        }
+      };
+    }
+    else{
       //글 검색하기 버튼을 누른 경우
-      if (_obj.content == '글 검색하기') {
+      if (user[idx].mode == NTCS) {     //NTCS 모드
         massage = {
           "message": {
             "text": "검색할 키워드를 입력해 주세요."
@@ -328,7 +356,7 @@ app.post('/message', (req, res) => {
         };
       } else {
         //공지사항 확인을 들어온 경우.
-        if (user[idx].mode == NTC){
+        if (user[idx].mode == NTC){       //NTC 모드
             result = explanation_notice;
 
             massage = {
@@ -341,11 +369,39 @@ app.post('/message', (req, res) => {
               }
             };
         }
-        else{
-          result = setResult(_obj.content, user[idx].mode);
+        else if((user[idx].mode == NTCLR || user[idx].mode == NTCLS) && (_obj.content =='>' || _obj.content=='<')){
+
+          if(_obj.content=='>')
+            user[idx].noticeObj.page++;
+          else if(_obj.content=='<')
+            user[idx].noticeObj.page--;
+
+          result = setResult(_obj.content, user[idx]);
+
+          user[idx].noticeObj = result;
+
+          massage = {
+            "message": {
+              "text": user[idx].noticeObj.explan
+            },
+            "keyboard": {
+              type: 'buttons',
+              buttons: user[idx].noticeObj.bt
+            }
+          };
+
+        }
+        else{             //NTCLR or NTCLS 모드를 처음 들어올때
+          user[idx].noticeObj.page = 1;
+
+          user[idx].noticeObj.mode = user[idx].mode;
+          user[idx].noticeObj.keyword = _obj.content;
+
+          result = setResult(_obj.content, user[idx]);
 
           //글 검색하기에서 검색결과가 없을 경우
           if (result == '[등록된 게시물이 없습니다.]\n'){
+
             massage = {
               "message": {
                 "text": result
@@ -356,41 +412,26 @@ app.post('/message', (req, res) => {
               }
             };
           }
-          //글 검색하기에서 검색결과가 있을 경우 혹은 최신글 보기를 누른 경우
+          //글 검색하기에서 검색결과가 있을 경우 혹은 최신글 보기를 누른 경우 글의 목록을 보여준다.
           else {
-            user[idx].noticeArr = result;
-            user[idx].mode = NTCR;
+            user[idx].noticeObj = result;
 
             massage = {
               "message": {
-                "text": user[idx].noticeArr[3]
+                "text": user[idx].noticeObj.explan
               },
               "keyboard": {
                 type: 'buttons',
-                buttons: user[idx].noticeArr[0]
+                buttons: user[idx].noticeObj.bt
               }
             };
           }
         }
       }
     }
-    //공지사항 글 클릭시 상세 내용을 출력
-    else if(user[idx].mode == NTCR){
-      resultstr=resultSetDetailNotice(_obj.content, user[idx].noticeArr);
-
-      massage = {
-        "message": {
-          "text": resultstr
-        },
-        "keyboard": {
-          type: 'buttons',
-          buttons: user[idx].noticeArr[0]
-        }
-      };
-    }
 
   } else if (user[idx].mode == WTR) {
-    result = setResult(_obj.content, user[idx].mode);
+    result = setResult(_obj.content, user[idx]);
 
     massage = {
       "message": {
@@ -404,7 +445,7 @@ app.post('/message', (req, res) => {
     user[idx].mode = MAIN;
   } else if (user[idx].mode == RNT) {
     if(_obj.content == '대여 물품 현황'){
-      var buttonlist = setResult(_obj.content, user[idx].mode);
+      var buttonlist = setResult(_obj.content, user[idx]);
 
       massage = {
         "message": {
@@ -420,7 +461,7 @@ app.post('/message', (req, res) => {
           result = explanation_rental;
 
         else
-          result = setResult(_obj.content, user[idx].mode);
+          result = setResult(_obj.content, user[idx]);
 
         massage = {
           "message": {
@@ -447,7 +488,7 @@ app.post('/message', (req, res) => {
       };
     }
     else{
-      result = setResult(_obj.content, user[idx].mode);
+      result = setResult(_obj.content, user[idx]);
 
       massage = {
         "message": {
@@ -487,7 +528,7 @@ app.post('/message', (req, res) => {
           },
           "keyboard" : {
             type : 'buttons',
-            buttons : calendarResult[0]
+            buttons : calendarResult.monthbt
           }
         }
       }
@@ -499,7 +540,7 @@ app.post('/message', (req, res) => {
         }
       }
       else if(user[idx].mode == CALM){
-        result = setResult(_obj.content, user[idx].mode)
+        result = setResult(_obj.content, user[idx])
 
         massage = {
           "message" : {
@@ -507,12 +548,12 @@ app.post('/message', (req, res) => {
           },
           "keyboard" : {
             type : 'buttons',
-            buttons : calendarResult[0]
+            buttons : calendarResult.monthbt
           }
         };
       }
       else{
-        result = setResult(_obj.content, user[idx].mode)
+        result = setResult(_obj.content, user[idx])
 
         massage = {
           "message" : {
@@ -557,7 +598,7 @@ app.post('/message', (req, res) => {
       }
     }
     else if(user[idx].mode == PHNO || user[idx].mode == PHNP){
-      result = setResult(_obj.content, user[idx].mode)
+      result = setResult(_obj.content, user[idx])
 
       if(result == '검색결과가 없습니다.'){
         user[idx].mode = PHN;
@@ -609,7 +650,7 @@ app.post('/message', (req, res) => {
     }
 
     else{
-      result = setResult(_obj.content, user[idx].mode);
+      result = setResult(_obj.content, user[idx]);
 
       massage = {
         "message": {
@@ -636,6 +677,7 @@ app.post('/message', (req, res) => {
 
 //받은 메시시를 바탕으로 모드를 정한다.
 function setMode(content, mode){
+
   if (content == backstr)
     mode = bigMode(mode);
   else if (content == mainstr || content == firststr)
@@ -646,8 +688,18 @@ function setMode(content, mode){
     mode = EAT;
   else if (content == ntcstr)
     mode = NTC;
-  else if (content == ntcbutton[1] || content == ntcbutton[2])
-    mode = NTCL
+  else if (content == ntcbutton[1])
+    mode = NTCLR;
+  else if (content == ntcbutton[2])
+    mode = NTCS;
+  else if (mode == NTCS)
+    mode = NTCLS;
+  else if (mode == NTCLR && (content == '>' || content == '<'))
+    mode = NTCLR;
+  else if (mode == NTCLS && (content == '>' || content == '<'))
+    mode = NTCLS;
+  else if (mode == NTCLR || mode == NTCLS)
+    mode = NTCR;
   else if (content == wtrstr)
     mode = WTR;
   else if (content == rntstr)
@@ -673,11 +725,17 @@ function bigMode(mode){
   return parseInt((mode)/10)*10
 }
 
-//이번주 버튼 배열 생성
+//이번주 버튼 배열 생성  (기준은 월요일)
 function makeweek(keyword){
   var thisweek = new Array();
   var dt = new Date();
-  dt.setDate(dt.getDate() - (dt.getDay()-1));
+
+  if(dt.getDay())
+    dt.setDate(dt.getDate() - (dt.getDay()-1));
+  else
+    dt.setDate(dt.getDate() - 6);
+
+
   var time = dt.toFormat("MM/DD");
 
   thisweek.push(backstr)
@@ -693,19 +751,24 @@ function makeweek(keyword){
 
 
 //사용자에게 보내는 메세지 결과를 만들어 준다.
-function setResult(keyword, mode) {
+function setResult(keyword, selectUser) {
+
+  mode = selectUser.mode;
+  noticePage = selectUser.noticeObj.page;
+  noticeMode = selectUser.noticeObj.mode;
+  noticeKeyword = selectUser.noticeObj.keyword;
 
   var result;
 
   if (bigMode(mode) == EAT) {
     result = getResultEat(keyword, mode);
   } else if (bigMode(mode) == NTC) {
-    cNotice.search(keyword)
+    cNotice.search(keyword, noticePage, noticeMode, noticeKeyword)
       .then(temp => {
         if (temp == '[등록된 게시물이 없습니다.]\n')
           result = temp;
         else
-          result = resultSetNotice(keyword, temp);
+          result = resultSetNotice(keyword, temp, mode);
       });
   } else if (bigMode(mode) == WTR) {
     result = weatherResult;
@@ -729,7 +792,7 @@ function setResult(keyword, mode) {
 
 
 //일주일치 학식정보를 업데이트
-function setResultEat() {
+async function setResultEat() {
   var dt = new Date();
   var time = dt.toFormat("YYYY-MM-DD HH24:MI:SS");
 
@@ -737,16 +800,16 @@ function setResultEat() {
   console.log("학식 정보를 업데이트 합니다\n");
 
   //변수의 변화를 감지해야 하기 때문에 과거의 값을 저장해 둔다.
-  var teatR;
-  var teatT;
-  var teatH;
+  var teatR = undefined;
+  var teatT = undefined;
+  var teatH = undefined;
 
-  cEat.search('R')
+  cEat.search('미래백년관 - ')
     .then(temp1 => {
       teatR = temp1;
     });
 
-  cEat.search('T')
+  cEat.search('밀레니엄관 - ')
     .then(temp2 => {
       teatT = temp2;
     });
@@ -760,48 +823,60 @@ function setResultEat() {
     deasync.runLoopOnce();
   }
 
-  eatR = teatR;
-  eatT = teatT;
-  eatH = teatH;
-  console.log(eatR);
-  console.log(eatT);
-  console.log(eatH);
+  eat.R = teatR;
+  eat.T = teatT;
+  eat.H = teatH;
+  console.log(eat.R.bt);
+  console.log(eat.T.bt);
+  console.log(eat.H.bt);
 }
 
 //요청한 학식 정보를 반환한다.
 function getResultEat(keyword, mode) {
   var d = new Date();
   var day;
-  var eatResult = '';
+  var eatResult;
 
-  if(mode == EAT){
+  if(keyword.indexOf('미래백년관') != -1)
+    eatResult = eat.R.contents;
+  else if(keyword.indexOf('밀레니엄관') != -1)
+    eatResult = eat.T.contents;
+  else if(keyword.indexOf('홍제기숙사') != -1)
+    eatResult = eat.H.contents;
+
+  if(mode == EAT){    //오늘의 메뉴인 경우
     day = d.getDay() - 1;
     if(day == -1)
       day = 6
 
-    if (keyword == '미래백년관(오늘)')
-      eatResult = eatR[day];
-    else if (keyword == '밀레니엄관(오늘)')
-      eatResult = eatT[day];
-    else if (keyword == '홍제기숙사(오늘)')
-      eatResult = eatH[day];
+    keyword = ("00" + (d.getMonth() + 1)).slice(-2) + '/' + ("00" + d.getDate()).slice(-2);
+
+    idx = eatResult.findIndex(function(ele, i){
+      return (ele.indexOf(this) != -1);
+    }, keyword);
+
+
+    if (idx == -1){
+      if(day < 5)
+        return '메뉴가 올라와 있지 않습니다.'
+      return '오늘은 식당을 운영하지 않습니다.'
+    }
+
   }
   else{
-    day = daystr.indexOf(keyword[15])
-    if(keyword.indexOf('미래백년관') != -1)
-      eatResult = eatR[day]
-    else if(keyword.indexOf('밀레니엄관') != -1)
-      eatResult = eatT[day]
-    else if(keyword.indexOf('홍제기숙사') != -1)
-      eatResult = eatH[day]
+    keyword = keyword.split(' - ')[1].trim();
+
+    idx = eatResult.findIndex(function(ele, i){
+      return (ele.indexOf(this) != -1);
+    }, keyword);
   }
 
-  return eatResult;
+  return eatResult[idx];
 }
 
 
 //날씨 정보를 업데이트
-function setResultWeather() {
+async function setResultWeather() {
   var dt = new Date();
   var time = dt.toFormat("YYYY-MM-DD HH24:MI:SS");
 
@@ -814,8 +889,51 @@ function setResultWeather() {
     });
 }
 
+
+//공지사항의 글 목록을 리턴
+function resultSetNotice(keyword, noticeObj, mode) {
+  if (mode == NTCLR){
+    noticeObj.explan = '최근 게시글 '+noticeObj.page;
+  }
+  else{
+    noticeObj.explan = noticeObj.keyword + '(으)로 검색한 게시글 '+noticeObj.page;
+  }
+
+  noticeObj.explan += '페이지입니다.\n버튼을 눌러 상세 내용을 확인하세요.\n뒤로가기를 누르면 뒤로 돌아갑니다.';
+  noticeObj.bt.unshift(backstr);
+
+  return noticeObj;
+}
+
+//공지사항 글 클릭시 상세 내용을 출력해주기 위해 세부 내용 리턴
+function resultSetDetailNotice(keyword, noticeobj) {
+
+  notice_idx = noticeobj.contents.map(x => x.title).indexOf(keyword)
+
+  var content = '';
+  var url = noticeobj.contents[notice_idx].pc;
+  var resultstr;
+
+  cNoticeContents.search(url)
+    .then(temp => {
+      content = temp
+    });
+
+  while (content == '') {
+    deasync.runLoopOnce();
+  }
+
+  resultstr = '[제목]\n'+noticeobj.contents[notice_idx].title+'\n\n';
+  resultstr += '[본문]\n'+ content;
+  resultstr += '[PC 링크]\n' + noticeobj.contents[notice_idx].pc;
+  resultstr += '\n\n[모바일 링크]\n※ 첨부파일 확인 불가\n' + noticeobj.contents[notice_idx].mobile;
+
+  return resultstr;
+}
+
+
 //집회 정보 업데이트
-function setseoulAssembly(){
+async function setseoulAssembly(){
   console.log("집회 정보 업데이트");
 
   var result = new Object();
@@ -842,58 +960,17 @@ function setseoulAssembly(){
 
     result.bt.push(firststr);
 
-    if(seoulAssemblyResult.check == true){
+    if(seoulAssemblyResult.check == true){    //오늘 데이터가 있었으면
       result.bt.push(day);
       result.str = seoulAssemblyResult.str;
       result.img = seoulAssemblyResult.img;
     }
-
     seoulAssemblyResult = result;
 }
 
 
-//공지사항의 글 목록을 리턴
-function resultSetNotice(keyword, temp) {
-  var noticestr = '';
-
-  if (keyword == '최근 글 보기')
-    noticestr += '공지사항의 최근 게시글 목록입니다.\n버튼을 눌러 상세 내용을 확인하세요.\n뒤로가기를 누르면 뒤로 돌아갑니다.\n'
-  else
-    noticestr += keyword + '(으)로 검색한 최근 게시글 목록입니다.\n버튼을 눌러 상세 내용을 확인하세요.\n뒤로가기를 누르면 뒤로으로 돌아갑니다.\n'
-
-  temp.push(noticestr);
-  temp[0].unshift(backstr);
-
-  return temp;
-}
-
-//공지사항 글 클릭시 상세 내용을 출력해주기 위해 세부 내용 리턴
-function resultSetDetailNotice(keyword, resultarr) {
-  notice_idx = resultarr[0].indexOf(''+keyword) -1;
-
-  var content ='';
-  var url = resultarr[2][notice_idx];
-  var resultstr;
-
-  cNoticeContents.search(url)
-    .then(temp => {
-      content = temp
-    });
-
-  while (content == '') {
-    deasync.runLoopOnce();
-  }
-
-  resultstr = '[제목]\n'+resultarr[0][notice_idx+1]+'\n\n';
-  resultstr += '[본문]\n'+ content;
-  resultstr += '[PC 링크]\n' + resultarr[2][notice_idx];
-  resultstr += '\n\n[모바일 링크]\n※ 첨부파일 확인 불가\n' + resultarr[1][notice_idx];
-
-  return resultstr;
-}
-
 //학사정보 업데이트
-function setCalendar(){
+async function setCalendar(){
   var calendartemp;
   console.log('학사정보 업데이트');
   calendar.crawling()
@@ -908,31 +985,35 @@ function setCalendar(){
   calendarResult = calendartemp;
 }
 
+
 function getclaendar(keyword){
-  calidx = calendarResult[0].indexOf(keyword);
-  calresultstr = '';
+  var calresultstr = '';
   var ch = 0
 
-  if(calidx != -1){   //달 검색일 경우
-    calidx--;
-    for(var i =0;i<calendarResult[1][calidx].length;i+=2){
-      calresultstr += calendarResult[1][calidx][i]+'\n'
-      calresultstr += calendarResult[1][calidx][i+1]+'\n\n'
-    }
-  }else{          //일정명 검색일 경우
-    for(var i = 0; i<calendarResult[1].length;i++){
-      for(var j = 1; j<calendarResult[1][i].length; j+=2){
-        if(calendarResult[1][i][j].indexOf(keyword) != -1){
-          calresultstr += calendarResult[1][i][j-1] +'\n';
-          calresultstr += calendarResult[1][i][j] + '\n\n';
-          ch++
-        }
+  if(calendarResult.monthbt.indexOf(keyword) != -1){   //달 검색일 경우
+    keyword = keyword.substring(0, keyword.length-1);
+    var selectMonth = keyword.split('년 ')[0] + '.' + keyword.split('년 ')[1];
+
+    for(var i =0;i<calendarResult.contents.length;i++){
+      if(calendarResult.contents[i].date.indexOf(selectMonth) != -1){
+        calresultstr += calendarResult.contents[i].date+'\n'
+        calresultstr += calendarResult.contents[i].content+'\n\n'
       }
     }
-    calresultstr = calresultstr.trim();
+  }
+  else{          //일정명 검색일 경우
+    for(var i = 0; i<calendarResult.contents.length;i++){
+      if(calendarResult.contents[i].content.indexOf(keyword) != -1){
+        calresultstr += calendarResult.contents[i].date+'\n'
+        calresultstr += calendarResult.contents[i].content+'\n\n'
+        ch++;
+      }
+    }
     if(ch == 0)
       calresultstr = '검색 결과가 없습니다.'
   }
+
+  calresultstr = calresultstr.trim();
 
   return calresultstr
 }
