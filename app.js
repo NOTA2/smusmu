@@ -93,7 +93,7 @@ const eatstr = '학식정보'
 const foodMenustr = '학교 근처 식당 메뉴판'
 const ntcstr = '학교 공지사항'
 const wtrstr = '학교 날씨'
-const salstr = '서울시 집회정보'
+const salstr = '서울시 집회/공사정보'
 const calstr = '학사일정 검색'
 
 const rntstr = '학생회 대여 물품 현황'
@@ -934,7 +934,7 @@ function resultSetDetailNotice(keyword, noticeobj) {
 
 //집회 정보 업데이트
 async function setseoulAssembly(){
-  console.log("집회 정보 업데이트");
+  console.log("집회/공사 정보 업데이트");
 
   var result = new Object();
   result.bt = new Array()

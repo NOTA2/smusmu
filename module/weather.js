@@ -28,6 +28,7 @@ var weather = {
   khai: 0
 };
 var changepop, changepty, changesky, on;
+
 //최저, 최고, 현재 기온
 //습도, 강수 확률
 //구름/강수 상태
@@ -53,7 +54,7 @@ var urlNow = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/Forec
 var urlForecast = 'http://www.kma.go.kr/wid/queryDFS.jsp?gridx=60&gridy=127'
 
 //미세먼지 정보를 가져오는 API
-var urlDust = "http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=%EC%A2%85%EB%A1%9C%EA%B5%AC&dataTerm=daily&pageNo=1&numOfRows=10&ServiceKey=" + dust_apikey.trim() + "&ver=1.3"
+var urlDust = "http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=%EC%A2%85%EB%A1%9C%EA%B5%AC&dataTerm=daily&pageNo=1&numOfRows=23&ServiceKey=" + dust_apikey.trim() + "&ver=1.3"
 
 exports.search = function(keyword) {
   //현재 시간을 구한다.
@@ -61,6 +62,7 @@ exports.search = function(keyword) {
   var ymd = dt.toFormat("YYYYMMDD");
   var time = dt.toFormat("HH24MI");
 
+  //20분까지는 예보정보가 안나오는 경우가있어서 시간을 25분 뒤로 돌려서 정보를 받는다.
   if(time[2] == '0' || time[2] == '1'){
       temp = dt.getTime() - (25*60*1000);
       dt.setTime(temp);
@@ -142,11 +144,25 @@ exports.search = function(keyword) {
                 try{
                   parser.parseString(htmlDust, function(err, result) {
 
-                    dustData = result.response.body[0].items[0].item[0];
+                    dustData = result.response.body[0].items[0].item;
 
-                    weather.pm1024 = dustData.pm10Grade[0] >> 0;
-                    weather.pm2524 = dustData.pm25Grade[0] >> 0;
-                    weather.khai = dustData.khaiGrade[0] >> 0;
+                    for(i in dustData){
+                      if((dustData[i].pm10Grade[0] >> 0) >=1 && weather.pm1024 == 0){
+                        weather.pm1024 = (dustData[i].pm10Grade[0] >> 0);
+                        console.log('pm10grade 추가');
+                      }
+
+                      if((dustData[i].pm25Grade[0] >> 0) >=1 && weather.pm2524 == 0){
+                        weather.pm2524 = (dustData[i].pm25Grade[0] >> 0)
+                        console.log('pm25Grade 추가');
+                      }
+
+                      if((dustData[i].khaiGrade[0] >> 0) >=1 && weather.khai == 0){
+                        weather.khai = (dustData[i].khaiGrade[0] >> 0)
+                        console.log('khaiGrade 추가');
+                      }
+                    }
+
                   });
                 } catch(e){
                   console.log('미세먼지 데이터 받기 실패');
