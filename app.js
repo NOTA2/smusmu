@@ -49,19 +49,24 @@ function setIp(){
   }
 }
 
-//설명글 텍스트 파일 로드
-var explanation = fs.readFileSync('asset/explanation/explanation.txt', 'utf8');
-var explanation_eat = fs.readFileSync('asset/explanation/explanation_eat.txt', 'utf8');
-var explanation_where = fs.readFileSync('asset/explanation/explanation_where.txt', 'utf8');
-var explanation_pn = fs.readFileSync('asset/explanation/explanation_pn.txt', 'utf8');
-var explanation_rental = fs.readFileSync('asset/explanation/explanation_rental.txt', 'utf8');
-var explanation_notice = fs.readFileSync('asset/explanation/explanation_notice.txt', 'utf8');
-var explanation_seoulAssembly = fs.readFileSync('asset/explanation/explanation_seoulAssembly.txt', 'utf8');
-var explanation_cal = fs.readFileSync('asset/explanation/explanation_cal.txt', 'utf8');
+
 
 /*********************************
 초기 설정 코드
 **********************************/
+
+//템플릿 엔진 설정 및 폴더 설정
+app.set('view engine', 'jade');
+app.set('views', './views');
+app.locals.pretty = true;     //jade로 웹페이지를 만들기 때문에 태그를 깔끔하게 정리해주는 설정
+app.use(express.static('public'));
+app.use(express.static('asset'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
 
 const MAIN = 10;
 const EX = 1;
@@ -108,10 +113,16 @@ var daystr = ['월', '화', '수', '목', '금', '토', '일'];
 var foodMenubutton = foodMenuBtMake();
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+//설명글 텍스트 파일 로드
+var explanation = fs.readFileSync('./asset/explanation/explanation.txt', 'utf8');
+var explanation_eat = fs.readFileSync('./asset/explanation/explanation_eat.txt', 'utf8');
+var explanation_where = fs.readFileSync('./asset/explanation/explanation_where.txt', 'utf8');
+var explanation_pn = fs.readFileSync('./asset/explanation/explanation_pn.txt', 'utf8');
+var explanation_rental = fs.readFileSync('./asset/explanation/explanation_rental.txt', 'utf8');
+var explanation_notice = fs.readFileSync('./asset/explanation/explanation_notice.txt', 'utf8');
+var explanation_seoulAssembly = fs.readFileSync('./asset/explanation/explanation_seoulAssembly.txt', 'utf8');
+var explanation_cal = fs.readFileSync('./asset/explanation/explanation_cal.txt', 'utf8');
+
 
 console.log('APIs initialize');
 
@@ -168,7 +179,7 @@ var scheduleEat = schedule.scheduleJob(ruleseoulAssembly, function() {
 });
 
 //stock.json 파일이 변경 될때마다 대여 물품 정보를 가져오는 함수를 실행한다.
-// fs.watch('/home/ubuntu/asset/stock.json', function(){
+// fs.watch('/home/ubuntu/stock.json', function(){
 //   setResultRental();
 // });
 
@@ -180,12 +191,6 @@ var scheduleEat = schedule.scheduleJob(ruleseoulAssembly, function() {
 **********************************
 *********************************/
 
-
-//템플릿 엔진 설정 및 폴더 설정
-app.set('view engine', 'jade');
-app.set('views', './views');
-app.locals.pretty = true;     //jade로 웹페이지를 만들기 때문에 태그를 깔끔하게 정리해주는 설정
-app.use(express.static('public'));
 
 
 //jade의 index파일로 연결
