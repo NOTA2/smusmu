@@ -54,7 +54,7 @@ exports.search = function(keyword, page, mode, realkeyword) {
           if($(".prev").attr('href').indexOf('없습니다.') == -1)
             noticeObj.bt.unshift('<');
           if($(".next").attr('href').indexOf('없습니다.') == -1)
-            noticeObj.bt.push('>');
+            noticeObj.bt.unshift('>');
 
         } else{
           noticeObj = '[등록된 게시물이 없습니다.]\n'

@@ -98,7 +98,7 @@ const eatstr = '학식정보'
 const foodMenustr = '학교 근처 식당 메뉴판'
 const ntcstr = '학교 공지사항'
 const wtrstr = '학교 날씨'
-const salstr = '서울시 집회/공사정보'
+const salstr = '서울시 공사/집회정보'
 const calstr = '학사일정 검색'
 
 const rntstr = '학생회 대여 물품 현황'
@@ -965,7 +965,7 @@ async function setseoulAssembly(){
 
     result.bt.push(firststr);
 
-    if(seoulAssemblyResult.check == true){    //오늘 데이터가 있었으면
+    if(seoulAssemblyResult.check){    //오늘 데이터가 있었으면
       result.bt.push(day);
       result.str = seoulAssemblyResult.str;
       result.img = seoulAssemblyResult.img;
@@ -1112,7 +1112,7 @@ function getfoodMenu(keyword){
   menuResult.str += '앞 장 : '+menuResult.img1;
 
 
-  if(foodMenudatas[keyword].img2 != "none"){
+  if(foodMenudatas[keyword].img2){
     menuResult.img2 = 'http://' + ipadd +foodMenudatas[keyword].img2;
     menuResult.str += '\n'+'뒷 장 : '+menuResult.img2;
   }
