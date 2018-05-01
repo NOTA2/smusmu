@@ -47,8 +47,6 @@ const weather_apikey = fs.readFileSync('config/weather_apikey', 'utf-8');
 const dust_apikey = fs.readFileSync('config/dust_apikey', 'utf-8');
 
 
-//현재 기상정보를 가져오는 API
-var urlNow = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastGrib?ServiceKey=" + weather_apikey.trim() + "&nx=" + nx + "&ny=" + ny;
 
 //기상 예보 정보를 가져오는 API
 var urlForecast = 'http://www.kma.go.kr/wid/queryDFS.jsp?gridx=60&gridy=127'
@@ -69,6 +67,9 @@ exports.search = function(keyword) {
       ymd = dt.toFormat("YYYYMMDD");
       time = dt.toFormat("HH24MI");
   }
+
+  //현재 기상정보를 가져오는 API
+  var urlNow = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastGrib?ServiceKey=" + weather_apikey.trim() + "&nx=" + nx + "&ny=" + ny;
 
   changepop = 0;
   changepty = 0;
