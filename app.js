@@ -165,16 +165,16 @@ var scheduleEat = schedule.scheduleJob(ruleEat, function() {
 if(ipadd !=  '52.78.151.4'){     //테스트 서버일 땐 하지 않습니다.
   var ruleWeather = new schedule.RecurrenceRule();
   ruleWeather.minute = new schedule.Range(0, 59, 22);
-  var scheduleEat = schedule.scheduleJob(ruleWeather, function() {
+  var scheduleWeather = schedule.scheduleJob(ruleWeather, function() {
     setResultWeather();
   });
 }
 //매일 6~9시에 5분 마다 집회정보 업데이트
 var ruleseoulAssembly = new schedule.RecurrenceRule();
 ruleseoulAssembly.dayOfWeek = [0, new schedule.Range(0,6)];
-ruleseoulAssembly.hour = new schedule.Range(5, 10, 1);
+ruleseoulAssembly.hour = new schedule.Range(5, 12, 1);
 ruleseoulAssembly.minute = new schedule.Range(0, 59, 5);
-var scheduleEat = schedule.scheduleJob(ruleseoulAssembly, function() {
+var scheduleSeoulAssembly = schedule.scheduleJob(ruleseoulAssembly, function() {
   setseoulAssembly();
 });
 
@@ -939,7 +939,7 @@ function resultSetDetailNotice(keyword, noticeobj) {
 
 //집회 정보 업데이트
 async function setseoulAssembly(){
-  console.log("집회/공사 정보 업데이트");
+
 
   var result = new Object();
   result.bt = new Array()
@@ -949,7 +949,7 @@ async function setseoulAssembly(){
   var time = d.toFormat("YYYY-MM-DD HH24:MI:SS");
 
   console.log(time);
-
+  console.log("집회/공사 정보 업데이트");
   beforeseoulAssemblyResult = seoulAssemblyResult;
 
   seoulAssembly.search()
@@ -977,6 +977,10 @@ async function setseoulAssembly(){
 //학사정보 업데이트
 async function setCalendar(){
   var calendartemp;
+  var dt = new Date();
+  var time = dt.toFormat("YYYY-MM-DD HH24:MI:SS");
+
+  console.log(time);
   console.log('학사정보 업데이트');
   calendar.crawling()
     .then(temp => {

@@ -49,7 +49,6 @@ exports.search = function() {
         d.setDate(d.getDate() - 1);
         var today = d.getDate();
 
-
         ele = $(".AdaptiveMediaOuterContainer");
 
         $(ele).each(function(idx, el){
@@ -60,7 +59,6 @@ exports.search = function() {
           if(today != time){    //오늘 날짜에 올라온 것인지 판단
               return true;
           }
-
           //이미지가 있는 노드의 부모의 형제를 찾아감
           var str = $(el).siblings(".js-tweet-text-container").text().trim();
           //이미지가 있는 노드의 자식인 img로 찾아감
@@ -74,67 +72,12 @@ exports.search = function() {
             if(result.detail != '')
               result.str+='\n\n[상세 정보 확인하기]'+ result.detail
           }
+          if(result.img == undefined){
+            result.img = imgurl;
+          }
           result.check = true;
+
         })
-
-        //
-        // $(ele).each(function(idx, el){
-        //   //오늘 날자에 올라온 것인지 확인하기 위해서 time 변수 선언
-        //   var time =  $(el).siblings(".stream-item-header").find('.tweet-timestamp').attr("title");
-        //   time = parseInt(time.split(' ')[3]) + 1;
-        //
-        //   temptext = $(el).siblings(".js-tweet-text-container").text().replace(/ /gi, "").replace(/\t/g, "").replace(/\n/g, "");
-        //
-        //   if(d.getDate() != time){    //오늘 날짜에 올라온 것인지 판단
-        //     return true;
-        //   } else if(temptext.indexOf('집회') != -1){
-        //     return true;
-        //   }else{                   //오늘날짜에 올라온게 맞다면 아래를 수행
-        //     console.log('공사정보 업데이트');
-        //     //이미지가 있는 노드의 부모의 형제를 찾아감
-        //     var str2 = $(el).siblings(".js-tweet-text-container").text().trim();
-        //     //이미지가 있는 노드의 자식인 img로 찾아감
-        //     var imgurl2 = $(el).find("img").attr("src")
-        //
-        //     result.check = true;
-        //     result.str += str2.replace('#poltra','\n').replace('pic.', '\npic.') + '\n\n' + '[사진 크게 보기]\n'+imgurl2
-        //     result.img = imgurl2;
-        //   }
-        // });
-        //
-        //
-        // //이미지가 있는 노드 찾기
-        // var ele = $(".content:contains('집') .AdaptiveMediaOuterContainer");
-        //
-        // $(ele).each(function(idx, el){
-        //   //오늘 날자에 올라온 것인지 확인하기 위해서 time 변수 선언
-        //   var time =  $(el).siblings(".stream-item-header").find('.tweet-timestamp').attr("title");
-        //   time = parseInt(time.split(' ')[3]) + 1;
-        //   temptext = $(el).siblings(".js-tweet-text-container").text().replace(/ /gi, "").replace(/\t/g, "").replace(/\n/g, "");
-        //   if(d.getDate() != time){    //오늘 날짜에 올라온 것인지 판단
-        //     return true;
-        //   } else if(temptext.indexOf('공사') != -1){
-        //     return true;
-        //   }else{                   //오늘날짜에 올라온게 맞다면 아래를 수행
-        //     console.log('집회정보 업데이트');
-        //     //이미지가 있는 노드의 부모의 형제를 찾아감
-        //     var str = $(el).siblings(".js-tweet-text-container").text().trim();
-        //     //이미지가 있는 노드의 자식인 img로 찾아감
-        //     var imgurl = $(el).find("img").attr("src")
-        //
-        //
-        //
-        //     result.check = true;
-        //     result.str += str.replace('#poltra','\n').replace('pic.', '\npic.') + '\n\n' + '[사진 크게 보기]\n'+imgurl
-        //
-        //     result.img = imgurl;
-        //
-        //
-        //   }
-        // });
-        //
-
-
 
         check++;
       }
