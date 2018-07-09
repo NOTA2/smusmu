@@ -25,7 +25,7 @@ exports.search = function(url) {
         if(content == ''){
           var img = $("#divView img");
           if(img.length)
-            content = '내용 없이 이미지로만 구성되어 있습니다.\n\n[이미지 보기]\n'+$(img).attr('src')+'\n\n'
+            content = '내용 없이 이미지로만 구성되어 있습니다.\n\n[이미지 보기]\n'+$(img).attr('src')+'\n'
           else
             content = '내용이 없거나 이미지로 구성되어 있습니다.\n링크를 통해 확인하세요\n\n'
         }

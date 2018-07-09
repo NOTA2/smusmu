@@ -1,13 +1,11 @@
 var cheerio = require('cheerio');
 var request = require('request');
-
-const NTCLR= 31;
-const NTCLS= 33;
+var defaultObj = require('../config/defaultVariable');
 
 exports.search = function(keyword, page, mode, realkeyword) {
   var url;
 
-  if (mode == NTCLR)
+  if (mode == defaultObj.NTCLR)
     url = "http://www.smu.ac.kr/mbs/mobile/jsp/board/list.jsp?id=mobile_050100000000&boardId=14446&spage="+page;
   else
     url = "http://www.smu.ac.kr/mbs/mobile/jsp/board/list.jsp?boardId=14446&spage="+page+"&listType=01&id=mobile_050100000000&column=TOTAL&search=" + encodeURIComponent(realkeyword);

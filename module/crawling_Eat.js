@@ -59,10 +59,14 @@ exports.search = function(keyword) {
           eatObj.bt[idx] = keyword + ("00" + month).slice(-2) + '/' + ("00" + date).slice(-2) + ' ' + day;
         });
 
+        var regex = /<br\s*[\/]?>/gi;
 
         $(".subj").each(function(idx, el) {
-          tempArr[idx] = $(el).text().trim();
+          var str = $(el).html();
+          var el_clone = $(el).html(str.replace(regex, "\n"));
+          tempArr[idx] = $(el_clone).text().trim();
         });
+
 
         var temp = '';
 

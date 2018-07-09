@@ -43,8 +43,8 @@ var changepop, changepty, changesky, on;
 
 var nx = 60;
 var ny = 127;
-const weather_apikey = fs.readFileSync('config/weather_apikey', 'utf-8');
-const dust_apikey = fs.readFileSync('config/dust_apikey', 'utf-8');
+const weather_apikey = fs.readFileSync('key/weather_apikey', 'utf-8');
+const dust_apikey = fs.readFileSync('key/dust_apikey', 'utf-8');
 
 
 
