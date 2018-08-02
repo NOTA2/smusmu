@@ -38,7 +38,7 @@ exports.search = function(keyword) {
 
           request(rurl, function(error, response, body) {
             if (!error && response.statusCode == 200) {
-              console.log('저번주로 재접속');
+              console.log(keyword + '저번주로 재접속' + rday);
               //HTML body
               $ = cheerio.load(body);
               tableCheck = $("table").hasClass("info_table_type11");

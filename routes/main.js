@@ -12,10 +12,8 @@ module.exports = function(){
         buttons: defaultObj.mainbutton
       }
     };
-    
-    res.set({
-      'content-type': 'application/json'
-    }).send(JSON.stringify(massage));
+    console.log(massage);
+    res.json(massage);
   });
 
   return route;

@@ -33,9 +33,7 @@ module.exports = function(){
       };
     }
 
-    res.set({
-      'content-type': 'application/json'
-    }).send(JSON.stringify(massage));
+    res.json(massage);
   });
 
 
@@ -71,9 +69,7 @@ module.exports = function(){
       };
 
 
-    res.set({
-      'content-type': 'application/json'
-    }).send(JSON.stringify(massage));
+    res.json(massage);
   });
 
 

@@ -18,9 +18,7 @@ module.exports = function(){
     };
     app.user[idx].mode = defaultObj.MAIN;
 
-    res.set({
-      'content-type': 'application/json'
-    }).send(JSON.stringify(massage));
+    res.json(massage);
   });
 
 
