@@ -6,7 +6,7 @@ module.exports = function(){
   route.get('', function(req, res){
     var sql = 'SELECT explanation FROM Description WHERE route=?';
 
-    conn.query(sql, ['main'], (err, results) => {
+    conn.query(sql, ['err'], (err, results) => {
       if(err){
         console.log(err);
         return res.redirect('/err');

@@ -1,32 +1,32 @@
 module.exports = function(){
   var defaultObj = require('../config/defaultVariable');
   var route = require('express').Router();
+  var conn = require('../config/db')();
 
   route.get('', function(req, res) {
-    var content = req.query.content;
+    var sql = 'SELECT explanation FROM Description WHERE route=?';
 
-    if (content == '서울시 공사/집회정보'){
-      result = defaultObj.explanation_seoulAssembly;
-
-      massage = {
-        "message": {
-          "text": result
-        },
-        "keyboard": {
-          type: 'buttons',
-          buttons: defaultObj.seoulAssemblyResult.bt
-        }
-      };
-    }
-    else{
-      return res.redirect("/seoulAssembly/content");
-    }
-
-    res.json(massage);
+    conn.query(sql, ['seoulAssembly'], (err, results) => {
+      if(err){
+        console.log(err);
+        return res.redirect('/err');
+      } else{
+        var massage = {
+          "message": {
+            "text": results[0].explanation
+          },
+          "keyboard": {
+            type: 'buttons',
+            buttons: defaultObj.seoulAssemblyResult.bt
+          }
+        };
+        res.json(massage);
+      }
+    });
   });
 
 
-  route.get('/content', function(req, res) {
+  route.get('/result', function(req, res) {
     massage = {
       "message": {
         "text": defaultObj.seoulAssemblyResult.str,

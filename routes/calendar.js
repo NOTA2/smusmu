@@ -20,18 +20,25 @@ module.exports = function(){
       return res.redirect("/calendar/search/result?content=" + content);
     }
 
+    var sql = 'SELECT explanation FROM Description WHERE route=?';
 
-    var massage = {
-      "message" : {
-        "text" : defaultObj.explanation_cal
-      },
-      "keyboard" : {
-        type : 'buttons',
-        buttons : defaultObj.calbutton
+    conn.query(sql, ['cal'], (err, results) => {
+      if(err){
+        console.log(err);
+        return res.redirect('/err');
+      } else{
+        var massage = {
+          "message": {
+            "text": results[0].explanation
+          },
+          "keyboard": {
+            type: 'buttons',
+            buttons: defaultObj.calbutton
+          }
+        };
+        res.json(massage);
       }
-    };
-
-    res.json(massage);
+    });
   });
 
 

@@ -4,10 +4,9 @@ module.exports = function(defaultObj){
   const deasync = require('deasync');
 
   (function (){
-    request("http://ip.ojj.kr/", function(error, response, body) {
+    request("http://169.254.169.254/latest/meta-data/public-ipv4", function(error, response, body) {
       if (!error && response.statusCode == 200) {
-        var $ = cheerio.load(body);
-        defaultObj.ipadd = $("body > center > h1 > font:nth-child(2)").text().trim()
+        defaultObj.ipadd  = body
       }
     });
     while (defaultObj.ipadd == undefined) {

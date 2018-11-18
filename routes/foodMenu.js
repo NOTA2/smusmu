@@ -1,78 +1,70 @@
 module.exports = function(){
   var defaultObj = require('../config/defaultVariable');
   var route = require('express').Router();
-  const fs = require('fs');
-
-  var foodMenubutton = foodMenuBtMake();
+  var conn = require('../config/db')();
 
   route.get('', function(req, res) {
-    var content = req.query.content;
+    var sql = 'SELECT * FROM FoodMenu';
 
-    if (content != '학교 근처 식당 메뉴판') {
-      return res.redirect("/foodMenu/result?content=" + content);
-    }
+    conn.query(sql, [], (err, results) => {
+      if (err) {
+        console.err(err);
+        return res.redirect('/err');
+      } else {
 
-    massage = {
-      "message": {
-        "text": '보고싶은 메뉴판을 누르뮤!'
-      },
-      "keyboard" : {
-        type : 'buttons',
-        buttons : foodMenubutton
+        console.log(results.name);
+
+        massage = {
+          "message": {
+            "text": '보고싶은 메뉴판을 누르뮤!'
+          },
+          "keyboard" : {
+            type : 'buttons',
+            buttons : results.name
+          }
+        };
+
+        res.json(massage);
       }
-    };
-
-    res.json(massage);
+    });
   });
 
 
   route.get('/result', function(req, res) {
     var content = req.query.content;
+    var sql = 'SELECT * FROM FoodMenu WHERE name=?';
 
-    result = getfoodMenu(content);
+    conn.query(sql, [content], (err, results) => {
+      if (err) {
+        console.err(err);
+        return res.redirect('/err');
+      } else {
 
-    massage = {
-      "message": {
-        "text": result.str,
-        "photo": {
-          "url": result.img,
-          "width": 480,
-          "height": 640
-        },
-        "message_button": {
-          "label" : '사진 크게 보기',
-          "url" : result.img
-        }
-      },
-      "keyboard" : {
-        type : 'buttons',
-        buttons : foodMenubutton
+        let img = 'http://' + defaultObj.ipadd + results[0].img;
+
+        massage = {
+          "message": {
+            "text": results[0].desc,
+            "photo": {
+              "url": img,
+              "width": 480,
+              "height": 640
+            },
+            "message_button": {
+              "label" : '사진 크게 보기',
+              "url" : img
+            }
+          },
+          "keyboard" : {
+            type : 'buttons',
+            buttons : results.name
+          }
+        };
+
+        res.json(massage);
       }
-    };
-
-    res.json(massage);
+    });
   });
-
-
-  function foodMenuBtMake(){
-    var foodMenuJSON = fs.readFileSync('./asset/foodMenu.json', 'utf8');
-    var foodMenudatas = JSON.parse(foodMenuJSON);
-
-    return [defaultObj.firststr].concat(Object.keys(foodMenudatas));
-  }
-
-  function getfoodMenu(keyword){
-    var foodMenuJSON = fs.readFileSync('./asset/foodMenu.json', 'utf8');
-    var foodMenudatas = JSON.parse(foodMenuJSON);
-
-    var menuResult = new Object();
-
-    menuResult.str = foodMenudatas[keyword].str
-
-    menuResult.img = 'http://' + defaultObj.ipadd +foodMenudatas[keyword].img;
-
-    return menuResult;
-  }
 
   return route;
 }

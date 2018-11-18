@@ -4,7 +4,7 @@ var cheerio = require('cheerio');
 var request = require('request');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
-var sky = ['', '맑고(해),\n', '구름이 조금있고,\n', '구름이 많으며(구름),\n', '흐리며(구름),\n'];
+// var sky = ['', '맑고(해),\n', '구름이 조금있고,\n', '구름이 많으며(구름),\n', '흐리며(구름),\n'];
 var skybefore = ['', '맑다가(해)', '구름이 조금있다가', '구름이 많았다가(구름)', '흐렸다가(구름)(구름)'];
 var skyafter = ['', '맑아(해)질 것', '구름이 조금 생길 것', '구름이 많아(구름)질 것', '흐려질(구름)(구름) 것'];
 var ptybefore = ['없다가(꺄아)', '비(비)가 오다가 ', '진눈깨비(비)(눈)가 오다가', '진눈깨비(눈)가 오다가', '눈(눈)이 오다가'];
@@ -13,7 +13,6 @@ var grade = ['', '좋음', '보통', '나쁨', '매우나쁨'];
 var grade2 = ['', '(꺄아)', '(아잉)', '(아픔)', '(아픔)'];
 var weather = {
   t1h: 0, //현재온도
-  nsky: 0, //현재구름
   npyt: 0, //현재강수
   nwsd: 0, //현재풍속
   tmn: -999, //최저기온
@@ -80,10 +79,6 @@ exports.search = function(keyword) {
   weather.r06 = 0.0;
   weather.s06 = 0.0;
 
-  console.log(urlNow + '\n');
-  console.log(urlForecast+'\n');
-  console.log(urlDust+'\n');
-
   return new Promise(function(resolve, reject) {
     var weatherResult = '';
     var nowData;
@@ -103,8 +98,8 @@ exports.search = function(keyword) {
               if (nowData.item[i].category[0] == 'T1H')
                 weather.t1h = nowData.item[i].obsrValue[0];
 
-              else if (nowData.item[i].category[0] == 'SKY')
-                weather.nsky = nowData.item[i].obsrValue[0];
+              // else if (nowData.item[i].category[0] == 'SKY')
+              //   weather.nsky = nowData.item[i].obsrValue[0];
 
               else if (nowData.item[i].category[0] == 'PTY')
                 weather.npyt = nowData.item[i].obsrValue[0] >> 0;
@@ -114,6 +109,7 @@ exports.search = function(keyword) {
             }
           });
         } catch(e){
+          console.log(e);
           console.log('현재 날씨 데이터 받아오기 실패');
         }
 
@@ -135,6 +131,7 @@ exports.search = function(keyword) {
                 }
               });
             }catch(e){
+              console.log(e);
               console.log('예보 날씨 데이터 받아오기 실패');
             }
 
@@ -166,6 +163,7 @@ exports.search = function(keyword) {
 
                   });
                 } catch(e){
+                  console.log(e);
                   console.log('미세먼지 데이터 받기 실패');
                 }
                 weatherResult = setWeatherResult(time);
@@ -234,8 +232,8 @@ function getForecastData(forecastData, i, day) {
 //문장을 완성하는 함수
 function setWeatherResult(time) {
   result = ''
-  result += '현재 기온은 ' + weather.t1h + '℃ 입니다.\n';
-  result += "하늘은 " + sky[weather.nsky];
+  result += '현재 기온은 ' + weather.t1h + '℃ 입니다.\n그리고';
+  // result += "하늘은 " + sky[weather.nsky];
   switch (weather.npyt) {
     case 0:
       result += '비는 오지 않습니다.(꺄아)\n';

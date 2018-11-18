@@ -12,7 +12,7 @@ module.exports = function(){
         buttons: defaultObj.mainbutton
       }
     };
-    console.log(massage);
+
     res.json(massage);
   });
 

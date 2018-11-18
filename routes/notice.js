@@ -3,8 +3,8 @@ module.exports = function(){
   var app = require('../app.js');
   var route = require('express').Router();
   const fs = require('fs');
-  var cNoticeContents = require('../module/crawling_Notice_Contents');
-  var cNotice = require('../module/crawling_Notice');
+  var cNoticeContents = require('../crawling/crawling_Notice_Contents');
+  var cNotice = require('../crawling/crawling_Notice');
   var deasync = require('deasync');
 
   route.get('', function(req, res) {
@@ -29,17 +29,25 @@ module.exports = function(){
       return res.redirect("/notice/ntcl?idx=" + idx + "&mode=" + mode + "&content=" + getreplace(content));
     }
 
-    massage = {
-      "message": {
-        "text": defaultObj.explanation_notice
-      },
-      "keyboard": {
-        type: 'buttons',
-        buttons: defaultObj.ntcbutton
-      }
-    };
+    var sql = 'SELECT explanation FROM Description WHERE route=?';
 
-    res.json(massage);
+    conn.query(sql, ['notice'], (err, results) => {
+      if(err){
+        console.log(err);
+        return res.redirect('/err');
+      } else{
+        var massage = {
+          "message": {
+            "text": results[0].explanation
+          },
+          "keyboard": {
+            type: 'buttons',
+            buttons: defaultObj.ntcbutton
+          }
+        };
+        res.json(massage);
+      }
+    });
   });
 
 

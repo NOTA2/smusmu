@@ -4,7 +4,6 @@ module.exports = function(){
   var route = require('express').Router();
 
   route.get('', function(req, res) {
-    var idx = req.query.idx;
     result = defaultObj.weatherResult;
 
     massage = {
@@ -16,7 +15,6 @@ module.exports = function(){
         buttons: defaultObj.mainbutton
       }
     };
-    app.user[idx].mode = defaultObj.MAIN;
 
     res.json(massage);
   });
