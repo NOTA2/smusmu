@@ -39,6 +39,7 @@ app.use('/calendar', calendarRouter);
 app.use('/foodMenu', foodMenuRouter);
 
 
+
 /*********************************
 초기 설정 코드
 **********************************/
@@ -50,6 +51,43 @@ console.log('APIs initialize');
 app.listen(80, function() {
   console.log('Connect 80 port');
 });
+
+
+//jade의 index파일로 연결
+app.get('/', function(req, res){
+  var loginFail='';
+  if(req.query.mode == 1){
+    loginFail = '다시 입력해주세요.'
+  }
+
+  res.render('index', {loginFail:loginFail});
+});
+
+app.post('/signIn', function(req, res){
+  var memberId = req.body.memberId;
+  var memberPw = req.body.memberPw;
+
+  if(checkMember(memberId, memberPw)){   //아이디와 비밀번호가 일치하면
+    res.redirect('/home');
+  }
+  else{   //일치하지 않으면
+    console.log('redirect');
+    res.redirect(301, '/?mode=1');
+  }
+});
+
+
+app.get('/home', function(req, res){
+  res.render('home');
+});
+
+
+function checkMember(id, pw){
+  if(id == 'a')
+    return true;
+  else
+    return false;
+}
 
 
 var scheduleEat = new CronJob({
@@ -172,17 +210,12 @@ function setseoulAssembly(){
     while (defaultObj.seoulAssemblyResult == beforeseoulAssemblyResult) {
       deasync.runLoopOnce();
     }
-
-    day = (d.getMonth() + 1) + '월 ' + d.getDate() +'일';
-
-    result.bt.push(defaultObj.firststr);
-
+    result.check = defaultObj.seoulAssemblyResult.check;
     if(defaultObj.seoulAssemblyResult.check){    //오늘 데이터가 있었으면
-      result.bt.push(day);
       result.str = defaultObj.seoulAssemblyResult.str;
       result.img = defaultObj.seoulAssemblyResult.img;
     }
-
+    
     defaultObj.seoulAssemblyResult = result;
 }
 

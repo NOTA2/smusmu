@@ -2,6 +2,7 @@ module.exports = function(){
   var defaultObj = require('../config/defaultVariable');
   var route = require('express').Router();
   var conn = require('../config/db')();
+  var foodmenu = [defaultObj.firststr];
 
   route.get('', function(req, res) {
     var sql = 'SELECT * FROM FoodMenu';
@@ -11,16 +12,14 @@ module.exports = function(){
         console.err(err);
         return res.redirect('/err');
       } else {
-
-        console.log(results.name);
-
+        foodmenu = foodmenu.concat(results.map(x => x.name));
         massage = {
           "message": {
             "text": '보고싶은 메뉴판을 누르뮤!'
           },
           "keyboard" : {
             type : 'buttons',
-            buttons : results.name
+            buttons : foodmenu
           }
         };
 
@@ -57,7 +56,7 @@ module.exports = function(){
           },
           "keyboard" : {
             type : 'buttons',
-            buttons : results.name
+            buttons : foodmenu
           }
         };
 

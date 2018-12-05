@@ -35,20 +35,16 @@ module.exports = function() {
         }
         console.log(content);
 
-
-
         //URL을 어떻게 처리할 것인지 방법을 깊이 고민해 보자
 
         //뒤로가기 라우팅
         if (content == defaultObj.backstr) {
           // /로 구분짓고 마지막 라우터를 ''으로 치환
-          
           let arr = user.uRoute.split('/');
-          console.log(arr);
-          console.log('/'+arr[arr.length-1]);
-          
-          
-          user.uRoute.replace('/'+arr[arr.length-1], '');
+          if(user.uRoute.indexOf('result') != -1 )
+            user.uRoute = user.uRoute.replace('/'+arr[arr.length-2]+'/'+ arr[arr.length-1], '').replace('/'+arr[arr.length-1], '');
+          else
+            user.uRoute = user.uRoute.replace('/'+arr[arr.length-1], '');
         }
         //메인화면 라우팅
         else if (content == defaultObj.mainstr || content == defaultObj.firststr)
@@ -68,14 +64,14 @@ module.exports = function() {
             user.uRoute = 'eat/week';
         }
         //날씨 라우팅
-        else if (content == defaultObj.wtrstr)
+        if (content == defaultObj.wtrstr)
           user.uRoute = 'weather';
-
+        
         //집회정보 라우팅
         else if (content == defaultObj.salstr)
           user.uRoute = 'seoulAssembly';
-        else if (user.uRoute.indexOf('seoulAssembly') != -1)
-          user.uRoute = 'seoulAssembly/result';
+        // else if (user.uRoute.indexOf('seoulAssembly') != -1)
+        //   user.uRoute = 'seoulAssembly/result';
 
         //메뉴판 라우팅
         else if(content == defaultObj.foodMenustr)
@@ -83,6 +79,23 @@ module.exports = function() {
         else if(user.uRoute.indexOf('foodMenu') != -1)
           user.uRoute = 'foodMenu/result';
 
+          //학사정보 라우팅
+        if(content == defaultObj.calstr)
+          user.uRoute = 'calendar';
+        else if (user.uRoute.indexOf('calendar') != -1){
+          if(content == "월 별 검색"){
+            user.uRoute = "calendar/month";
+          }
+          else if(user.uRoute.indexOf('month') != -1){
+            user.uRoute = "calendar/month/result";
+          }
+          else if(content == "일정 검색"){
+            user.uRoute = "calendar/search";
+          }
+          else if(user.uRoute.indexOf('search') != -1){
+            user.uRoute = "calendar/search/result";
+          }
+        }
 
         sql = 'UPDATE ChatUser SET uRoute=? WHERE uKey=?';
         conn.query(sql, [user.uRoute, user.uKey], (err, results) => {
@@ -110,8 +123,7 @@ module.exports = function() {
         // else if (mode == defaultObj.NTCLR || mode == defaultObj.NTCLS)
         //   mode = defaultObj.NTCR;
 
-        // else if(content == defaultObj.calstr)
-        //   mode = defaultObj.CAL;
+        // else 
         // else if (content == defaultObj.calbutton[1])
         //   mode = defaultObj.CALM
         // else if (content == defaultObj.calbutton[2])

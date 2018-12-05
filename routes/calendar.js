@@ -1,24 +1,17 @@
 module.exports = function(){
   var defaultObj = require('../config/defaultVariable');
   var route = require('express').Router();
+  var conn = require('../config/db')();
 
   route.get('', function(req, res){
-    var mode = req.query.mode;
     var content = req.query.content;
-    var idx = req.query.idx;
 
-    if(content == "월 별 검색"){
-      return res.redirect("/calendar/month");
-    }
-    else if(content == "일정 검색"){
-      return res.redirect("/calendar/search");
-    }
-    else if(mode == defaultObj.CALM){
-      return res.redirect("/calendar/month/result?content=" + content);
-    }
-    else if(mode == defaultObj.CALS){
-      return res.redirect("/calendar/search/result?content=" + content);
-    }
+    // else if(mode == defaultObj.CALM){
+    //   return res.redirect("/calendar/month/result?content=" + content);
+    // }
+    // else if(mode == defaultObj.CALS){
+    //   return res.redirect("/calendar/search/result?content=" + content);
+    // }
 
     var sql = 'SELECT explanation FROM Description WHERE route=?';
 
@@ -43,7 +36,7 @@ module.exports = function(){
 
 
   route.get('/month', function(req, res){
-
+    
     massage = {
       "message" : {
         "text" : "검색할 달을 선택해 주세요."
