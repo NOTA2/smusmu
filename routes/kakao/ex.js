@@ -1,12 +1,12 @@
 module.exports = function(){
-  var defaultObj = require('../config/defaultVariable');
+  var defaultObj = require('../../config/defaultVariable');
   var route = require('express').Router();
-  var conn = require('../config/db')();
+  var conn = require('../../config/db')();
 
   route.get('', function(req, res){
     var sql = 'SELECT explanation FROM Description WHERE route=?';
 
-    conn.query(sql, ['err'], (err, results) => {
+    conn.query(sql, ['main'], (err, results) => {
       if(err){
         console.log(err);
         return res.redirect('/err');

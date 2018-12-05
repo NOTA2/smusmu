@@ -1,8 +1,8 @@
 module.exports = function() {
-  var app = require('../app.js');
-  var defaultObj = require('../config/defaultVariable');
+  var app = require('../../app.js');
+  var defaultObj = require('../../config/defaultVariable');
   var route = require('express').Router();
-  var conn = require('../config/db')();
+  var conn = require('../../config/db')();
 
   route.get('', function(req, res) {
 

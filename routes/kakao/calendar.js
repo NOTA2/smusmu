@@ -1,7 +1,7 @@
 module.exports = function(){
-  var defaultObj = require('../config/defaultVariable');
+  var defaultObj = require('../../config/defaultVariable');
   var route = require('express').Router();
-  var conn = require('../config/db')();
+  var conn = require('../../config/db')();
 
   route.get('', function(req, res){
     var content = req.query.content;

@@ -1,14 +1,11 @@
 module.exports = function(){
-  var app = require('../app.js');
-  var defaultObj = require('../config/defaultVariable');
+  var defaultObj = require('../../config/defaultVariable');
   var route = require('express').Router();
 
-  route.get('', function(req, res) {
-    result = defaultObj.weatherResult;
-
-    massage = {
+  route.get('', function(req, res){
+    var massage = {
       "message": {
-        "text": result
+        "text": defaultObj.firstmsg
       },
       "keyboard": {
         type: 'buttons',
@@ -18,7 +15,6 @@ module.exports = function(){
 
     res.json(massage);
   });
-
 
   return route;
 }

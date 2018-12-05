@@ -20,18 +20,19 @@ html(lang='ko')
     #wrap
       #container
         h1.title 스뮤스뮤(smusmu)
-        form(action='/signIn', method='post', onsubmit='return checkSubmit()')
+        form(action='/auth/login', method='post', onsubmit='return checkSubmit()')
           .form-group.row
             label(for="inputId").col-sm-2.col-form-label.col-form-label-lg 아이디
             .col-sm-9
-              input.memberId.form-control(type='text', name='memberId', placeholder="Enter id")
+              input.memberId.form-control(type='text', name='username', placeholder="Enter id")
           .form-group.row
             label(for="inputPw").col-sm-2.col-form-label.col-form-label-lg 비밀번호
             .col-sm-9
-              input.memberPw.form-control(type="password", name='memberPw', placeholder="Enter password")
+              input.memberPw.form-control(type="password", name='password', placeholder="Enter password")
           - if(loginFail)
             h3.alert.alert-danger(role="alert")= loginFail
           .form-group.row
             .col-sm-2
             .form-group.col-sm-8
               input.btn.btn-primary.btn-lg.btn-block(type='submit', value='로그인')
+        a(href='/auth/register').title 가입하기

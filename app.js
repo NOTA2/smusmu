@@ -4,6 +4,7 @@ require('./config/ip')(defaultObj);
 require('date-utils');
 var deasync = require('deasync');
 var CronJob = require('cron').CronJob;
+var passport = require('./config/passport')(app);
 
 var cEat = require('./crawling/crawling_Eat');
 var chEat = require('./crawling/crawling_Eat_happy');
@@ -14,20 +15,24 @@ var calendar = require('./crawling/calendar');
 exports.user = new Array();
 var userCount = 0;
 
-var messageRouter = require('./routes/message')();
-var errRouter = require('./routes/err')();
+var messageRouter = require('./routes/kakao/message')();
+// var errRouter = require('./routes/kakao/err')();
 
-var mainRouter = require('./routes/main')();
-var exRouter = require('./routes/ex')();
-var eatRouter = require('./routes/eat')();
-var noticeRouter = require('./routes/notice')();
-var weatherRouter = require('./routes/weather')();
-var seoulAssemblyRouter = require('./routes/seoulAssembly')();
-var calendarRouter = require('./routes/calendar')();
-var foodMenuRouter = require('./routes/foodMenu')();
+var mainRouter = require('./routes/kakao/main')();
+var exRouter = require('./routes/kakao/ex')();
+var eatRouter = require('./routes/kakao/eat')();
+var noticeRouter = require('./routes/kakao/notice')();
+var weatherRouter = require('./routes/kakao/weather')();
+var seoulAssemblyRouter = require('./routes/kakao/seoulAssembly')();
+var calendarRouter = require('./routes/kakao/calendar')();
+var foodMenuRouter = require('./routes/kakao/foodMenu')();
+
+var auth = require('./routes/asso/auth')(passport);
+app.use('/auth/', auth);
+
 
 app.use('/message', messageRouter);
-app.use('/err', errRouter);
+// app.use('/err', errRouter);
 
 app.use('/main', mainRouter);
 app.use('/ex', exRouter);
@@ -48,46 +53,24 @@ console.log('APIs initialize');
 
 
 //서버를 계속 유지
-app.listen(80, function() {
+app.listen(80, function () {
   console.log('Connect 80 port');
 });
 
 
 //jade의 index파일로 연결
-app.get('/', function(req, res){
-  var loginFail='';
-  if(req.query.mode == 1){
-    loginFail = '다시 입력해주세요.'
-  }
-
-  res.render('index', {loginFail:loginFail});
-});
-
-app.post('/signIn', function(req, res){
-  var memberId = req.body.memberId;
-  var memberPw = req.body.memberPw;
-
-  if(checkMember(memberId, memberPw)){   //아이디와 비밀번호가 일치하면
-    res.redirect('/home');
-  }
-  else{   //일치하지 않으면
-    console.log('redirect');
-    res.redirect(301, '/?mode=1');
-  }
+app.get('/', function (req, res) {
+  res.redirect('/auth/login')
 });
 
 
-app.get('/home', function(req, res){
-  res.render('home');
+app.get('/home', function (req, res) {
+  if (req.user) {
+    res.render('home');
+  } else {
+    res.redirect('/auth/login');
+  }
 });
-
-
-function checkMember(id, pw){
-  if(id == 'a')
-    return true;
-  else
-    return false;
-}
 
 
 var scheduleEat = new CronJob({
@@ -95,7 +78,7 @@ var scheduleEat = new CronJob({
   onTick: setResultEat,
   start: true,
   timeZone: 'Asia/Seoul',
-  runOnInit : true
+  runOnInit: true
 });
 
 var scheduleSeoulAssembly = new CronJob({
@@ -103,7 +86,7 @@ var scheduleSeoulAssembly = new CronJob({
   onTick: setseoulAssembly,
   start: true,
   timeZone: 'Asia/Seoul',
-  runOnInit : true
+  runOnInit: true
 });
 
 var scheduleCalendar = new CronJob({
@@ -111,17 +94,17 @@ var scheduleCalendar = new CronJob({
   onTick: setCalendar,
   start: true,
   timeZone: 'Asia/Seoul',
-  runOnInit : true
+  runOnInit: true
 });
 
 
-if(defaultObj.ipadd !=  '52.78.151.4'){     //테스트 서버일 땐 하지 않습니다.
+if (defaultObj.ipadd != '52.78.151.4') { //테스트 서버일 땐 하지 않습니다.
   var scheduleWeather = new CronJob({
     cronTime: "00 43 * * * *",
     onTick: setResultWeather,
     start: true,
     timeZone: 'Asia/Seoul',
-    runOnInit : true
+    runOnInit: true
   });
 }
 
@@ -190,7 +173,7 @@ function setResultWeather() {
 }
 
 //집회 정보 업데이트
-function setseoulAssembly(){
+function setseoulAssembly() {
   var result = new Object();
   result.bt = new Array()
 
@@ -207,21 +190,21 @@ function setseoulAssembly(){
       defaultObj.seoulAssemblyResult = temp;
     });
 
-    while (defaultObj.seoulAssemblyResult == beforeseoulAssemblyResult) {
-      deasync.runLoopOnce();
-    }
-    result.check = defaultObj.seoulAssemblyResult.check;
-    if(defaultObj.seoulAssemblyResult.check){    //오늘 데이터가 있었으면
-      result.str = defaultObj.seoulAssemblyResult.str;
-      result.img = defaultObj.seoulAssemblyResult.img;
-    }
-    
-    defaultObj.seoulAssemblyResult = result;
+  while (defaultObj.seoulAssemblyResult == beforeseoulAssemblyResult) {
+    deasync.runLoopOnce();
+  }
+  result.check = defaultObj.seoulAssemblyResult.check;
+  if (defaultObj.seoulAssemblyResult.check) { //오늘 데이터가 있었으면
+    result.str = defaultObj.seoulAssemblyResult.str;
+    result.img = defaultObj.seoulAssemblyResult.img;
+  }
+
+  defaultObj.seoulAssemblyResult = result;
 }
 
 
 //학사정보 업데이트
-function setCalendar(){
+function setCalendar() {
   var calendartemp;
   var dt = new Date();
   var time = dt.toFormat("YYYY-MM-DD HH24:MI:SS");

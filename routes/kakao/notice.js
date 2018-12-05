@@ -1,10 +1,10 @@
 module.exports = function(){
-  var defaultObj = require('../config/defaultVariable');
-  var app = require('../app.js');
+  var defaultObj = require('../../config/defaultVariable');
+  var app = require('../../app.js');
   var route = require('express').Router();
   const fs = require('fs');
-  var cNoticeContents = require('../crawling/crawling_Notice_Contents');
-  var cNotice = require('../crawling/crawling_Notice');
+  var cNoticeContents = require('../../crawling/crawling_Notice_Contents');
+  var cNotice = require('../../crawling/crawling_Notice');
   var deasync = require('deasync');
 
   route.get('', function(req, res) {
