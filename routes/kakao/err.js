@@ -11,7 +11,7 @@ module.exports = function(){
         console.log(err);
         return res.redirect('/err');
       } else{
-        var massage = {
+        var message = {
           "message": {
             "text": results[0].explanation
           },
@@ -21,7 +21,7 @@ module.exports = function(){
           }
         };
 
-        res.json(massage);
+        res.json(message);
       }
     });
   });

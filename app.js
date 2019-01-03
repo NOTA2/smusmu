@@ -15,13 +15,13 @@ var calendar = require('./crawling/calendar');
 exports.user = new Array();
 var userCount = 0;
 
-var messageRouter = require('./routes/kakao/message')();
+// var messageRouter = require('./routes/kakao/message')();
 // var errRouter = require('./routes/kakao/err')();
 
-var mainRouter = require('./routes/kakao/main')();
-var exRouter = require('./routes/kakao/ex')();
+// var mainRouter = require('./routes/kakao/main')();
+// var exRouter = require('./routes/kakao/ex')();
 var eatRouter = require('./routes/kakao/eat')();
-var noticeRouter = require('./routes/kakao/notice')();
+// var noticeRouter = require('./routes/kakao/notice')();
 var weatherRouter = require('./routes/kakao/weather')();
 var seoulAssemblyRouter = require('./routes/kakao/seoulAssembly')();
 var calendarRouter = require('./routes/kakao/calendar')();
@@ -31,13 +31,13 @@ var auth = require('./routes/asso/auth')(passport);
 app.use('/auth/', auth);
 
 
-app.use('/message', messageRouter);
-// app.use('/err', errRouter);
+// app.use('/message', messageRouter);
+// // app.use('/err', errRouter);
 
-app.use('/main', mainRouter);
-app.use('/ex', exRouter);
+// app.use('/main', mainRouter);
+// app.use('/ex', exRouter);
 app.use('/eat', eatRouter);
-app.use('/notice', noticeRouter);
+// app.use('/notice', noticeRouter);
 app.use('/weather', weatherRouter);
 app.use('/seoulAssembly', seoulAssemblyRouter);
 app.use('/calendar', calendarRouter);
@@ -73,13 +73,13 @@ app.get('/home', function (req, res) {
 });
 
 
-var scheduleEat = new CronJob({
-  cronTime: "00 10 6-11 * * 0-2",
-  onTick: setResultEat,
-  start: true,
-  timeZone: 'Asia/Seoul',
-  runOnInit: true
-});
+// var scheduleEat = new CronJob({
+//   cronTime: "00 10 6-11 * * 0-2",
+//   onTick: setResultEat,
+//   start: true,
+//   timeZone: 'Asia/Seoul',
+//   runOnInit: true
+// });
 
 var scheduleSeoulAssembly = new CronJob({
   cronTime: "00 */5 6-9 * * *",
@@ -89,33 +89,25 @@ var scheduleSeoulAssembly = new CronJob({
   runOnInit: true
 });
 
+//학사정보 업데이트
 var scheduleCalendar = new CronJob({
-  cronTime: "00 00 12 */10 1,2,12 *",
-  onTick: setCalendar,
+  cronTime: "00 00 12 */10 0,1 *",
+  onTick: calendar.crawling,
   start: true,
   timeZone: 'Asia/Seoul',
   runOnInit: true
 });
 
 
-if (defaultObj.ipadd != '52.78.151.4') { //테스트 서버일 땐 하지 않습니다.
-  var scheduleWeather = new CronJob({
-    cronTime: "00 43 * * * *",
-    onTick: setResultWeather,
-    start: true,
-    timeZone: 'Asia/Seoul',
-    runOnInit: true
-  });
-}
-
-
-
-app.get('/keyboard', (req, res) => {
-  res.json({
-    type: 'buttons',
-    buttons: [defaultObj.mainstr]
-  });
+if (defaultObj.ipadd != '54.180.122.96') { //테스트 서버일 땐 하지 않습니다.
+var scheduleWeather = new CronJob({
+  cronTime: "00 43 * * * *",
+  onTick: setResultWeather,
+  start: true,
+  timeZone: 'Asia/Seoul',
+  runOnInit: true
 });
+}
 
 
 //일주일치 학식정보를 업데이트
@@ -169,7 +161,10 @@ function setResultWeather() {
   kmaWeather.search()
     .then(temp => {
       defaultObj.weatherResult = temp;
+      console.log(defaultObj.weatherResult);
+      
     });
+
 }
 
 //집회 정보 업데이트
@@ -200,25 +195,4 @@ function setseoulAssembly() {
   }
 
   defaultObj.seoulAssemblyResult = result;
-}
-
-
-//학사정보 업데이트
-function setCalendar() {
-  var calendartemp;
-  var dt = new Date();
-  var time = dt.toFormat("YYYY-MM-DD HH24:MI:SS");
-
-  console.log(time);
-  console.log('학사정보 업데이트');
-  calendar.crawling()
-    .then(temp => {
-      calendartemp = temp
-    });
-
-  while (calendartemp == undefined) {
-    deasync.runLoopOnce();
-  }
-
-  defaultObj.calendarResult = calendartemp;
 }

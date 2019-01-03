@@ -1,138 +1,76 @@
-module.exports = function(){
+module.exports = function () {
   var defaultObj = require('../../config/defaultVariable');
   var route = require('express').Router();
   var conn = require('../../config/db')();
 
-  route.get('', function(req, res){
-    var content = req.query.content;
+  route.post('', function (req, res) {
+    var content = req.body.action.detailParams;
 
-    // else if(mode == defaultObj.CALM){
-    //   return res.redirect("/calendar/month/result?content=" + content);
-    // }
-    // else if(mode == defaultObj.CALS){
-    //   return res.redirect("/calendar/search/result?content=" + content);
-    // }
-
-    var sql = 'SELECT explanation FROM Description WHERE route=?';
-
-    conn.query(sql, ['cal'], (err, results) => {
-      if(err){
-        console.log(err);
-        return res.redirect('/err');
-      } else{
-        var massage = {
-          "message": {
-            "text": results[0].explanation
-          },
-          "keyboard": {
-            type: 'buttons',
-            buttons: defaultObj.calbutton
+    var message = {
+      "version": "2.0",
+      "template": {
+        "outputs": [{
+          "simpleText": {
+            "text": '검색결과를 찾을 수 업스뮤 😔'
           }
-        };
-        res.json(massage);
-      }
-    });
-  });
-
-
-  route.get('/month', function(req, res){
-    
-    massage = {
-      "message" : {
-        "text" : "검색할 달을 선택해 주세요."
-      },
-      "keyboard" : {
-        type : 'buttons',
-        buttons : defaultObj.calendarResult.monthbt
-      }
-    }
-
-    res.json(massage);
-  });
-
-
-
-  route.get('/search', function(req, res){
-    massage = {
-      "message" : {
-        "text" : "검색할 일정을 입력해 주세요."
-      }
-    }
-
-    res.json(massage);
-  });
-
-
-  route.get('/month/result', function(req, res){
-
-    var content = req.query.content;
-    var result = getclaendar(content, defaultObj.calendarResult)
-
-    massage = {
-      "message" : {
-        "text" : result
-      },
-      "keyboard" : {
-        type : 'buttons',
-        buttons : defaultObj.calendarResult.monthbt
+        }],
+        "quickReplies": defaultObj.Qu
       }
     };
 
-    res.json(massage);
-  });
+    var sql = "SELECT date,content FROM academicCalendar ";
 
+    try {
+      content = JSON.parse(content.date.value);
+      
+      var year = content.to.date.split('-')[0].substr(2,2);;
+      var month = content.to.date.split('-')[1];
 
-
-  route.get('/search/result', function(req, res){
-
-    var content = req.query.content;
-    var result = getclaendar(content, defaultObj.calendarResult)
-
-    massage = {
-      "message" : {
-        "text" : result
-      },
-      "keyboard" : {
-        type : 'buttons',
-        buttons : defaultObj.calbutton
-      }
-    };
-
-
-    res.json(massage);
+      sql += "WHERE month LIKE ('%" + year + "%') AND month LIKE ('%" + month + "%')";
+    } catch (e) {
+      content = content.content.value;
+      sql += "WHERE content LIKE ('%" + content + "%') OR homonym LIKE ('%" + content + "%')"
+    } finally {
+      console.log(sql);
+      
+      conn.query(sql, function (err, rows) {
+        if (err) throw err
+        rows = JSON.parse(JSON.stringify(rows))
+        
+        if (rows.length > 0)
+          message = getmessage(rows);
+      
+        res.json(message);
+      });
+    }
   });
 
   return route;
 }
 
-function getclaendar(keyword, calendarResult){
+function getmessage(rows) {
   var calresultstr = '';
-  var ch = 0
+  var defaultObj = require('../../config/defaultVariable');
 
-  if(calendarResult.monthbt.indexOf(keyword) != -1){   //달 검색일 경우
-    keyword = keyword.substring(0, keyword.length-1);
-    var selectMonth = keyword.split('년 ')[0] + '.' + keyword.split('년 ')[1];
-
-    for(var i =0;i<calendarResult.contents.length;i++){
-      if(calendarResult.contents[i].date.indexOf(selectMonth) != -1){
-        calresultstr += calendarResult.contents[i].date+'\n'
-        calresultstr += calendarResult.contents[i].content+'\n\n'
-      }
+  rows.forEach((row, idx) =>{
+    calresultstr+='['+row.date+']\n';
+    if(idx == rows.length - 1)
+      calresultstr+=row.content;
+    else
+      calresultstr+=row.content+'\n\n';
+  }) 
+  var result ={
+    "version": "2.0",
+    "template": {
+      "outputs": [{
+        "simpleText": {
+          "text": calresultstr
+        }
+      }],
+      "quickReplies": defaultObj.Qu
     }
-  }
-  else{          //일정명 검색일 경우
-    for(var i = 0; i<calendarResult.contents.length;i++){
-      if(calendarResult.contents[i].content.indexOf(keyword) != -1){
-        calresultstr += calendarResult.contents[i].date+'\n'
-        calresultstr += calendarResult.contents[i].content+'\n\n'
-        ch++;
-      }
-    }
-    if(ch == 0)
-      calresultstr = '검색 결과가 없습니다.'
-  }
+  };
 
-  calresultstr = calresultstr.trim();
 
-  return calresultstr
+  return result;
 }

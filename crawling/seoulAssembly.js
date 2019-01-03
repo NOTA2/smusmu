@@ -19,6 +19,9 @@ exports.search = function() {
         var $ = cheerio.load(body);
 
         var today = (d.getFullYear()+'').substr(2,2) + ("00" + (d.getMonth() + 1)).slice(-2) + ("00" + d.getDate()).slice(-2);
+        console.log(today);
+        today = '181231'
+        
         var boardNo = $("td.subject > a:contains('"+today+ "')").attr('href').split('\'');
         boardNo = boardNo[boardNo.length-2];
 
@@ -86,7 +89,8 @@ exports.search = function() {
     while (check != 2) {
       deasync.runLoopOnce();
     }
-
+    console.log(result);
+    
     resolve(result);
   });
 }

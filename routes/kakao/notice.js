@@ -36,7 +36,7 @@ module.exports = function(){
         console.log(err);
         return res.redirect('/err');
       } else{
-        var massage = {
+        var message = {
           "message": {
             "text": results[0].explanation
           },
@@ -45,7 +45,7 @@ module.exports = function(){
             buttons: defaultObj.ntcbutton
           }
         };
-        res.json(massage);
+        res.json(message);
       }
     });
   });
@@ -61,7 +61,7 @@ module.exports = function(){
 
     app.user[idx].mode = app.user[idx].noticeObj.mode;
 
-    massage = {
+    message = {
       "message": {
         "text": result.str,
         "message_button": {
@@ -75,18 +75,18 @@ module.exports = function(){
       }
     };
 
-    res.json(massage);
+    res.json(message);
   });
 
 
   route.get('/ntcs', function(req, res) {
-    massage = {
+    message = {
       "message": {
         "text": "검색할 키워드를 입력해 주세요."
       }
     };
 
-    res.json(massage);
+    res.json(message);
   });
 
 
@@ -106,7 +106,7 @@ module.exports = function(){
 
       app.user[idx].noticeObj = result;
 
-      massage = {
+      message = {
         "message": {
           "text": app.user[idx].noticeObj.explan
         },
@@ -126,7 +126,7 @@ module.exports = function(){
       //글 검색하기에서 검색결과가 없을 경우
       if (result == '[등록된 게시물이 없습니다.]\n') {
 
-        massage = {
+        message = {
           "message": {
             "text": result
           },
@@ -140,7 +140,7 @@ module.exports = function(){
       else {
         app.user[idx].noticeObj = result;
 
-        massage = {
+        message = {
           "message": {
             "text": app.user[idx].noticeObj.explan
           },
@@ -152,7 +152,7 @@ module.exports = function(){
       }
     }
 
-    res.json(massage);
+    res.json(message);
   });
 
 

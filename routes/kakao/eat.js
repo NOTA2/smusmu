@@ -2,46 +2,51 @@ module.exports = function() {
   var app = require('../../app.js');
   var defaultObj = require('../../config/defaultVariable');
   var route = require('express').Router();
-  var conn = require('../../config/db')();
+  // var conn = require('../../config/db')();
 
-  route.get('', function(req, res) {
+  // route.get('', function(req, res) {
 
-    var sql = 'SELECT explanation FROM Description WHERE route=?';
+  //   var sql = 'SELECT explanation FROM Description WHERE route=?';
 
-    conn.query(sql, ['eat'], (err, results) => {
-      if(err){
-        console.log(err);
-        return res.redirect('/err');
-      } else{
-        var massage = {
-          "message": {
-            "text": results[0].explanation
-          },
-          "keyboard": {
-            type: 'buttons',
-            buttons: defaultObj.eatbutton
-          }
-        };
-        res.json(massage);
-      }
-    });
-  });
+  //   conn.query(sql, ['eat'], (err, results) => {
+  //     if(err){
+  //       console.log(err);
+  //       return res.redirect('/err');
+  //     } else{
+  //       var message = {
+  //         "message": {
+  //           "text": results[0].explanation
+  //         },
+  //         "keyboard": {
+  //           type: 'buttons',
+  //           buttons: defaultObj.eatbutton
+  //         }
+  //       };
+  //       res.json(message);
+  //     }
+  //   });
+  // });
 
-  route.get('/day', (req, res) => {
+  route.post('/day', (req, res) => {
     var content = req.query.content;
 
-    result = getDayResult(content);
+    console.log(req.body.userRequest);
+    console.log(req.body.action);
+    
+    
 
-    var massage = {
-      "message": {
-        "text": result
-      },
-      "keyboard": {
-        type: 'buttons',
-        buttons: defaultObj.eatbutton
-      }
+    var uId = req.body.userRequest.user.id;
+    var uType = req.body.userRequest.user.type;
+    var uPlusKey = req.body.userRequest.user.properties.plusfriend_user_key;
+    var content = req.body.action.detailParams.content.value;
+
+    // result = getDayResult(content);
+
+    var message = {
+      "message":  '학식정보가 없습니다.'
     };
-    res.json(massage);
+
+    res.json(message);
   })
 
   route.get('/week', (req, res) => {
@@ -60,7 +65,7 @@ module.exports = function() {
     else
       result = getWeekResult(content);
 
-    massage = {
+    message = {
       "message": {
         "text": result
       },
@@ -70,7 +75,7 @@ module.exports = function() {
       }
     };
 
-    res.json(massage);
+    res.json(message);
   });
 
 

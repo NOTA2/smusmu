@@ -3,7 +3,7 @@ module.exports = function(){
   var route = require('express').Router();
 
   route.get('', function(req, res){
-    var massage = {
+    var message = {
       "message": {
         "text": defaultObj.firstmsg
       },
@@ -13,7 +13,7 @@ module.exports = function(){
       }
     };
 
-    res.json(massage);
+    res.json(message);
   });
 
   return route;

@@ -13,7 +13,7 @@ module.exports = function(){
         return res.redirect('/err');
       } else {
         foodmenu = foodmenu.concat(results.map(x => x.name));
-        massage = {
+        message = {
           "message": {
             "text": '보고싶은 메뉴판을 누르뮤!'
           },
@@ -23,7 +23,7 @@ module.exports = function(){
           }
         };
 
-        res.json(massage);
+        res.json(message);
       }
     });
   });
@@ -41,7 +41,7 @@ module.exports = function(){
 
         let img = 'http://' + defaultObj.ipadd + results[0].img;
 
-        massage = {
+        message = {
           "message": {
             "text": results[0].desc,
             "photo": {
@@ -60,7 +60,7 @@ module.exports = function(){
           }
         };
 
-        res.json(massage);
+        res.json(message);
       }
     });
   });

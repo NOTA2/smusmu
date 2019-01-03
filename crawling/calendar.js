@@ -1,55 +1,111 @@
 var cheerio = require('cheerio');
-var request = require('request');
+var phantom = require('phantom');
+var deasync = require('deasync');
+var conn = require('../config/db')();
+var async = require('async');
 
+exports.crawling = function () {
 
-exports.crawling = function() {
-  var url = "https://www.smu.ac.kr/mbs/smu/jsp/academic_calender/academic_calender.jsp?academicIdx=26499&id=smu_040200000000";
+  var url = "https://www.smu.ac.kr/ko/life/academicCalendar.do?mode=list";
+  var body = undefined;
+  var dt = new Date();
+  var time = dt.toFormat("YYYY-MM-DD HH24:MI:SS");
+  var test = 0;
 
-  return new Promise(function(resolve, reject) {
-    request(url, function(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        //HTML body
-        var $ = cheerio.load(body);
+  //phantom을 사용하여 크롤링
+  console.log(time + ' 학사정보 업데이트 시작');
 
-        calresultObj = new Object();
-        calresultObj.monthbt = new Array();
-        resultarr = new Array();
+  (async function () { //phantom js 사용
 
-        //학사일정이 있는 월 리스트를 생성
-        calresultObj.monthbt.push('뒤로가기');
-        $("div.sub4_date > h3").each(function() {
-          monthstr = $(this).text().trim();
-          monthstr = monthstr.substring(0, monthstr.length-1);
-          monthstr = monthstr.split('년 ')[0] + '년 ' + ("00" + (monthstr.split('년 ')[1])).slice(-2)+'월';
+    const instance = await phantom.create();
+    const page = await instance.createPage();
+    await page.on('onResourceRequested', function (requestData) {});
+    const status = await page.open(url);
+    var content = await page.property('content');
 
-          calresultObj.monthbt.push(monthstr);
-        });
+    var $ = cheerio.load(content);
 
-        //학사일정 내용 배열 생성
-        calresultObj.contents = new Array();
-        var idx = 0;
-
-        $("table.sub4_inf").find('td').each(function() {    //12개월을 구분하기 위해
-
-
-          td = $(this).text().trim();
-          td= td.replace(/\t/g, "").replace(/\n/g, "");
-
-          if(td.indexOf('~') != -1){    //기간인 경우
-            calresultObj.contents[idx] = new Object();
-            if(td.split('~')[0] == td.split('~')[1])
-             td = td.split('~')[0];
-
-            calresultObj.contents[idx].date = td;
-           }else{
-             calresultObj.contents[idx].content = td;
-             idx++;
-           }
-        });
-
-        resolve(calresultObj);
+    while ($('.smu-table.pd-b-con > tbody > tr > td').length == 0) {
+      console.log("학사정보");
+      var content = await page.property('content');
+      $ = cheerio.load(content);
+      test++;
+      if (test > 20) {
+        console.log(content);
+        break;
       }
+    }
+    body = content;
 
-    });
+    await instance.exit();
+  })();
+
+  while (body == undefined) {
+    deasync.runLoopOnce();
+  }
+
+  //크롤링 후 데이터 정리
+  var $ = cheerio.load(body);
+
+
+  var params = new Array();
+
+  var idx = 0;
+  var month;
+
+  $(".smu-table.pd-b-con > tbody > tr > td").each(function () {
+
+    td = $(this).text().trim();
+    td = td.replace(/\t/g, "").replace(/\n/g, "");
+
+    if (td.indexOf('년') != -1 && td.indexOf('월') != -1) {
+      month = td;
+    } else if (td.indexOf(' ~ ') != -1) { //기간인 경우
+      if (td.split(' ~ ')[0] == td.split(' ~ ')[1])
+        td = td.split(' ~ ')[0];
+      params[idx] = new Array();
+      params[idx][0] = month;
+      params[idx][1] = td;
+    } else {  //행사명인경우
+      td = $(this).find('a').text().trim();
+      params[idx][2] = td;
+      idx++;
+    }
   });
+
+  var month = params.map(x => x[0]);
+  var date = params.map(x => x[1]);
+  var contents = params.map(x => x[2]);
+
+  var rowslength = 0;
+  var sql = `
+    INSERT INTO academicCalendar (month, date, content)
+    SELECT * FROM (SELECT ?) AS tmp
+    WHERE NOT EXISTS (
+        SELECT month, date, content FROM academicCalendar WHERE month=? AND date =? AND content = ? 
+    ) LIMIT 1;`
+
+
+  async.forEachOf(params, function (param, i, inner_callback) {
+    conn.query(sql, [param, month[i], date[i], contents[i]], function (err, rows) {
+      if (!err) {
+        rowslength += rows.affectedRows
+        inner_callback(null);
+      } else {
+        console.log("Error while performing Query");
+        inner_callback(err);
+      };
+    });
+  }, function (err) {
+    if (err) {
+      throw err
+    } else {
+      console.log('총 '+ rowslength+'행이 추가 되었습니다.');
+      console.log('실제 데이터 : '+ params.length);
+      console.log("학사정보 업데이트 완료");
+    }
+  });
+
+
+
 }

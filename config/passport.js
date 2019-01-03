@@ -9,7 +9,7 @@ module.exports = function (app) {
 
     passport.use(new LocalStrategy((username, password, done) => {
         var sql = 'SELECT * FROM assoUser WHERE username=?';
-        console.log('dflsdf');
+        
         conn.query(sql, [username], (err, results) => {
             if (err)
                 done(null, false);
@@ -23,7 +23,6 @@ module.exports = function (app) {
                 password: password,
                 salt: user.salt
             }, (err, pass, salt, hash) => {
-                console.log(hash);
                 
                 if (hash === user.password)
                     done(null, user);

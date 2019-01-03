@@ -5,12 +5,21 @@ module.exports = function() {
   var route = require('express').Router();
 
   route.post('', (req, res) => {
-    var uKey = req.body.user_key;
-    var content = getreplace(req.body.content);
+    console.log(req.body.userRequest);
+    console.log(req.body.action);
+    
+    
 
-    var sql = 'SELECT * FROM ChatUser WHERE uKey=?';
+    var uId = req.body.userRequest.user.id;
+    var uType = req.body.userRequest.user.type;
+    var uPlusKey = req.body.userRequest.user.properties.plusfriend_user_key;
 
-    conn.query(sql, [uKey], (err, results) => {
+    
+    var content = getreplace(req.body.action.detailParams.content.value);
+
+    var sql = 'SELECT * FROM ChatUser WHERE uId=?';
+
+    conn.query(sql, [uId], (err, results) => {
       if (err) {
         console.log(err);
         return res.redirect('/err');
@@ -22,8 +31,9 @@ module.exports = function() {
           console.log('새로운 유저. DB에 등록');
           
           user = {
-            uKey: uKey,
-            uRoute: 'main'
+            uId: uId,
+            uType: uType,
+            uPlusKey : uPlusKey
           }
           sql = 'INSERT INTO ChatUser SET ?';
           conn.query(sql, user, (err, results) => {
