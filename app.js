@@ -82,7 +82,7 @@ app.get('/home', function (req, res) {
 // });
 
 var scheduleSeoulAssembly = new CronJob({
-  cronTime: "00 */5 6-9 * * *",
+  cronTime: "00 */5 6-8 * * *",
   onTick: setseoulAssembly,
   start: true,
   timeZone: 'Asia/Seoul',
@@ -161,38 +161,20 @@ function setResultWeather() {
   kmaWeather.search()
     .then(temp => {
       defaultObj.weatherResult = temp;
-      console.log(defaultObj.weatherResult);
-      
     });
 
 }
 
 //집회 정보 업데이트
 function setseoulAssembly() {
-  var result = new Object();
-  result.bt = new Array()
-
   var d = new Date();
-  var day;
   var time = d.toFormat("YYYY-MM-DD HH24:MI:SS");
 
   console.log(time);
   console.log("집회/공사 정보 업데이트");
-  beforeseoulAssemblyResult = defaultObj.seoulAssemblyResult;
 
   seoulAssembly.search()
     .then(temp => {
       defaultObj.seoulAssemblyResult = temp;
     });
-
-  while (defaultObj.seoulAssemblyResult == beforeseoulAssemblyResult) {
-    deasync.runLoopOnce();
-  }
-  result.check = defaultObj.seoulAssemblyResult.check;
-  if (defaultObj.seoulAssemblyResult.check) { //오늘 데이터가 있었으면
-    result.str = defaultObj.seoulAssemblyResult.str;
-    result.img = defaultObj.seoulAssemblyResult.img;
-  }
-
-  defaultObj.seoulAssemblyResult = result;
 }

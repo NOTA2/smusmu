@@ -30,11 +30,12 @@ module.exports = function () {
     } catch (e) {
       content = content.content.value;
       sql += "WHERE content LIKE ('%" + content + "%') OR homonym LIKE ('%" + content + "%')"
-    } finally {
-      console.log(sql);
-      
+    } finally {  
       conn.query(sql, function (err, rows) {
-        if (err) throw err
+        if (err){
+          console.err(err);
+          return res.json(message);
+        }
         rows = JSON.parse(JSON.stringify(rows))
         
         if (rows.length > 0)
