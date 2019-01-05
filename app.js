@@ -12,37 +12,23 @@ var kmaWeather = require('./crawling/weather');
 var seoulAssembly = require('./crawling/seoulAssembly');
 var calendar = require('./crawling/calendar');
 
-exports.user = new Array();
-var userCount = 0;
-
-// var messageRouter = require('./routes/kakao/message')();
-// var errRouter = require('./routes/kakao/err')();
-
-// var mainRouter = require('./routes/kakao/main')();
-// var exRouter = require('./routes/kakao/ex')();
 var eatRouter = require('./routes/kakao/eat')();
-// var noticeRouter = require('./routes/kakao/notice')();
+var noticeRouter = require('./routes/kakao/notice')();
 var weatherRouter = require('./routes/kakao/weather')();
 var seoulAssemblyRouter = require('./routes/kakao/seoulAssembly')();
 var calendarRouter = require('./routes/kakao/calendar')();
 var foodMenuRouter = require('./routes/kakao/foodMenu')();
 
-var auth = require('./routes/asso/auth')(passport);
-app.use('/auth/', auth);
-
-
 // app.use('/message', messageRouter);
-// // app.use('/err', errRouter);
-
-// app.use('/main', mainRouter);
-// app.use('/ex', exRouter);
 app.use('/eat', eatRouter);
-// app.use('/notice', noticeRouter);
+app.use('/notice', noticeRouter);
 app.use('/weather', weatherRouter);
 app.use('/seoulAssembly', seoulAssemblyRouter);
 app.use('/calendar', calendarRouter);
 app.use('/foodMenu', foodMenuRouter);
 
+var auth = require('./routes/asso/auth')(passport);
+app.use('/auth/', auth);
 
 
 /*********************************
@@ -83,7 +69,7 @@ app.get('/home', function (req, res) {
 
 var scheduleSeoulAssembly = new CronJob({
   cronTime: "00 */5 6-8 * * *",
-  onTick: setseoulAssembly,
+  onTick: seoulAssembly.search,
   start: true,
   timeZone: 'Asia/Seoul',
   runOnInit: true
@@ -163,18 +149,4 @@ function setResultWeather() {
       defaultObj.weatherResult = temp;
     });
 
-}
-
-//집회 정보 업데이트
-function setseoulAssembly() {
-  var d = new Date();
-  var time = d.toFormat("YYYY-MM-DD HH24:MI:SS");
-
-  console.log(time);
-  console.log("집회/공사 정보 업데이트");
-
-  seoulAssembly.search()
-    .then(temp => {
-      defaultObj.seoulAssemblyResult = temp;
-    });
 }

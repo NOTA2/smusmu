@@ -1,4 +1,4 @@
-module.exports = function(){
+module.exports = function () {
   var defaultObj = require('../../config/defaultVariable');
   var app = require('../../app.js');
   var route = require('express').Router();
@@ -7,223 +7,122 @@ module.exports = function(){
   var cNotice = require('../../crawling/crawling_Notice');
   var deasync = require('deasync');
 
-  route.get('', function(req, res) {
-    var mode = req.query.mode;
-    var content = req.query.content;
-    var idx = req.query.idx;
-
-
-    //공지사항 글 클릭시 상세 내용을 출력
-    if (mode == defaultObj.NTCR) {
-      return res.redirect("/notice/ntcr?idx=" + idx + "&mode=" + mode + "&content=" + getreplace(content));
-    }
-    //글 검색하기 버튼을 누른 경우
-    else if (mode == defaultObj.NTCS) {
-      return res.redirect("/notice/ntcs?idx=" + idx + "&mode=" + mode + "&content=" + getreplace(content));
-    }
-    // //옆으로 이동
-    // else if ((app.user[idx].mode == NTCLR || app.user[idx].mode == NTCLS) && (content == '>' || content == '<')) {
-    //   return res.redirect("/notice/ntcl?idx=" + idx + "&mode=" + mode + "&content=" + content);
-    // }
-    else if (mode == defaultObj.NTCLR || mode == defaultObj.NTCLS) { //NTCLR or NTCLS 모드
-      return res.redirect("/notice/ntcl?idx=" + idx + "&mode=" + mode + "&content=" + getreplace(content));
-    }
-
-    var sql = 'SELECT explanation FROM Description WHERE route=?';
-
-    conn.query(sql, ['notice'], (err, results) => {
-      if(err){
-        console.log(err);
-        return res.redirect('/err');
-      } else{
-        var message = {
-          "message": {
-            "text": results[0].explanation
-          },
-          "keyboard": {
-            type: 'buttons',
-            buttons: defaultObj.ntcbutton
+  route.post('', function (req, res) {
+    var message = {
+      "version": "2.0",
+      "template": {
+        "outputs": [{
+          "simpleText": {
+            "text": '검색결과를 찾을 수 업스뮤 😔'
           }
-        };
-        res.json(message);
-      }
-    });
-  });
-
-
-
-  route.get('/ntcr', function(req, res) {
-    var mode = req.query.mode;
-    var content = req.query.content;
-    var idx = req.query.idx;
-
-    result = resultSetDetailNotice(content, app.user[idx].noticeObj);
-
-    app.user[idx].mode = app.user[idx].noticeObj.mode;
-
-    message = {
-      "message": {
-        "text": result.str,
-        "message_button": {
-          "label" : 'PC 링크 바로가기',
-          "url" : result.url
-        }
-      },
-      "keyboard": {
-        type: 'buttons',
-        buttons: app.user[idx].noticeObj.bt
+        }],
+        "quickReplies": defaultObj.Qu.concat([{
+          "label": '공지사항 검색하기',
+          "action": "block",
+          "messageText": '공지사항 검색하기',
+          "blockId": "5c279735384c5518d11fd216"
+        },{
+          "label": '최근 공지사항',
+          "action": "block",
+          "messageText": '최근 공지사항',
+          "blockId": "5c27971b384c5518d11fd210"
+        }])
       }
     };
 
-    res.json(message);
-  });
-
-
-  route.get('/ntcs', function(req, res) {
-    message = {
-      "message": {
-        "text": "검색할 키워드를 입력해 주세요."
-      }
-    };
-
-    res.json(message);
-  });
-
-
-
-  route.get('/ntcl', function(req, res) {
-    var mode = req.query.mode;
-    var content = req.query.content;
-    var idx = req.query.idx;
-
-    if ((app.user[idx].mode == defaultObj.NTCLR || app.user[idx].mode == defaultObj.NTCLS) && (content == '>' || content == '<')) {
-      if (content == '>')
-        app.user[idx].noticeObj.page++;
-      else if (content == '<')
-        app.user[idx].noticeObj.page--;
-
-      result = setNoticeResult(content, app.user[idx]);
-
-      app.user[idx].noticeObj = result;
-
-      message = {
-        "message": {
-          "text": app.user[idx].noticeObj.explan
-        },
-        "keyboard": {
-          type: 'buttons',
-          buttons: app.user[idx].noticeObj.bt
-        }
-      };
-    } else { //NTCLR or NTCLS 모드를 처음 들어올때
-      app.user[idx].noticeObj.page = 1;
-
-      app.user[idx].noticeObj.mode = app.user[idx].mode;
-      app.user[idx].noticeObj.keyword = content;
-
-      result = setNoticeResult(content, app.user[idx]);
-
-      //글 검색하기에서 검색결과가 없을 경우
-      if (result == '[등록된 게시물이 없습니다.]\n') {
-
-        message = {
-          "message": {
-            "text": result
-          },
-          "keyboard": {
-            type: 'buttons',
-            buttons: defaultObj.ntcbutton
-          }
-        };
-      }
-      //글 검색하기에서 검색결과가 있을 경우 혹은 최신글 보기를 누른 경우 글의 목록을 보여준다.
-      else {
-        app.user[idx].noticeObj = result;
-
-        message = {
-          "message": {
-            "text": app.user[idx].noticeObj.explan
-          },
-          "keyboard": {
-            type: 'buttons',
-            buttons: app.user[idx].noticeObj.bt
-          }
-        };
-      }
+    try {
+      var keyword = req.body.action.detailParams.keyword.value;
+    } catch (e) {
+      var keyword = ''
     }
 
-    res.json(message);
-  });
+    try {
+      var page = parseInt(JSON.parse(req.body.action.detailParams.page.value).amount);
+      console.log(req.body.action.detailParams);
+    } catch (e) {
+      var page = 1;
+    }
 
+    cNotice.search(keyword, page)
+      .then(resultList => {
+        if (resultList != 'false') {
+          message.template.outputs[0] = {
+            "carousel": {
+              "type": "basicCard",
+              "items": []
+            }
+          }
+          resultList.forEach((el) => {
+            message.template.outputs[0].carousel.items.push({
+              "title": el.title,
+              "description": el.desc,
+              "thumbnail": {
+                "imageUrl": 'http://' + defaultObj.ipadd + '/test.png'
+              },
+              "buttons": [{
+                  "action": "webLink",
+                  "label": "홈페이지에서 확인",
+                  "webLinkUrl": el.src
+                }
+                // ,
+                // {
+                //   "label": '스뮤스뮤에서 확인',
+                //   "action": "block",
+                //   "messageText": el.src,
+                //   "blockId": "5c3061135f38dd44d86a2710"
+                // }
+              ]
+            });
+          });
+          if (keyword.length == 0) {
+            message.template.quickReplies[1] = {
+              "label": '공지사항 ' + (page + 1) + '페이지',
+              "action": "message",
+              "messageText": '공지사항 ' + (page + 1) + '페이지'
+            };
+          }
+        }
 
-
-  function setNoticeResult(keyword, selectUser) {
-    var resultList;
-
-    mode = selectUser.mode;
-    noticePage = selectUser.noticeObj.page;
-    noticeMode = selectUser.noticeObj.mode;
-    noticeKeyword = selectUser.noticeObj.keyword;
-
-    cNotice.search(keyword, noticePage, noticeMode, noticeKeyword)
-      .then(temp => {
-        if (temp == '[등록된 게시물이 없습니다.]\n')
-          resultList = temp;
-        else
-          resultList = resultSetNotice(keyword, temp, mode);
+        return res.json(message);
       });
+  });
 
-    while (resultList == undefined)
-      deasync.runLoopOnce();
-
-    return resultList;
-  }
-
-
-  //공지사항의 글 목록을 리턴
-  function resultSetNotice(keyword, noticeObj, mode) {
-    if (mode == defaultObj.NTCLR) {
-      noticeObj.explan = '최근 게시글 ' + noticeObj.page;
-    } else {
-      noticeObj.explan = noticeObj.keyword + '(으)로 검색한 게시글 ' + noticeObj.page;
-    }
-
-    noticeObj.explan += '페이지입니다.\n버튼을 눌러 상세 내용을 확인하세요.\n뒤로가기를 누르면 뒤로 돌아갑니다.';
-    noticeObj.bt.unshift('뒤로가기');
-
-    return noticeObj;
-  }
-
-  //공지사항 글 클릭시 상세 내용을 출력해주기 위해 세부 내용 리턴
-  function resultSetDetailNotice(keyword, noticeobj) {
-    notice_idx = noticeobj.contents.map(x => x.title).indexOf(keyword)
-
-    var content = '';
-    var url = noticeobj.contents[notice_idx].pc;
-    var result = new Object();
+  route.post('/result', (req, res) => {
+    var message = {
+      "version": "2.0",
+      "template": {
+        "outputs": [{
+          "simpleText": {
+            "text": '검색결과를 찾을 수 업스뮤 😔'
+          }
+        }],
+        "quickReplies": defaultObj.Qu
+      }
+    };
+    var url = req.body.userRequest.utterance;
+    // var url = req.body.action.detailParams.a.value;
 
     cNoticeContents.search(url)
-      .then(temp => {
-        content = temp
+      .then(result => {
+        if(result){
+          message.template.outputs[0] = {
+            "simpleText": {
+              "text": result.str
+            }
+          }
+          if (result.img) {
+            message.template.outputs[1] = {
+              "simpleImage": {
+                "imageUrl": result.img,
+                "altText": "공지사항 게시글"
+              }
+            }
+          }
+        }
+
+        res.json(message);
       });
-
-    while (content == '') {
-      deasync.runLoopOnce();
-    }
-
-    result.str = '[제목]\n'+noticeobj.contents[notice_idx].title+'\n\n';
-    result.str += '[본문]\n'+ content;
-    result.url = noticeobj.contents[notice_idx].pc
-
-    return result;
-  }
-
-
-  function getreplace(inum) {
-      inum = inum.replace(/&/g,"%26");
-      inum = inum.replace(/\+/g,"%2B");
-      return inum;
-  }
+  });
 
   return route;
 }

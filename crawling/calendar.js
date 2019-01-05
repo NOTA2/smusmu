@@ -105,7 +105,4 @@ exports.crawling = function () {
       console.log("학사정보 업데이트 완료");
     }
   });
-
-
-
 }
