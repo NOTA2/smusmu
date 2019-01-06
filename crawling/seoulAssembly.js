@@ -2,14 +2,15 @@ var cheerio = require('cheerio');
 var request = require('request');
 var deasync = require('deasync');
 var defaultObj = require('../config/defaultVariable');
+var conn = require('../config/db')();
 
 exports.search = function () {
   var d = new Date();
   var time = d.toFormat("YYYY-MM-DD HH24:MI:SS");
+  var date = d.toFormat("YYYY-MM-DD");
 
-  console.log(time);
-  console.log("집회/공사 정보 업데이트");
-  
+  console.log(time + " 집회/공사 정보 업데이트");
+
   urlt = "https://twitter.com/poltra02"; //트위터 주소
   urld = "http://www.smpa.go.kr/user/nd54882.do" //상세정보를 얻기위한 서울지방 경찰청 주소
   var check = 0;
@@ -80,13 +81,33 @@ exports.search = function () {
 
         result.idx++;
       });
-      check++;
+
+      jsondata = JSON.stringify(result);
+
+      var sql = `
+      INSERT INTO seoulAssembly SET ?  
+      ON DUPLICATE KEY UPDATE date=?, jsondata=?; `
+
+      var param = {
+        "date" : date, 
+        "jsondata" : jsondata
+      };
+
+      conn.query(sql, [param,date,jsondata], function (err, rows) {
+        if (!err) {
+          console.log('집회/공사 정보 업데이트 완료');
+        } else {
+          console.log("query error 발생");
+          console.log(err);
+          throw err
+        };
+      });
+
     }
   });
 
-  while (check != 2) {
-    deasync.runLoopOnce();
-  }
 
-  defaultObj.seoulAssemblyResult = result
+
+
+
 }

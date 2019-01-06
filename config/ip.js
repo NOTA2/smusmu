@@ -1,14 +1,17 @@
-module.exports = function(defaultObj){
-  const cheerio = require('cheerio');
+module.exports = function (defaultObj) {
   const request = require('request');
   const deasync = require('deasync');
 
-  (function (){
-    request("http://169.254.169.254/latest/meta-data/public-ipv4", function(error, response, body) {
+  (function () {
+    request("http://169.254.169.254/latest/meta-data/public-ipv4", function (error, response, body) {
       if (!error && response.statusCode == 200) {
-        defaultObj.ipadd  = body
+        defaultObj.ipadd = body
         console.log(defaultObj.ipadd);
-        console.log('스뮤스뮤 서버');
+
+        if (defaultObj.ipadd == '54.180.122.96')
+          console.log('테스트 서버');
+        else
+          console.log('리얼 서버');
       }
     });
     while (defaultObj.ipadd == undefined) {

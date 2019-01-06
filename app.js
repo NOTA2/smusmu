@@ -67,8 +67,9 @@ app.get('/home', function (req, res) {
 //   runOnInit: true
 // });
 
+//집회정보 업데이트
 var scheduleSeoulAssembly = new CronJob({
-  cronTime: "00 */5 6-8 * * *",
+  cronTime: "00 */5 0,6-8 * * *",
   onTick: seoulAssembly.search,
   start: true,
   timeZone: 'Asia/Seoul',
@@ -88,7 +89,7 @@ var scheduleCalendar = new CronJob({
 if (defaultObj.ipadd != '54.180.122.96') { //테스트 서버일 땐 하지 않습니다.
 var scheduleWeather = new CronJob({
   cronTime: "00 43 * * * *",
-  onTick: setResultWeather,
+  onTick: kmaWeather.search,
   start: true,
   timeZone: 'Asia/Seoul',
   runOnInit: true
@@ -134,19 +135,4 @@ function setResultEat() {
   console.log(defaultObj.eatResult.R.bt);
   console.log(defaultObj.eatResult.T.bt);
   console.log(defaultObj.eatResult.H.bt);
-}
-
-//날씨 정보를 업데이트
-function setResultWeather() {
-  var dt = new Date();
-  var time = dt.toFormat("YYYY-MM-DD HH24:MI:SS");
-
-  console.log(time);
-  console.log("날씨 정보를 업데이트 합니다\n");
-
-  kmaWeather.search()
-    .then(temp => {
-      defaultObj.weatherResult = temp;
-    });
-
 }

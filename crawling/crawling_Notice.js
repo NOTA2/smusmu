@@ -1,5 +1,3 @@
-var cheerio = require('cheerio');
-var request = require('request');
 var client = require('cheerio-httpcli');
 
 exports.search = function (keyword, page) {

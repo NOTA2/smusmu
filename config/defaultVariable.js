@@ -19,7 +19,5 @@ defaultObj.eatResult.R;  //미백관 식단
 defaultObj.eatResult.T; //밀관 식단
 defaultObj.eatResult.H; //행복기숙사 식단
 defaultObj.weatherResult = '날씨정보가 없스뮤.'; //날씨 정보
-defaultObj.seoulAssemblyResult = new Object(); //집회정보 저장
-
 
 module.exports = defaultObj;

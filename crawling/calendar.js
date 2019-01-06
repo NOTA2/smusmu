@@ -100,8 +100,6 @@ exports.crawling = function () {
     if (err) {
       throw err
     } else {
-      console.log('총 '+ rowslength+'행이 추가 되었습니다.');
-      console.log('실제 데이터 : '+ params.length);
       console.log("학사정보 업데이트 완료");
     }
   });
