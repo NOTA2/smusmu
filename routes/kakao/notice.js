@@ -14,15 +14,15 @@ module.exports = function () {
           }
         }],
         "quickReplies": defaultObj.Qu.concat([{
-          "label": '공지사항 검색하기',
-          "action": "block",
-          "messageText": '공지사항 검색하기',
-          "blockId": "5c279735384c5518d11fd216"
-        },{
           "label": '최근 공지사항',
           "action": "block",
           "messageText": '최근 공지사항',
           "blockId": "5c27971b384c5518d11fd210"
+        },{
+          "label": '공지사항 검색하기',
+          "action": "block",
+          "messageText": '공지사항 검색하기',
+          "blockId": "5c279735384c5518d11fd216"
         }])
       }
     };
@@ -61,13 +61,13 @@ module.exports = function () {
                   "label": "홈페이지에서 확인",
                   "webLinkUrl": el.src
                 }
-                // ,
-                // {
-                //   "label": '스뮤스뮤에서 확인',
-                //   "action": "block",
-                //   "messageText": el.src,
-                //   "blockId": "5c3061135f38dd44d86a2710"
-                // }
+                ,
+                {
+                  "label": '스뮤스뮤에서 확인',
+                  "action": "block",
+                  "messageText": el.src.split('?mode=view&')[1],
+                  "blockId": "5c3061135f38dd44d86a2710"
+                }
               ]
             });
           });
@@ -93,10 +93,21 @@ module.exports = function () {
             "text": '검색결과를 찾을 수 업스뮤 😔'
           }
         }],
-        "quickReplies": defaultObj.Qu
+        "quickReplies": defaultObj.Qu.concat([{
+          "label": '최근 공지사항',
+          "action": "block",
+          "messageText": '최근 공지사항',
+          "blockId": "5c27971b384c5518d11fd210"
+        },{
+          "label": '공지사항 검색하기',
+          "action": "block",
+          "messageText": '공지사항 검색하기',
+          "blockId": "5c279735384c5518d11fd216"
+        }])
       }
     };
-    var url = req.body.userRequest.utterance;
+    var url = 'http://www.smu.ac.kr/lounge/notice/notice.do?mode=view&' + req.body.userRequest.utterance;
+    
     // var url = req.body.action.detailParams.a.value;
 
     cNoticeContents.search(url)

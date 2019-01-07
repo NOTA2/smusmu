@@ -32,12 +32,15 @@ exports.search = function (keyword, page) {
           var titleArr = title.split(' ');
           title = '';
           var desc = '';
+          var check = true
 
           titleArr.forEach((el, idx) => {
-            if (idx < 2)
+            // if (check && (title + el + ' ').length < 20)
               title += el + ' ';
-            else
-              desc += el + ' ';
+            // else{
+            //   desc += el + ' ';
+            //   check = false
+            // }
           })
           noticeObj[idx].title = title.trim();
           noticeObj[idx].desc = desc.trim();
