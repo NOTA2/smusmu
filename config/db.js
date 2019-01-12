@@ -8,7 +8,8 @@ module.exports = function(){
     host : 'smusmutest.cew1lcmxgnch.ap-northeast-2.rds.amazonaws.com',
     user : 'smusmu',
     password : dbKey,
-    database : 'smusmu'
+    database : 'smusmu',
+    dateStrings: 'date'
   })
 
   conn.connect();

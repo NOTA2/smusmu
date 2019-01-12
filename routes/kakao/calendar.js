@@ -1,7 +1,8 @@
+var conn = require('../../config/db')();
+
 module.exports = function () {
   var defaultObj = require('../../config/defaultVariable');
   var route = require('express').Router();
-  var conn = require('../../config/db')();
 
   route.post('', function (req, res) {
     var content = req.body.action.detailParams;
@@ -26,11 +27,12 @@ module.exports = function () {
       var year = content.to.date.split('-')[0].substr(2,2);;
       var month = content.to.date.split('-')[1];
 
-      sql += "WHERE month LIKE ('%" + year + "%') AND month LIKE ('%" + month + "%')";
+      sql += "WHERE month LIKE ('%" + year + "%') AND month LIKE ('%" + month + "월%')";
     } catch (e) {
       content = content.content.value;
       sql += "WHERE content LIKE ('%" + content + "%') OR homonym LIKE ('%" + content + "%')"
-    } finally {  
+    } finally {
+
       conn.query(sql, function (err, rows) {
         if (err){
           console.err(err);

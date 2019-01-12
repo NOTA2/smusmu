@@ -18,7 +18,7 @@ module.exports = function () {
           "action": "block",
           "messageText": '최근 공지사항',
           "blockId": "5c27971b384c5518d11fd210"
-        },{
+        }, {
           "label": '공지사항 검색하기',
           "action": "block",
           "messageText": '공지사항 검색하기',
@@ -53,15 +53,11 @@ module.exports = function () {
             message.template.outputs[0].carousel.items.push({
               "title": el.title,
               "description": el.desc,
-              "thumbnail": {
-                "imageUrl": 'http://' + defaultObj.ipadd + '/test.png'
-              },
               "buttons": [{
                   "action": "webLink",
                   "label": "홈페이지에서 확인",
                   "webLinkUrl": el.src
-                }
-                ,
+                },
                 {
                   "label": '스뮤스뮤에서 확인',
                   "action": "block",
@@ -90,7 +86,7 @@ module.exports = function () {
       "template": {
         "outputs": [{
           "simpleText": {
-            "text": '검색결과를 찾을 수 업스뮤 😔'
+            "text": '결과를 찾을 수 업스뮤 😔 다시 시도해주세요!'
           }
         }],
         "quickReplies": defaultObj.Qu.concat([{
@@ -98,7 +94,7 @@ module.exports = function () {
           "action": "block",
           "messageText": '최근 공지사항',
           "blockId": "5c27971b384c5518d11fd210"
-        },{
+        }, {
           "label": '공지사항 검색하기',
           "action": "block",
           "messageText": '공지사항 검색하기',
@@ -107,27 +103,31 @@ module.exports = function () {
       }
     };
     var url = 'http://www.smu.ac.kr/lounge/notice/notice.do?mode=view&' + req.body.userRequest.utterance;
-    
-    // var url = req.body.action.detailParams.a.value;
 
     cNoticeContents.search(url)
       .then(result => {
-        if(result){
-          message.template.outputs[0] = {
-            "simpleText": {
-              "text": result.str
-            }
-          }
+        if (result) {
+          var idx = 0;
           if (result.img) {
-            message.template.outputs[1] = {
+            message.template.outputs[idx] = {
               "simpleImage": {
                 "imageUrl": result.img,
                 "altText": "공지사항 게시글"
               }
-            }
+            };
+            idx++;
           }
+          message.template.outputs[idx] = {
+            "basicCard": {
+              "title": result.str,
+              "buttons": [{
+                "action": "webLink",
+                "label": "홈페이지에서 확인",
+                "webLinkUrl": url
+              }]
+            }
+          };
         }
-
         res.json(message);
       });
   });

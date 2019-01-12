@@ -1,135 +1,180 @@
+var conn = require('../../config/db')();
+var dow = ['(일)','(월)','(화)','(수)','(목)','(금)','(토)'];
+
 module.exports = function() {
-  var app = require('../../app.js');
   var defaultObj = require('../../config/defaultVariable');
   var route = require('express').Router();
-  // var conn = require('../../config/db')();
 
-  // route.get('', function(req, res) {
+  //오늘의 학식메뉴
+  route.post('/', (req, res) => {
 
-  //   var sql = 'SELECT explanation FROM Description WHERE route=?';
-
-  //   conn.query(sql, ['eat'], (err, results) => {
-  //     if(err){
-  //       console.log(err);
-  //       return res.redirect('/err');
-  //     } else{
-  //       var message = {
-  //         "message": {
-  //           "text": results[0].explanation
-  //         },
-  //         "keyboard": {
-  //           type: 'buttons',
-  //           buttons: defaultObj.eatbutton
-  //         }
-  //       };
-  //       res.json(message);
-  //     }
-  //   });
-  // });
-
-  route.post('/day', (req, res) => {
-    var content = req.query.content;
-
-    console.log(req.body.userRequest);
-    console.log(req.body.action);
+    var content = req.body.action.detailParams;
+    var d = new Date();
+    var date = d.toFormat("YYYY-MM-DD");
+    var location = content.eat_place.value;
+    var day = d.getDay();
     
-    
-
-    var uId = req.body.userRequest.user.id;
-    var uType = req.body.userRequest.user.type;
-    var uPlusKey = req.body.userRequest.user.properties.plusfriend_user_key;
-    var content = req.body.action.detailParams.content.value;
-
-    // result = getDayResult(content);
-
     var message = {
-      "message":  '학식정보가 없습니다.'
-    };
-
-    res.json(message);
-  })
-
-  route.get('/week', (req, res) => {
-    var content = req.query.content;
-
-    //버튼을 생성하는 과정
-    if (content.indexOf('미래백년관') != -1)
-      weekbt = defaultObj.eatResult.R.bt;
-    else if (content.indexOf('밀레니엄관') != -1)
-      weekbt = defaultObj.eatResult.T.bt;
-    else
-      weekbt = defaultObj.eatResult.H.bt;
-
-    if (content.indexOf('일주일') != -1)
-      result = '원하는 날을 선택해 주세요.'
-    else
-      result = getWeekResult(content);
-
-    message = {
-      "message": {
-        "text": result
-      },
-      "keyboard": {
-        type: 'buttons',
-        buttons: weekbt
+      "version": "2.0",
+      "template": {
+        "outputs": [{
+          "simpleText": {
+            "text": '학식정보가 업스뮤 😔'
+          }
+        }],
+        "quickReplies": defaultObj.Qu.concat([{
+          "label": '학식정보',
+          "action": "block",
+          "messageText": '학식정보',
+          "blockId": "5c271af35f38dd44d86a0dca"
+        }])
       }
     };
 
-    res.json(message);
-  });
-
-
-  //요청한 학식 정보를 반환한다.
-  function getDayResult(keyword) {
-    var d = new Date();
-    var day;
-    var eatResultTemp;
-
-    if (keyword.indexOf('미래백년관') != -1)
-      eatResultTemp = defaultObj.eatResult.R.contents;
-    else if (keyword.indexOf('밀레니엄관') != -1)
-      eatResultTemp = defaultObj.eatResult.T.contents;
-    else if (keyword.indexOf('홍제기숙사') != -1)
-      eatResultTemp = defaultObj.eatResult.H.contents;
-
-    day = d.getDay() - 1;
-    if (day == -1)
-      day = 6
-
-    keyword = ("00" + (d.getMonth() + 1)).slice(-2) + '/' + ("00" + d.getDate()).slice(-2);
-
-    var idx = eatResultTemp.findIndex(function(ele, i) {
-      return (ele.indexOf(this) != -1);
-    }, keyword);
-
-
-    if (idx == -1) {
-      if (day < 5)
-        return '메뉴가 올라와 있지 않습니다.'
-      return '오늘은 식당을 운영하지 않습니다.'
+    if(location != 'H' && (day==0 || day==6)){
+      message.template.outputs[0].simpleText.text = '오늘은 쉬는날이에요! 😔'
+      return res.json(message);
+    }else{
+      var sql = 'SELECT content FROM Eat WHERE date=? AND location=?'
+      conn.query(sql, [date,location], function(err, rows){
+        if(err){
+          console.log(err);
+          message.template.outputs[0].simpleText.text = '잠시 문제가 생겼어요. 다시 시도해주세요 😔'
+          return res.json(message);
+        }
+        if(rows.length>0){
+          rows = JSON.parse(rows[0].content);
+        
+          rows.forEach(function(el,idx){
+            if(idx == 0)
+              el = date + dow[day] + '\n' +el
+            message.template.outputs[idx] = {
+              "simpleText": {
+                "text": el
+              }
+            } 
+          });
+        }
+        return res.json(message);
+      })
     }
+  })
 
-    return eatResultTemp[idx];
-  }
+  //특정 날의
+  route.post('/day', (req, res) => {
 
-  function getWeekResult(keyword) {
-    var eatResultTemp;
+    var content = req.body.action.detailParams;
+    var location = content.eat_place.value;
+    var date = JSON.parse(content.sys_date.value).date;
+    var d = new Date(date);
+    var day = d.getDay();
+    
+    var message = {
+      "version": "2.0",
+      "template": {
+        "outputs": [{
+          "simpleText": {
+            "text": '학식정보가 업스뮤 😔'
+          }
+        }],
+        "quickReplies": defaultObj.Qu.concat([{
+          "label": '학식정보',
+          "action": "block",
+          "messageText": '학식정보',
+          "blockId": "5c271af35f38dd44d86a0dca"
+        }])
+      }
+    };
+    if(location != 'H' && (day==0 || day==6)){
+      message.template.outputs[0].simpleText.text = '그날은 쉬는날이에요! 😔'
+      return res.json(message);
+    }else{
+      var sql = 'SELECT content FROM Eat WHERE date=? AND location=?'
+      conn.query(sql, [date,location], function(err, rows){
+        if(err){
+          console.log(err);
+          message.template.outputs[0].simpleText.text = '잠시 문제가 생겼어요. 다시 시도해주세요 😔'
+          return res.json(message);
+        }
+        if(rows.length>0){
+          rows = JSON.parse(rows[0].content);
+        
+          rows.forEach(function(el,idx){
+            if(idx == 0)
+              el = date + dow[day] + '\n' +el
+            message.template.outputs[idx] = {
+              "simpleText": {
+                "text": el
+              }
+            } 
+          });
+          
+        }
+        return res.json(message);
+      })
+    }
+  })
 
-    if (keyword.indexOf('미래백년관') != -1)
-      eatResultTemp = defaultObj.eatResult.R.contents;
-    else if (keyword.indexOf('밀레니엄관') != -1)
-      eatResultTemp = defaultObj.eatResult.T.contents;
-    else if (keyword.indexOf('홍제기숙사') != -1)
-      eatResultTemp = defaultObj.eatResult.H.contents;
+  //이번주 학식 메뉴
+  route.post('/week', (req, res) => {
 
-    keyword = keyword.split(' - ')[1].trim();
+    var content = req.body.action.detailParams;
+    var location = content.eat_place.value;
+    var d = new Date();
+    var date = d.toFormat("YYYY-MM-DD");
+    var from = JSON.parse(content.sys_date_period.value).from.date;
+    var to = JSON.parse(content.sys_date_period.value).to.date;
+    
+    if(date > from)
+      from = date;
 
-    var idx = eatResultTemp.findIndex(function(ele, i) {
-      return (ele.indexOf(this) != -1);
-    }, keyword);
+    var message = {
+      "version": "2.0",
+      "template": {
+        "outputs": [{
+          "simpleText": {
+            "text": '학식정보가 업스뮤 😔'
+          }
+        }],
+        "quickReplies": defaultObj.Qu.concat([{
+          "label": '학식정보',
+          "action": "block",
+          "messageText": '학식정보',
+          "blockId": "5c271af35f38dd44d86a0dca"
+        }])
+      }
+    };
+    
+    var sql = "select date, content from Eat where location=? AND date between date(?) and date(?)+1 LIMIT 7"
+    
+    conn.query(sql, [location,from,to], function(err, rows){
+      if(err){
+        console.log(err);
+        message.template.outputs[0].simpleText.text = '잠시 문제가 생겼어요. 다시 시도해주세요 😔'
+        return res.json(message);
+      }
+      if(rows.length>0){
+        rows.forEach(function(el, idx){
+          var d = new Date(el.date);
+          var str = el.date + dow[d.getDay()]+ '\n\n';
+          var temp = JSON.parse(el.content);
 
-    return eatResultTemp[idx];
-  }
+          temp.forEach(function(el){
+            str+=el+'\n\n';
+          })
+
+          message.template.outputs[idx] = {
+            "basicCard": {
+              "title": str.trim()
+            }
+          };
+        });
+      }
+      return res.json(message);
+    })
+  })
+
+
 
   return route;
 }

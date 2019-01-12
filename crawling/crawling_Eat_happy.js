@@ -1,130 +1,129 @@
 var cheerio = require('cheerio');
-var request = require('request');
 var phantom = require('phantom');
 var deasync = require('deasync');
+var conn = require('../config/db')();
+var async = require('async');
 
-exports.search = function() {
+exports.search = function () {
 
+  var d = new Date();
   var url = "https://hongje.happydorm.or.kr/hongje/60/6050.kmc";
+  //일요일 일 경우 월요일로 바꿔서 다음주 메뉴 가져오기
+  if (d.getDay() == 0) {
+    d.setDate(d.getDate() + 1);
+    url = 'https://hongje.happydorm.or.kr/hongje/food/getWMLastNext.kmc?sch_date=' + d.toFormat("YYYY-MM-DD");
+  }
+  var test = 0;
 
-  return new Promise(function(resolve, reject ) {
-    var happyResult = new Object();
-    happyResult.bt = new Array();
-    happyResult.contents = new Array();
+  var body = undefined;
 
-    var daystr = ['월', '화', '수', '목', '금', '토', '일'];
-    var cnt = 0;
-    var btcnt = 0;
-    var temp = new Object();
-    var test =0;
+  (async function () { //phantom js 사용
 
-    do{
-      var body = undefined;
+    const instance = await phantom.create();
+    const page = await instance.createPage();
+    await page.on('onResourceRequested', function (requestData) {});
+    const status = await page.open(url);
+    var content = await page.property('content');
+    var $ = cheerio.load(content);
 
-      (async function() {         //phantom js 사용
-
-        const instance = await phantom.create();
-        const page = await instance.createPage();
-        await page.on('onResourceRequested', function(requestData) {
-        });
-        const status = await page.open(url);
-        var content = await page.property('content');
-        var $ = cheerio.load(content);
-
-        while($('#fo_menu_mor1 > li').length == 0) {
-            console.log("홍제 행복기숙사 리로드");
-            var content = await page.property('content');
-            $ = cheerio.load(content);
-            test++;
-            if(test > 20){
-              console.log(content);
-              break;
-            }
-        }
-        body = content;
-
-        await instance.exit();
-      })();
-
-      while (body == undefined) {
-        deasync.runLoopOnce();
+    while ($('#fo_menu_mor1 > li').length == 0) {
+      console.log("홍제 행복기숙사 리로드");
+      var content = await page.property('content');
+      $ = cheerio.load(content);
+      test++;
+      if (test > 20) {
+        console.log(content);
+        break;
       }
+    }
+    body = content;
 
-      var $ = cheerio.load(body);
+    var $ = cheerio.load(body);
+    if ($('.fmenu.iconbuf li').length > 0) {
+      var eatH = new Array();
 
+      //첫 날짜 구하기
+      var date = $(".monday:nth-child(1)").text().replace(/ /gi, "").trim();
+      var year = d.getFullYear();
+      if ((month == 12) && (d.getMonth() + 1 != month))
+        year = parseInt(year) - 1
+      var month = parseInt(date.split('월')[0]) - 1;
+      var day = parseInt(date.split('월')[1]);
 
-      //버튼 생성
-      $(".monday").each(function(idx, el) {
-        temp = $(el).text().replace(/ /gi, "").trim();
-        temp = temp.split('월');
-        month = temp[0];
-        date = temp[1].split('일')[0];
+      eatDate = new Date(year, month, day);
 
-        happyResult.bt[btcnt++] = '홍제기숙사 - ' + ("00" + month).slice(-2) + '/' + ("00" + date).slice(-2) + ' (' + daystr[idx] + ')';
+      $('.monday').each(function (idx) {
+        eatH[idx] = new Array();
+        eatH[idx][0] = eatDate.toFormat("YYYY-MM-DD");
+        eatDate.setDate(eatDate.getDate() + 1);
+      })
+
+      var tcnt = 0;
+      var temp = new Array();
+
+      $(".fmenu").each(function (idx, ulel) {
+        var str = '';
+        $(ulel).children('li').each(function (idx, el) {
+          if (idx != 0)
+            str += '\n';
+          str += $(el).text().trim();
+        })
+        if (idx % 6 == 0)
+          temp[idx - tcnt * 3] = '=====조식=====\n' + str;
+        else if (idx % 6 == 1)
+          temp[idx - tcnt * 3] = '=====중식=====\n' + str;
+        else if (idx % 6 == 2)
+          temp[idx - tcnt * 3] = '=====석식=====\n' + str;
+        else if (idx % 6 == 3)
+          temp[idx - tcnt * 3 - 3] += '\n\n[빵식(Take-out)]\n' + str;
+        else if (idx % 6 == 4)
+          temp[idx - tcnt * 3 - 3] += '\n\n[샐러드/후식]\n' + str;
+        else if (idx % 6 == 5) {
+          temp[idx - tcnt * 3 - 3] += '\n\n[샐러드/후식]\n' + str;
+          tcnt++
+        }
       });
 
-      temp = makeContents($, happyResult, cnt, happyResult.bt);
-
-      happyResult = temp.hR;
-      cnt=temp.cn;
-
-      //다음주 식단이 있는지 확인
-      nextcheck = $(".btnnextfood").attr('onclick');
-      nextcheck = nextcheck.indexOf('없습니다');
-      if(nextcheck == -1){    // 없습니다 없으니까 다음주가 있는거
-        nextweek = $(".btnnextfood").attr('onclick').split('\'')[1].split('\'')[0];
-        url = 'https://hongje.happydorm.or.kr/hongje/food/getWMLastNext.kmc?sch_date=' + nextweek;
-        console.log(url);
-        console.log('다음주 것을 가져옵니다.');
+      for (var idx = 0, cnt = 0; idx < temp.length; idx += 3, cnt++) {
+        eatH[cnt][1] = 'H';
+        eatH[cnt][2] = new Array();
+        eatH[cnt][2].push(temp[idx]);
+        eatH[cnt][2].push(temp[idx + 1]);
+        eatH[cnt][2].push(temp[idx + 2]);
+        eatH[cnt][2] = JSON.stringify(eatH[cnt][2])
       }
-    }while(nextcheck == -1);  //다음주가 있으면 계속 실행
+
+      var date = eatH.map(x => x[0]);
+      var location = eatH.map(x => x[1]);
+
+      var sql = `
+          INSERT INTO Eat (date, location, content)
+          SELECT * FROM (SELECT ?) AS tmp
+          WHERE NOT EXISTS (
+              SELECT date, location FROM Eat WHERE date=? AND location =?
+          ) LIMIT 1;`
 
 
-    happyResult.bt.unshift('뒤로가기');
-    resolve(happyResult);
-  });
-}
-
-function makeContents($, happyResult ,cnt, day){
-  var jbAry = new Array();
-  var temp = new Object();
-  var tcnt = 0;
-
-  $(".fmenu").each(function(idx, ulel) {
-    str = '';
-    $(ulel).children('li').each(function(idx, el){
-      if(idx != 0)
-        str += '\n';
-      str += $(el).text().trim();
-    })
-    if(idx % 6 == 0)
-      jbAry[idx - tcnt*3] = '[조식]\n' + str;
-    else if(idx % 6 == 1)
-      jbAry[idx - tcnt*3] = '[중식]\n' + str;
-    else if(idx % 6 == 2)
-      jbAry[idx - tcnt*3] = '[석식]\n' + str;
-    else if(idx % 6 == 3)
-      jbAry[idx - tcnt*3 -3] += '\n\n[빵식(Take-out)]\n' + str;
-    else if(idx % 6 == 4)
-      jbAry[idx - tcnt*3 -3] += '\n\n[샐러드/후식]\n' + str;
-    else if(idx % 6 == 5){
-      jbAry[idx - tcnt*3 -3] += '\n\n[샐러드/후식]\n' + str;
-      tcnt++
+      async.forEachOf(eatH, function (param, i, inner_callback) {
+        conn.query(sql, [param, date[i], location[i]], function (err, rows) {
+          if (!err) {
+            inner_callback(null);
+          } else {
+            console.log("홍제기숙사 학식정보 INSERT 에러");
+            inner_callback(err);
+          };
+        });
+      }, function (err) {
+        if (err) {
+          throw err
+        } else {
+          console.log("홍제기숙사 학식정보 업데이트 완료");
+        }
+      });
+    } else {
+      console.log("홍제기숙사 학식정보 없음");
     }
 
-  });
-
-  for(var idx =0;idx<jbAry.length;idx+=3,cnt++){
-    happyResult.contents[cnt] = day[cnt] + '식단입니다.\n\n';
-    happyResult.contents[cnt] += jbAry[idx];
-    happyResult.contents[cnt] += "\n\n=================\n\n";
-    happyResult.contents[cnt] += jbAry[idx+1];
-    happyResult.contents[cnt] += "\n\n=================\n\n";
-    happyResult.contents[cnt] += jbAry[idx+2];
-  }
-
-  temp.hR = happyResult;
-  temp.cn = cnt;
-
-  return temp;
+    await instance.exit();
+  })();
 }

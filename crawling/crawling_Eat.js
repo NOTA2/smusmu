@@ -1,103 +1,188 @@
-var cheerio = require('cheerio');
-var request = require('request');
-var deasync = require('deasync');
+var client = require('cheerio-httpcli');
+var conn = require('../config/db')();
+var async = require('async');
 
-exports.search = function(keyword) {
+exports.search = function () {
+  var d = new Date();
 
-  var url;
+  var dateTime = d.toFormat("YYYY-MM-DD HH24:MI:SS");
+  var urlDate = d.toFormat("YYYY-MM-DD");
+  var time = 'L';
 
-  if (keyword == '미래백년관 - ')
-    url = "https://www.smu.ac.kr/mbs/smu/jsp/restaurant/restaurant.jsp?configIdx=27144&id=smu_040501000000";
-  else
-    url = "https://www.smu.ac.kr/mbs/smu/jsp/restaurant/restaurant.jsp?configIdx=27145&id=smu_040501020000";
+  console.log(dateTime + ' 학식정보 업데이트 시작');
 
-  return new Promise(function(resolve, reject) {
-    request(url, function(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        //HTML body
-        var $ = cheerio.load(body);
+  var urlR = 'https://www.smu.ac.kr/ko/life/restaurantView.do?srMealCategory=' + time + '&srDt=' + urlDate;
+  var urlT = 'https://www.smu.ac.kr/ko/life/restaurantView2.do?srMealCategory=' + time + '&srDt=' + urlDate;
 
-        var eatObj = new Object();
-        var tempArr = new Array();
-        eatObj.bt = new Array();
-        eatObj.contents = new Array();
-        var tableCheck = $("table").hasClass("info_table_type11");
+  client.fetch(urlR, function (err, $, res) {
+    if (err) {
+      console.log(err);
+      return;
+    }
 
-        // 식단이 나타나는 테이블의 존재 유무를 따져서 식단이 존재하는지 검사
-        while (tableCheck == false) {
-          var requestCheck = 0;
+    if ($('.menu-list-box td .s-dot').length > 0) {
+      var eatR = new Array();
+      var eatRIdx = 0;
 
-          thisweekmon = $("#subContents > div:nth-child(5)").text().replace(/ /gi, "").replace('▶', '').replace('◀', '').split('-');
-          thisweekmon = thisweekmon[0] + '-' + thisweekmon[1] + '-' + thisweekmon[2];
-          var d = new Date(thisweekmon.trim());
-
-          var rday = d.setDate(d.getDate() - 7)
-          rday = d.toFormat("YYYY-MM-DD");
-
-          var rurl = url + '&firstWeekDay=' + rday;
-
-          request(rurl, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-              console.log(keyword + '저번주로 재접속' + rday);
-              //HTML body
-              $ = cheerio.load(body);
-              tableCheck = $("table").hasClass("info_table_type11");
-              requestCheck = 1;
-            }
-          });
-          while (requestCheck == 0) {
-            deasync.runLoopOnce();
-          }
-        }
-
-        $(".th_type2").each(function(idx, el) {
-          temp = $(el).text().trim();
-          temp = temp.split('.');
-          month = temp[0];
-          date = temp[1].split(' ')[0];
-          day = temp[1].split(' ')[1];
-          eatObj.bt[idx] = keyword + ("00" + month).slice(-2) + '/' + ("00" + date).slice(-2) + ' ' + day;
-        });
-
-        var regex = /<br\s*[\/]?>/gi;
-
-        $(".subj").each(function(idx, el) {
-          var str = $(el).html();
-          var el_clone = $(el).html(str.replace(regex, "\n"));
-          tempArr[idx] = $(el_clone).text().trim();
-        });
-
-
-        var temp = '';
-
-
-        for (i = 0; i < 5; i++) {
-          day = i;
-
-          temp += eatObj.bt[i]+ '식단입니다.\n\n';
-          if (keyword == '미래백년관 - ') {
-            day *= 4;
-            temp += '======중식======\n';
-            temp += '[뷔페식]\n';
-            temp += tempArr[day];
-            temp += '\n\n[오늘의 메뉴]\n';
-            temp += tempArr[day + 1];
-            temp += '\n\n======석식======\n';
-            temp += tempArr[day + 3];
-          } else {
-            day *= 2;
-            temp += '======중식======\n';
-            temp += tempArr[day];
-            temp += '\n\n[후식] : ';
-            temp += tempArr[day + 1];
-          }
-          eatObj.contents[i] = temp;
-          temp = '';
-        }
-
-        eatObj.bt.unshift('뒤로가기');
-        resolve(eatObj);
+      var eatDate = $('.menu-list-box > div > table > thead > tr > th:nth-child(1)').text().trim().replace(/[^0-9.]/g, '').split('.');
+      var year = d.getFullYear();
+      if ((parseInt(eatDate[0]) == 12) && (d.getMonth() + 1 != parseInt(eatDate[0]))) {
+        year = parseInt(year) - 1
       }
-    });
+      eatDate = new Date(year, parseInt(eatDate[0]) - 1, parseInt(eatDate[1]));
+
+      $('.menu-list-box th').each(function (idx) {
+        eatR[idx] = new Array();
+        eatR[idx][0] = eatDate.toFormat("YYYY-MM-DD");
+        eatDate.setDate(eatDate.getDate() + 1);
+      })
+
+      $('.menu-list-box td .s-dot').each(function (idx) {
+        if (idx % 2 == 0) {
+          eatR[eatRIdx][1] = 'R';
+          eatR[eatRIdx][2] = new Array();
+        }
+
+        if (idx % 2 == 1)
+          eatR[eatRIdx][2][0] += '\n\n[오늘의 메뉴]\n'
+        else
+          eatR[eatRIdx][2][0] = '=====중식=====\n[뷔페식 메뉴]\n'
+
+        $(this).find('li').each(function () {
+          eatR[eatRIdx][2][0] += $(this).text().trim() + '\n';
+        })
+        //공백 제거
+        eatR[eatRIdx][2][0] = eatR[eatRIdx][2][0].trim();
+        if (idx % 2 == 1)
+          eatRIdx++;
+      });
+
+      //석식 추가
+      time = 'D'
+      urlR = 'https://www.smu.ac.kr/ko/life/restaurantView.do?srMealCategory=' + time + '&srDt=' + urlDate;
+
+      client.fetch(urlR, function (err, $, res) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        if ($('.menu-list-box td .s-dot').length > 0) {
+          $('.menu-list-box td .s-dot').each(function (idx) {
+            eatR[idx][2][1] = '=====석식=====\n'
+
+            $(this).find('li').each(function () {
+              eatR[idx][2][1] += $(this).text().trim() + '\n';
+            })
+
+            //중식 석식을 배열에 저장하여 이를 문자열화 시킨 후 DB에 저장한다.
+            //(출력시 따로 출력하기 위해)
+            eatR[idx][2][1] = eatR[idx][2][1].trim();
+            eatR[idx][2] = JSON.stringify(eatR[idx][2]);
+          });
+        }
+
+        var date = eatR.map(x => x[0]);
+        var location = eatR.map(x => x[1]);
+
+        var sql = `
+        INSERT INTO Eat (date, location, content)
+        SELECT * FROM (SELECT ?) AS tmp
+        WHERE NOT EXISTS (
+            SELECT date, location FROM Eat WHERE date=? AND location =?
+        ) LIMIT 1;`
+
+
+        async.forEachOf(eatR, function (param, i, inner_callback) {
+          conn.query(sql, [param, date[i], location[i]], function (err, rows) {
+            if (!err) {
+              inner_callback(null);
+            } else {
+              console.log("R관 학식정보 INSERT 에러");
+              inner_callback(err);
+            };
+          });
+        }, function (err) {
+          if (err) {
+            throw err
+          } else {
+            console.log("R관 학식정보 업데이트 완료");
+          }
+        });
+      });
+    } else {
+      console.log("R관 학식정보 없음");
+    }
   });
+
+
+  //T관 업데이트
+  client.fetch(urlT, function (err, $, res) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    if ($('.menu-list-box td .s-dot').length > 0) {
+      var eatT = new Array();
+
+      var eatDate = $('.menu-list-box > div > table > thead > tr > th:nth-child(1)').text().trim().replace(/[^0-9.]/g, '').split('.');
+      var year = d.getFullYear();
+      if ((parseInt(eatDate[0]) == 12) && (d.getMonth() + 1 != parseInt(eatDate[0])))
+        year = parseInt(year) - 1
+
+      eatDate = new Date(year, parseInt(eatDate[0]) - 1, parseInt(eatDate[1]));
+
+      $('.menu-list-box th').each(function (idx) {
+        eatT[idx] = new Array();
+        eatT[idx][0] = eatDate.toFormat("YYYY-MM-DD");
+        eatDate.setDate(eatDate.getDate() + 1);
+      })
+
+      $('.menu-list-box td .s-dot').each(function (idx) {
+        eatT[idx][1] = 'T';
+        eatT[idx][2] = new Array();
+        eatT[idx][2][0] = '=====중식=====\n'
+
+        $(this).find('li').each(function () {
+          eatT[idx][2][0] += $(this).text().trim() + '\n';
+        });
+
+        //중식 석식을 배열에 저장하여 이를 문자열화 시킨 후 DB에 저장한다.
+        //(출력시 따로 출력하기 위해)
+        eatT[idx][2][0] = eatT[idx][2][0].trim(); //공백제거
+        eatT[idx][2] = JSON.stringify(eatT[idx][2]);
+      });
+
+      // DB에 추가
+      var date = eatT.map(x => x[0]);
+      var location = eatT.map(x => x[1]);
+
+      var sql = `
+        INSERT INTO Eat (date, location, content)
+        SELECT * FROM (SELECT ?) AS tmp
+        WHERE NOT EXISTS (
+            SELECT date, location FROM Eat WHERE date=? AND location =?
+        ) LIMIT 1;`
+
+      async.forEachOf(eatT, function (param, i, inner_callback) {
+        conn.query(sql, [param, date[i], location[i]], function (err, rows) {
+          if (!err) {
+            inner_callback(null);
+          } else {
+            console.log("T관 학식정보 업데이트 에러");
+            inner_callback(err);
+          };
+        });
+      }, function (err) {
+        if (err) {
+          throw err
+        } else {
+          console.log("T관 학식정보 업데이트 완료");
+        }
+      });
+    } else {
+      console.log("T관 학식정보 없음");
+    }
+  });
+
 }

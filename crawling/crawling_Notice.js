@@ -4,9 +4,9 @@ exports.search = function (keyword, page) {
   var url = 'http://www.smu.ac.kr/lounge/notice/notice.do';
 
   if (keyword.length > 0) //검색시
-    var listUrl = url + '?mode=list&srCampus=smu&srSearchVal=' + keyword + '&articleLimit=10';
+    var listUrl = url + '?mode=list&srSearchVal=' + keyword + '&articleLimit=10';
   else //평상시
-    var listUrl = url + '?mode=list&srCampus=smu&articleLimit=8&article.offset=' + ((page - 1) * 8);
+    var listUrl = url + '?mode=list&articleLimit=10&article.offset=' + ((page - 1) * 10);
 
   listUrl = encodeURI(listUrl)
 
@@ -22,30 +22,24 @@ exports.search = function (keyword, page) {
       if ($(".board-thumb-content-wrap:not(.noti)").length > 0) {
         noticeObj = new Array();
 
-        $(".board-thumb-content-wrap:not(.noti) dt a").each(function(idx) {
+        $(".board-thumb-content-wrap:not(.noti)").each(function(idx) {
+          if($(this).find('.cmp.cheon').length)
+            return true;
+
           noticeObj[idx] = new Object();
 
-          var title = $(this).text().trim().split(']')
-          
+          var title = $(this).find('a').text().trim().split(']')
           title = title[title.length - 1].trim();
+          
+          var desc = '';  //clip
 
-          var titleArr = title.split(' ');
-          title = '';
-          var desc = '';
-          var check = true
+          if($(this).siblings('.list-file').length > 0)
+            desc = '첨부파일 있음'
 
-          titleArr.forEach((el, idx) => {
-            // if (check && (title + el + ' ').length < 20)
-              title += el + ' ';
-            // else{
-            //   desc += el + ' ';
-            //   check = false
-            // }
-          })
           noticeObj[idx].title = title.trim();
           noticeObj[idx].desc = desc.trim();
 
-          var src = $(this).attr('href');
+          var src = $(this).find('a').attr('href');
           noticeObj[idx].src = url + src;
         });
       } else {

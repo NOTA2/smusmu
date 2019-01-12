@@ -6,12 +6,10 @@ module.exports = function (defaultObj) {
     request("http://169.254.169.254/latest/meta-data/public-ipv4", function (error, response, body) {
       if (!error && response.statusCode == 200) {
         defaultObj.ipadd = body
-        console.log(defaultObj.ipadd);
-
         if (defaultObj.ipadd == '54.180.122.96')
-          console.log('테스트 서버');
+          console.log(defaultObj.ipadd + ' 테스트 서버');
         else
-          console.log('리얼 서버');
+          console.log(defaultObj.ipadd + ' 리얼 서버');
       }
     });
     while (defaultObj.ipadd == undefined) {

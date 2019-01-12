@@ -1,7 +1,6 @@
 var cheerio = require('cheerio');
 var request = require('request');
 var deasync = require('deasync');
-var defaultObj = require('../config/defaultVariable');
 var conn = require('../config/db')();
 
 exports.search = function () {
@@ -9,7 +8,7 @@ exports.search = function () {
   var time = d.toFormat("YYYY-MM-DD HH24:MI:SS");
   var date = d.toFormat("YYYY-MM-DD");
 
-  console.log(time + " 집회/공사 정보 업데이트");
+  console.log(time + " 집회정보 업데이트 시작");
 
   urlt = "https://twitter.com/poltra02"; //트위터 주소
   urld = "http://www.smpa.go.kr/user/nd54882.do" //상세정보를 얻기위한 서울지방 경찰청 주소
@@ -89,6 +88,7 @@ exports.search = function () {
       ON DUPLICATE KEY UPDATE date=?, jsondata=?; `
 
       var param = {
+        "id" : null,
         "date" : date, 
         "jsondata" : jsondata
       };
@@ -105,9 +105,4 @@ exports.search = function () {
 
     }
   });
-
-
-
-
-
 }
