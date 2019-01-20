@@ -63,8 +63,7 @@ exports.search = function (keyword) {
   var time = dt.toFormat("HH24MI");
   var datetime = dt.toFormat("YYYY-MM-DD HH24:MI:SS");
 
-  console.log(datetime);
-  console.log("날씨 정보를 업데이트 합니다");
+  console.log(datetime + " 날씨 정보를 업데이트 합니다");
 
   //20분까지는 예보정보가 안나오는 경우가있어서 시간을 25분 뒤로 돌려서 정보를 받는다.
   if (time[2] == '0' || time[2] == '1') {

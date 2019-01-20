@@ -27,7 +27,7 @@ module.exports = function () {
       }
     };
 
-    try {
+    try {   //검색하기 였을때
       var keyword = req.body.action.detailParams.keyword.value;
     } catch (e) {
       var keyword = ''
@@ -35,7 +35,6 @@ module.exports = function () {
 
     try {
       var page = parseInt(JSON.parse(req.body.action.detailParams.page.value).amount);
-      console.log(req.body.action.detailParams);
     } catch (e) {
       var page = 1;
     }

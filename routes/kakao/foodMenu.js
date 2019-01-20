@@ -9,10 +9,10 @@ module.exports = function () {
       "version": "2.0",
       "template": {
         "outputs": [{
-          "simpleText": {
-            "text": '검색결과를 찾을 수 업스뮤 😔'
-          }
-        }],
+            "simpleText": {
+              "text": '검색결과를 찾을 수 업스뮤 😔'
+            }
+          }],
         "quickReplies": defaultObj.Qu
       }
     };
@@ -58,7 +58,6 @@ module.exports = function () {
           });
         })
       }
-
       res.json(message);
     });
   });

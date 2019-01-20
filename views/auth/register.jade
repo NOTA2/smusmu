@@ -1,16 +1,12 @@
-doctype
+doctype html
 html(lang='ko')
     head
         meta(charset='utf-8')
         title
     body
         h1 Register
-            form(action='/auth/register', method='post')
-                p
-                    input(type='text', name="username", placeholder="username")
-                p
-                    input(type='password', name="password", placeholder="password")
-                p
-                    input(type='submit')
-    
-    
+        div
+            a(href='/auth/register') 일반학생 가입하기
+        div
+            a(href='/auth/register') 학생회 관리자 가입하기
+

@@ -30,7 +30,7 @@ module.exports = function () {
       sql += "WHERE month LIKE ('%" + year + "%') AND month LIKE ('%" + month + "월%')";
     } catch (e) {
       content = content.content.value;
-      sql += "WHERE content LIKE ('%" + content + "%') OR homonym LIKE ('%" + content + "%')"
+      sql += "WHERE month LIKE ('%"+ year + "%') AND content LIKE ('%" + content + "%') OR homonym LIKE ('%" + content + "%')"
     } finally {
 
       conn.query(sql, function (err, rows) {

@@ -28,6 +28,13 @@ exports.search = function () {
 
     while ($('#fo_menu_mor1 > li').length == 0) {
       console.log("홍제 행복기숙사 리로드");
+      
+      await instance.exit();
+      const instance = await phantom.create();
+      const page = await instance.createPage();
+      await page.on('onResourceRequested', function (requestData) {});
+      const status = await page.open(url);
+
       var content = await page.property('content');
       $ = cheerio.load(content);
       test++;

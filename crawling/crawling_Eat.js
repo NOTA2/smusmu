@@ -19,23 +19,23 @@ exports.search = function () {
       console.log(err);
       return;
     }
-
+    
     if ($('.menu-list-box td .s-dot').length > 0) {
       var eatR = new Array();
       var eatRIdx = 0;
 
-      var eatDate = $('.menu-list-box > div > table > thead > tr > th:nth-child(1)').text().trim().replace(/[^0-9.]/g, '').split('.');
-      var year = d.getFullYear();
-      if ((parseInt(eatDate[0]) == 12) && (d.getMonth() + 1 != parseInt(eatDate[0]))) {
-        year = parseInt(year) - 1
-      }
-      eatDate = new Date(year, parseInt(eatDate[0]) - 1, parseInt(eatDate[1]));
+      var eatDate = $('.menu-tab-box > div > p').text().split('~')[0].trim().replace(/[^0-9.]/g, '').split('.');
+      var year = parseInt(eatDate[0])
+      var month = parseInt(eatDate[1])
+      var date = parseInt(eatDate[2])
 
-      $('.menu-list-box th').each(function (idx) {
+      eatDate = new Date(year, month - 1, date);
+
+      for(var idx =0;idx<5;idx++){
         eatR[idx] = new Array();
         eatR[idx][0] = eatDate.toFormat("YYYY-MM-DD");
         eatDate.setDate(eatDate.getDate() + 1);
-      })
+      }
 
       $('.menu-list-box td .s-dot').each(function (idx) {
         if (idx % 2 == 0) {
@@ -125,18 +125,18 @@ exports.search = function () {
     if ($('.menu-list-box td .s-dot').length > 0) {
       var eatT = new Array();
 
-      var eatDate = $('.menu-list-box > div > table > thead > tr > th:nth-child(1)').text().trim().replace(/[^0-9.]/g, '').split('.');
-      var year = d.getFullYear();
-      if ((parseInt(eatDate[0]) == 12) && (d.getMonth() + 1 != parseInt(eatDate[0])))
-        year = parseInt(year) - 1
+      var eatDate = $('.menu-tab-box > div > p').text().split('~')[0].trim().replace(/[^0-9.]/g, '').split('.');
+      var year = parseInt(eatDate[0])
+      var month = parseInt(eatDate[1])
+      var date = parseInt(eatDate[2])
 
-      eatDate = new Date(year, parseInt(eatDate[0]) - 1, parseInt(eatDate[1]));
-
-      $('.menu-list-box th').each(function (idx) {
-        eatT[idx] = new Array();
-        eatT[idx][0] = eatDate.toFormat("YYYY-MM-DD");
+      eatDate = new Date(year, month - 1, date);
+      
+      for(var idx =0;idx<5;idx++){
+        eatR[idx] = new Array();
+        eatR[idx][0] = eatDate.toFormat("YYYY-MM-DD");
         eatDate.setDate(eatDate.getDate() + 1);
-      })
+      }
 
       $('.menu-list-box td .s-dot').each(function (idx) {
         eatT[idx][1] = 'T';
