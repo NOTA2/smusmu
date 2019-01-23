@@ -35,6 +35,7 @@ module.exports = function () {
           return res.json(message);
         }
         if (rows.length > 0) {
+
           message.template.outputs[0] = {
             "carousel": {
               "type": "basicCard",
@@ -43,13 +44,18 @@ module.exports = function () {
           };
 
           rows.forEach(function (el, idx) {
+            
             if(content.call && el.phoneNumber == null){
               return;
             }
 
             message.template.outputs[0].carousel.items[idx] = new Object();
-            var str = '[' + el.keyword + ']\n' + el.explanation
-            message.template.outputs[0].carousel.items[idx].title = str
+            if(el.explanation){
+              var str = '[' + el.keyword + ']\n' + el.explanation
+              message.template.outputs[0].carousel.items[idx].title = str
+            } else{
+              message.template.outputs[0].carousel.items[idx].title = '[' + el.keyword + ']\n전화번호는 버튼을 눌러 확인해주세요!'
+            }
 
             if (el.img) {
               message.template.outputs[0].carousel.items[idx].thumbnail = {
@@ -60,6 +66,8 @@ module.exports = function () {
                 "label": "지도 크게보기",
                 "webLinkUrl": 'http://' + defaultObj.ipadd + '/mapimg/' + el.img + '1.png'
               }];
+            } else{
+              message.template.outputs[0].carousel.items[idx].buttons = []
             }
 
             if (el.phoneNumber) {

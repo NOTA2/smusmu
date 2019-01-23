@@ -19,7 +19,7 @@ exports.search = function () {
       console.log(err);
       return;
     }
-    
+
     if ($('.menu-list-box td .s-dot').length > 0) {
       var eatR = new Array();
       var eatRIdx = 0;
@@ -31,30 +31,31 @@ exports.search = function () {
 
       eatDate = new Date(year, month - 1, date);
 
-      for(var idx =0;idx<5;idx++){
+      for (var idx = 0; idx < 5; idx++) {
         eatR[idx] = new Array();
         eatR[idx][0] = eatDate.toFormat("YYYY-MM-DD");
         eatDate.setDate(eatDate.getDate() + 1);
       }
 
       $('.menu-list-box td .s-dot').each(function (idx) {
-        if (idx % 2 == 0) {
-          eatR[eatRIdx][1] = 'R';
-          eatR[eatRIdx][2] = new Array();
+        if (idx < 5) {
+          eatR[idx][1] = 'R';
+          eatR[idx][2] = new Array();
         }
-
-        if (idx % 2 == 1)
-          eatR[eatRIdx][2][0] += '\n\n[오늘의 메뉴]\n'
-        else
+        
+        if (idx < 5)
           eatR[eatRIdx][2][0] = '=====중식=====\n[뷔페식 메뉴]\n'
+        else
+          eatR[eatRIdx][2][0] += '\n\n[오늘의 메뉴]\n'
 
         $(this).find('li').each(function () {
           eatR[eatRIdx][2][0] += $(this).text().trim() + '\n';
         })
         //공백 제거
         eatR[eatRIdx][2][0] = eatR[eatRIdx][2][0].trim();
-        if (idx % 2 == 1)
-          eatRIdx++;
+        eatRIdx++;
+        if (idx == 4)
+          eatRIdx = 0;
       });
 
       //석식 추가
@@ -131,8 +132,8 @@ exports.search = function () {
       var date = parseInt(eatDate[2])
 
       eatDate = new Date(year, month - 1, date);
-      
-      for(var idx =0;idx<5;idx++){
+
+      for (var idx = 0; idx < 5; idx++) {
         eatR[idx] = new Array();
         eatR[idx][0] = eatDate.toFormat("YYYY-MM-DD");
         eatDate.setDate(eatDate.getDate() + 1);

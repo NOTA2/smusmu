@@ -14,6 +14,10 @@ module.exports = function () {
           }
         }],
         "quickReplies": defaultObj.Qu.concat([{
+          "label": '주요 공지사항',
+          "action": "message",
+          "messageText": '주요 공지사항'
+        },{
           "label": '최근 공지사항',
           "action": "block",
           "messageText": '최근 공지사항',
@@ -27,6 +31,9 @@ module.exports = function () {
       }
     };
 
+
+    var im = false;
+
     try {   //검색하기 였을때
       var keyword = req.body.action.detailParams.keyword.value;
     } catch (e) {
@@ -39,7 +46,10 @@ module.exports = function () {
       var page = 1;
     }
 
-    cNotice.search(keyword, page)
+    if(req.body.action.detailParams.import != undefined)
+      im = true;
+    
+    cNotice.search(keyword, page, im)
       .then(resultList => {
         if (resultList != 'false') {
           message.template.outputs[0] = {
@@ -66,11 +76,19 @@ module.exports = function () {
               ]
             });
           });
-          if (keyword.length == 0) {
-            message.template.quickReplies[1] = {
-              "label": '공지사항 ' + (page + 1) + '페이지',
+
+          if(im){
+            message.template.quickReplies[2] = {
+              "label": '주요 공지사항 ' + (page + 1) + '페이지',
               "action": "message",
-              "messageText": '공지사항 ' + (page + 1) + '페이지'
+              "messageText": '주요 공지사항 ' + (page + 1) + '페이지'
+            };
+          }
+          else if (keyword.length == 0) {
+            message.template.quickReplies[3] = {
+              "label": '최근 공지사항 ' + (page + 1) + '페이지',
+              "action": "message",
+              "messageText": '최근 공지사항 ' + (page + 1) + '페이지'
             };
           }
         }
@@ -89,6 +107,10 @@ module.exports = function () {
           }
         }],
         "quickReplies": defaultObj.Qu.concat([{
+          "label": '주요 공지사항',
+          "action": "message",
+          "messageText": '주요 공지사항'
+        }, {
           "label": '최근 공지사항',
           "action": "block",
           "messageText": '최근 공지사항',

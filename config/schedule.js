@@ -20,9 +20,9 @@ module.exports = function () {
         runOnInit: true
     });
 
-    //학사정보 업데이트
+    //학사일정정보 업데이트
     var scheduleCalendar = new CronJob({
-        cronTime: "00 00 12 */10 0,1 *",
+        cronTime: "00 00 12 * * *",
         onTick: calendar.crawling,
         start: true,
         timeZone: 'Asia/Seoul',
