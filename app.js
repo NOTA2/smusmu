@@ -20,6 +20,7 @@ var seoulAssemblyRouter = require('./routes/kakao/seoulAssembly')();
 var calendarRouter = require('./routes/kakao/calendar')();
 var foodMenuRouter = require('./routes/kakao/foodMenu')();
 var schoolInfoRouter = require('./routes/kakao/schoolInfo')();
+var quizRouter = require('./routes/kakao/quiz');
 
 app.use('/eat', eatRouter);
 app.use('/notice', noticeRouter);
@@ -28,6 +29,12 @@ app.use('/seoulAssembly', seoulAssemblyRouter);
 app.use('/calendar', calendarRouter);
 app.use('/foodMenu', foodMenuRouter);
 app.use('/schoolInfo', schoolInfoRouter);
+app.use('/quiz', quizRouter);
+
+
+app.post('/test', (req, res) =>{
+  console.log(req.body.action.detailParams);
+})
 
 // var index = require('./routes/index')();
 // var auth = require('./routes/auth')(passport);

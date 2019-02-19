@@ -12,7 +12,7 @@ module.exports = function () {
       "template": {
         "outputs": [{
           "simpleText": {
-            "text": '검색결과를 찾을 수 업스뮤 😔'
+            "text": '검색결과를 찾을 수 업스뮤 😔\n버튼을 다시 누르거나 학사일정이라고 말해줘스뮤 😔'
           }
         }],
         "quickReplies": defaultObj.Qu
@@ -30,9 +30,10 @@ module.exports = function () {
       sql += "WHERE month LIKE ('%" + year + "%') AND month LIKE ('%" + month + "월%')";
     } catch (e) {
       content = content.content.value;
+      var d= new Date();
+      var year = d.getFullYear();
       sql += "WHERE month LIKE ('%"+ year + "%') AND content LIKE ('%" + content + "%') OR homonym LIKE ('%" + content + "%')"
     } finally {
-
       conn.query(sql, function (err, rows) {
         if (err){
           console.err(err);

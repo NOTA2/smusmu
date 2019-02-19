@@ -25,21 +25,27 @@ exports.search = function () {
 
       var today = (d.getFullYear() + '').substr(2, 2) + ("00" + (d.getMonth() + 1)).slice(-2) + ("00" + d.getDate()).slice(-2);
 
-      var boardNo = $("td.subject > a:contains('" + today + "')").attr('href').split('\'');
-      boardNo = boardNo[boardNo.length - 2];
+      try{
+        var boardNo = $("td.subject > a:contains('" + today + "')").attr('href').split('\'');
+        boardNo = boardNo[boardNo.length - 2];
+  
+        request(urld + "?View&boardNo=" + boardNo, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            //HTML body
+            var $ = cheerio.load(body);
+  
+            $(".reply-content > img").each(function (idx, el) {
+              result.detail.push('http://www.smpa.go.kr/' + $(el).attr("src"));
+            });
 
-      request(urld + "?View&boardNo=" + boardNo, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          //HTML body
-          var $ = cheerio.load(body);
-
-          $(".reply-content > img").each(function (idx, el) {
-            result.detail.push('http://www.smpa.go.kr/' + $(el).attr("src"));
-          });
-
-          check++;
-        }
-      });
+          }
+        });
+      }catch(e){
+        console.log(e);
+      }finally{
+        check++;
+      }
+      
     }
   });
 
