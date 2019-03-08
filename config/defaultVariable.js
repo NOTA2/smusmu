@@ -12,7 +12,4 @@ defaultObj.Qu = [{
     "blockId" : "5c272d6d384c5518d11fd082"
   }]
 
-
-defaultObj.weatherResult = '날씨정보가 없스뮤.'; //날씨 정보
-
 module.exports = defaultObj;

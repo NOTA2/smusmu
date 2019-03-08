@@ -1,0 +1,170 @@
+body{
+    background-color : #2A3C78;
+}
+
+#wrap {
+    clear: both;
+    max-width: 68rem;
+    height: 50rem;
+    margin: 0 auto;
+}
+
+#container {
+    clear: both;
+    width: 70%;
+    height: 100%;
+    padding: 3%;
+    margin: 3% auto;
+}
+
+hr{
+    background-color: white;
+}
+
+#container h1,
+h4 {
+    clear: both;
+    float: left;
+    width: 100%;
+    text-align: center;
+    padding: 0.2em;
+    margin: 1em 0 0 0;
+}
+h4{
+    margin: 0.2rem 0 0 0;
+}
+
+.form-group {
+    clear: both;
+    color: #2A3C78;
+    text-align: center;
+    margin: 0.8em 1%;
+    padding: 1%;
+}
+/* 
+input {
+    width: 80%;
+    padding: 1% 1%;
+    margin: 1% 0;
+    text-align: center;
+    font-size: 3rem;
+    color: #000;
+} */
+
+form {
+    margin: 1% auto;
+    padding: 8%;
+    background-color: white;
+}
+
+.line .inputArea {
+    float: left;
+}
+
+#agree{
+    margin: 1% auto;
+    padding: 8%;
+    background-color: white;
+}
+.register-term {
+    /* position: relative; */
+    height: 195px;
+    margin-bottom: 12px;
+    overflow: auto;
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+
+.page-content {
+    line-height: 22px;
+    word-break: keep-all;
+    word-wrap: break-word;
+}
+
+.page-content .article-title {
+    color: #0083B9;
+    font-weight: bold;
+    padding-top: 30px;
+    padding-bottom: 10px;
+}
+
+.page-content ul {
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+    font-weight: normal;
+}
+
+.page-content ol {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.page-content ol>li>ol li {
+    list-style: disc;
+}
+
+.page-content p {
+    margin: 0 0 15px;
+    padding: 0;
+}
+
+/*스마트폰에 적용*/
+
+@media screen and (max-width:766px) {
+    body {
+        background: #2A3C78;
+        color: #FFF;
+    }
+
+    #container {
+        clear: both;
+        width: 100%;
+        height: 100%;
+        padding: 1em 1em;
+        margin: 5% auto;
+    }
+
+    h1 {
+        color: #FFF;
+        font-size: 2rem;
+    }
+    h3{
+        font-size: 1.5rem;
+    }
+    .form-group.row {
+        clear: both;
+        text-align: left;
+        color: #FFF;
+        margin: 1rem 0;
+    }
+
+    form {
+        margin: 1% auto;
+        padding: 0 0 10%;
+        background-color: #2A3C78;
+    }
+
+    .register-term{
+        background-color : white;
+        color : black;
+    }
+    .page-content .article-title {
+        color: #0083B9;
+        font-weight: bold;
+        padding-top: 30px;
+        padding-bottom: 10px;
+    }
+
+    #agree{
+        margin: 1% auto;
+        padding: 8%;
+        background-color: #2A3C78;
+    }
+    /* .agreebox h3{
+        color: #2A3C78;
+    }
+    .agreebox p{
+        color: #2A3C78;
+    } */
+}

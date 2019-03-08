@@ -20,29 +20,29 @@ exports.search = function (keyword, page, im) {
       }
       var noticeObj;
 
-      if (im) {
+      if (im) { //중요 공지사항인 경우
         if ($(".board-thumb-content-wrap.noti").length > 0) {
           noticeObj = new Array();
 
           $(".board-thumb-content-wrap.noti").each(function (idx) {
             if ($(this).find('.cmp.cheon').length)
               return true;
-            
-            if(idx > (page * alimit))
+
+            if (idx > (page * alimit))
               return true;
-            
-            if(page > 1 && idx < offset)
+
+            if (page > 1 && idx < offset)
               return true;
-              
+
             noticeObj[idx] = new Object();
 
             var title = $(this).find('a').text().trim().split(']')
             title = title[title.length - 1].trim();
 
-            var desc = ''; //clip
-
+            var desc = '게시일 : ' + $(this).find('.board-thumb-content-date').text().replace(/[^-0-9]/g,'').trim();
+            
             if ($(this).siblings('.list-file').length > 0)
-              desc = '첨부파일 있음'
+              desc += '\n첨부파일 있음'
 
             noticeObj[idx].title = title.trim();
             noticeObj[idx].desc = desc.trim();
@@ -53,7 +53,41 @@ exports.search = function (keyword, page, im) {
         } else {
           noticeObj = 'false';
         }
-      } else {
+      } else if (keyword.length > 0) { //검색하기일 경우
+
+        if ($(".board-thumb-content-wrap").length > 0) {
+          noticeObj = new Array();
+
+          $(".board-thumb-content-wrap").each(function (idx) {
+            if ($(this).find('.cmp.cheon').length)
+              return true;
+
+            if (noticeObj.filter(Boolean).length > alimit)
+              return true;
+
+            var title = $(this).find('a').text().trim().split(']')
+            title = title[title.length - 1].trim();
+
+            if ($(this).find('.noti').length && title.indexOf(keyword) == -1)
+              return true;
+            
+            var desc = '게시일 : ' + $(this).find('.board-thumb-content-date').text().replace(/[^-0-9]/g,'').trim();
+            
+            if ($(this).siblings('.list-file').length > 0)
+              desc += '\n첨부파일 있음'
+
+            noticeObj[idx] = new Object();
+            noticeObj[idx].title = title.trim();
+            noticeObj[idx].desc = desc.trim();
+
+            var src = $(this).find('a').attr('href');
+            noticeObj[idx].src = url + src;
+          });
+        } else {
+          noticeObj = 'false';
+        }
+
+      } else { //최근 공지사항일 경우
         //게시판에 글이 존재 한다면 출력
         if ($(".board-thumb-content-wrap:not(.noti)").length > 0) {
           noticeObj = new Array();
@@ -67,10 +101,10 @@ exports.search = function (keyword, page, im) {
             var title = $(this).find('a').text().trim().split(']')
             title = title[title.length - 1].trim();
 
-            var desc = ''; //clip
-
+            var desc = '게시일 : ' + $(this).find('.board-thumb-content-date').text().replace(/[^-0-9]/g,'').trim();
+            
             if ($(this).siblings('.list-file').length > 0)
-              desc = '첨부파일 있음'
+              desc += '\n첨부파일 있음'
 
             noticeObj[idx].title = title.trim();
             noticeObj[idx].desc = desc.trim();
@@ -83,10 +117,10 @@ exports.search = function (keyword, page, im) {
         }
       }
 
-      if(noticeObj.length == 0){
-        noticeObj='false'
+      if (noticeObj.length == 0) {
+        noticeObj = 'false'
       }
-      
+
       resolve(noticeObj);
     });
   });

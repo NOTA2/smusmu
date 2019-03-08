@@ -11,13 +11,6 @@ route.post('*', function (req, res) {
 					"text": '틀렸습니다.\n아래의 퀴즈 버튼을 눌러서 다시 시도해주세요.'
 				}
 			}]
-			// ,
-			// "quickReplies": [{
-			//     "label": '퀴즈',
-			//     "action": "block",
-			//     "messageText": '퀴즈',
-			//     "blockId": "5c6a65c3e821274ba78938cb"
-			// }]
 		}
 	};
 
@@ -49,7 +42,7 @@ route.post('*', function (req, res) {
 	}
 
 	if (quiz == 0) {
-		message.template.outputs[0].simpleText.text = '스뮤스뮤 퀴즈모드 입니다.\n문제는 총 4문제입니다.\n아래의 버튼을 눌러서 첫번째 퀴즈부터 맞춰보세요!'
+		message.template.outputs[0].simpleText.text = '스뮤스뮤 퀴즈모드 입니다.\n문제는 총 4문제입니다.\n아래의 버튼을 눌러서 첫번째 퀴즈부터 맞혀보세요!'
 		message.template.quickReplies = [{
 			"label": '퀴즈',
 			"action": "block",
@@ -129,7 +122,7 @@ route.post('*', function (req, res) {
 		}
 		if (answer == '학생청원제도') {		//정답일 경우
 			count++;
-			message.template.outputs[0].simpleText.text = '정답입니다.\n모든 퀴즈를 다 맞췄습니다. 축하합니다.\n당신의 번호는 ' + count + '번 입니다.'
+			message.template.outputs[0].simpleText.text = '정답입니다.\n모든 퀴즈를 다 맞혔습니다. 축하합니다.\n당신의 번호는 ' + count + '번 입니다.'
 			users[idx].grade[4] = true;
 			message.template.quickReplies = [{
 				"label" : "스뮤스뮤 사용하기",
@@ -151,7 +144,7 @@ route.post('*', function (req, res) {
 			}]
 		}
 	}else{
-		message.template.outputs[0].simpleText.text = '모든 퀴즈를 다 맞췄습니다. 참여할 수 없습니다.'
+		message.template.outputs[0].simpleText.text = '모든 퀴즈를 다 맞혔습니다. 참여할 수 없습니다.'
 		message.template.quickReplies = [{
 			"label" : "처음으로",
 			"action" : "block",

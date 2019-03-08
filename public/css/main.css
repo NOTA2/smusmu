@@ -54,6 +54,7 @@ form{
 @media screen and (max-width:766px) {
     body {
       background: #2A3C78;
+      color: #FFF;
     }
     #container {
       clear: both;

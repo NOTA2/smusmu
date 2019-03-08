@@ -6,38 +6,40 @@ require('./config/ip')(defaultObj);
 require('date-utils');
 var passport = require('./config/passport')(app);
 
+// require('./config/schedule')();
+
+var eatKakaoRouter = require('./routes/kakao/eat');
+var noticeKakaoRouter = require('./routes/kakao/notice');
+var weatherKakaoRouter = require('./routes/kakao/weather');
+var seoulAssemblyKakaoRouter = require('./routes/kakao/seoulAssembly');
+var calendarKakaoRouter = require('./routes/kakao/calendar');
+var foodMenuKakaoRouter = require('./routes/kakao/foodMenu');
+var schoolInfoKakaoRouter = require('./routes/kakao/schoolInfo');
+var quizKakaoRouter = require('./routes/kakao/quiz');
+var authKakaoRouter = require('./routes/kakao/auth')
+
+app.use('/kakao/eat', eatKakaoRouter);
+app.use('/kakao/notice', noticeKakaoRouter);
+app.use('/kakao/weather', weatherKakaoRouter);
+app.use('/kakao/seoulAssembly', seoulAssemblyKakaoRouter);
+app.use('/kakao/calendar', calendarKakaoRouter);
+app.use('/kakao/foodMenu', foodMenuKakaoRouter);
+app.use('/kakao/schoolInfo', schoolInfoKakaoRouter);
+app.use('/kakao/quiz', quizKakaoRouter);
+app.use('/kakao/auth', authKakaoRouter);
+
+
+var index = require('./routes/index');
+var auth = require('./routes/auth')(passport);
+var commu = require('./routes/commu');
+// var asso = require('./routes/asso');
+
+app.use('/', index);
+app.use('/auth', auth);
+app.use('/commu', commu);
+// app.use('/asso', asso);
+
 //서버를 계속 유지
 app.listen(80, function () {
   console.log('Connect 80 port');
 });
-
-require('./config/schedule')();
-
-var eatRouter = require('./routes/kakao/eat')();
-var noticeRouter = require('./routes/kakao/notice')();
-var weatherRouter = require('./routes/kakao/weather')();
-var seoulAssemblyRouter = require('./routes/kakao/seoulAssembly')();
-var calendarRouter = require('./routes/kakao/calendar')();
-var foodMenuRouter = require('./routes/kakao/foodMenu')();
-var schoolInfoRouter = require('./routes/kakao/schoolInfo')();
-var quizRouter = require('./routes/kakao/quiz');
-
-app.use('/eat', eatRouter);
-app.use('/notice', noticeRouter);
-app.use('/weather', weatherRouter);
-app.use('/seoulAssembly', seoulAssemblyRouter);
-app.use('/calendar', calendarRouter);
-app.use('/foodMenu', foodMenuRouter);
-app.use('/schoolInfo', schoolInfoRouter);
-app.use('/quiz', quizRouter);
-
-
-app.post('/test', (req, res) =>{
-  console.log(req.body.action.detailParams);
-})
-
-// var index = require('./routes/index')();
-// var auth = require('./routes/auth')(passport);
-
-// app.use('/', index);
-// app.use('/auth/', auth);

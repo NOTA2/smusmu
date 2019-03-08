@@ -1,14 +1,15 @@
 var CronJob = require('cron').CronJob;
 
-var defaultObj = require('./defaultVariable');
+var defaultObj = require('./config/defaultVariable');
+require('./config/ip')(defaultObj);
 
-var cEat = require('../crawling/crawling_Eat');
-var chEat = require('../crawling/crawling_Eat_happy');
-var kmaWeather = require('../crawling/weather');
-var seoulAssembly = require('../crawling/seoulAssembly');
-var calendar = require('../crawling/calendar');
+var cEat = require('./crawling/crawling_Eat');
+var chEat = require('./crawling/crawling_Eat_happy');
+var kmaWeather = require('./crawling/weather');
+var seoulAssembly = require('./crawling/seoulAssembly');
+var calendar = require('./crawling/calendar');
 
-module.exports = function () {
+(function () {
     var scheduleEat = new CronJob({
         cronTime: "00 10 9-11 * * 0-2",
         onTick: function () {
@@ -21,7 +22,7 @@ module.exports = function () {
     });
 
     //학사일정정보 업데이트
-    var scheduleCalendar = new CronJob({
+    var scheduleCalendar = new CronJob({ 
         cronTime: "00 00 12 * * *",
         onTick: calendar.crawling,
         start: true,
@@ -29,7 +30,7 @@ module.exports = function () {
         runOnInit: true
     });
 
-    if (defaultObj.ipadd != '54.180.122.96') { //테스트 서버일 땐 하지 않습니다.
+    if (defaultObj.ipadd != '54.180.122.926') { //테스트 서버일 땐 하지 않습니다.
         var scheduleWeather = new CronJob({
             cronTime: "00 43 * * * *",
             onTick: kmaWeather.search,
@@ -47,4 +48,4 @@ module.exports = function () {
         timeZone: 'Asia/Seoul',
         runOnInit: true
     });
-}
+})();

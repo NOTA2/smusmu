@@ -3,36 +3,40 @@ html(lang='ko')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width')
-    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css", integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4", crossorigin="anonymous")
-    link(rel="shortcut icon", href="favicon/favicon.ico")
     meta(http-equiv='X-UA-Compatible', content='ie=edge')
-    script(type='text/javascript', src='http://code.jquery.com/jquery-2.1.0.min.js')
-    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js", integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo", crossorigin="anonymous")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js", integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ", crossorigin="anonymous")
-    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js", integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm", crossorigin="anonymous")
-    script(type='text/javascript', src='js/prefixfree.min.js')
-    //link(rel='stylesheet',type="text/css", href='css/reset.css')
-    script(type='text/javascript', src='js/mySignInForm.js')
-    link(rel='stylesheet', href='css/base.css')
-    link(rel='stylesheet', href='css/main.css')
-    title smusmu 학생회 관리 페이지
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
+    link(rel="shortcut icon", href="/favicon/favicon.ico")
+    //- link(rel='stylesheet',type="text/css", href='/css/reset.css')
+    link(rel='stylesheet', href='/css/base.css')
+    link(rel='stylesheet', href='/css/main.css')
+    title smusmu
   body
     #wrap
       #container
-        h1.title 스뮤스뮤(smusmu)
+        h1.title 스뮤스뮤
         form(action='/auth/login', method='post', onsubmit='return checkSubmit()')
           .form-group.row
             label(for="inputId").col-sm-2.col-form-label.col-form-label-lg 아이디
-            .col-sm-9
-              input.memberId.form-control(type='text', name='username', placeholder="Enter id")
+            .col-sm-8
+              input#inputId.memberId.form-control(type='text', name='username', placeholder="Enter id" autocomplete="off")
           .form-group.row
             label(for="inputPw").col-sm-2.col-form-label.col-form-label-lg 비밀번호
-            .col-sm-9
-              input.memberPw.form-control(type="password", name='password', placeholder="Enter password")
+            .col-sm-8
+              input#inputPw.memberPw.form-control(type="password", name='password', placeholder="Enter password")
           - if(loginFail)
             h3.alert.alert-danger(role="alert")= loginFail
           .form-group.row
             .col-sm-2
             .form-group.col-sm-8
               input.btn.btn-primary.btn-lg.btn-block(type='submit', value='로그인')
-        a(href='/auth/register').title 가입하기
+          .row
+            .col-sm-2
+            .col-sm-4
+              a.btn.btn-warning.btn-lg.btn-block(href='/auth/register/commu' role="button") 일반학생 가입
+            .col-sm-4
+              a.btn.btn-danger.btn-lg.btn-block(href='/auth/register/asso' role="button") 학생회로 가입
+    script(type='text/javascript', src='/js/prefixfree.min.js')
+    script(type='text/javascript', src='/js/mySignInForm.js')
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")

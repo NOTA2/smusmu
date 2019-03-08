@@ -1,0 +1,106 @@
+doctype html
+html(lang='ko')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width')
+    meta(http-equiv='X-UA-Compatible', content='ie=edge')
+    link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
+    link(rel="shortcut icon", href="/favicon/favicon.ico")
+    link(rel='stylesheet', href='/css/base.css')
+    link(rel='stylesheet', href='/css/register.css')
+    script(type='text/javascript', src='/js/prefixfree.min.js')
+    title smusmu
+  body
+    #wrap
+      #container
+        h1 등록하기
+        #agree
+          .agreebox
+            h3.register_title 회원가입 약관 동의
+            .register-term
+              .page-content
+                #{agree1}
+              p 회원가입약관 내용에 동의합니다.
+                input#agree11(type="checkbox" name="agree" value="1")
+            .agreebox
+              h3.register_title 개인정보처리방침안내
+              .register-term
+                .page-content
+                  #{agree2}
+                p 개인정보처리방침 내용에 동의합니다.
+                  input#agree22(type="checkbox" name="agree2" value="1")
+            hr
+            h4(style="color:red;") *표시가 있는 것은 필수입니다.
+            form#frm(name="frm" action='/auth/register/commu', method='post')
+              .input-group.mb-3
+                .input-group-prepend
+                  span.input-group-text(style="color:red;") *
+                  span.input-group-text 아이디
+                input#username.form-control(type='text', name="username", placeholder="아이디", maxlength="20", aria-describedby="basic-addon1",autocomplete="off")
+                .input-group-append
+                  .btn.btn-outline-secondary#idbutton(onclick="idCheck();") 중복확인
+              p 영문자, 숫자만 입력 가능. 3자리 ~ 20자리 이내
+              .input-group.mb-3
+                .input-group-prepend
+                  span.input-group-text(style="color:red;") *
+                  span.input-group-text 비밀번호
+                input#password.form-control(type='password', name="password", placeholder="비밀번호",maxlength="20", style="color:black;")
+              .input-group.mb-3
+                .input-group-prepend
+                  span.input-group-text 비밀번호 확인
+                input#passwordCheck.form-control(type='password', name="passwordCheck", placeholder="비밀번호 확인",maxlength="20" onchange="passwordE();")
+              p 영문,숫자,특수문자 혼합하여 8자리 ~ 20자리 이내
+              p#passcheck
+              .input-group.mb-3
+                .input-group-prepend
+                  span.input-group-text(style="color:red;") *
+                  span.input-group-text 이름
+                input#name.form-control(type='text', name="name", placeholder="이름", autocomplete="off")
+              .input-group.mb-3
+                .input-group-prepend
+                  span.input-group-text(style="color:red;") *
+                  span.input-group-text 학번
+                input#schoolId.form-control(type="number", pattern="\d*", name="schoolId", placeholder="학번 (입력예. 201399392)", autocomplete="off")
+              p 학교 이메일 수집 및 여러 기능을 위해 사용됩니다.
+              .input-group.mb-3
+                .input-group-prepend
+                  span.input-group-text(style="color:red;") *
+                  label.input-group-text(for="college") 단과 대학
+                select.custom-select#college(name="college" onchange="collegeChange();")
+                  option(value="인문사회과학") 인문사회과학대학
+                  option(value="사범") 사범대학
+                  option(value="경영경제") 경영경제대학
+                  option(value="융합공과") 융합공과대학
+                  option(value="문화예술") 문화예술대학
+              .input-group.mb-3
+                .input-group-prepend
+                  span.input-group-text(style="color:red;") *
+                  label.input-group-text(for="department") 소속 학과
+                select.custom-select#department(name="department")
+                  option(value="역사콘텐츠학과") 역사콘텐츠학과
+                  option(value="지적재산권학과") 지적재산권학과
+                  option(value="문헌정보학과") 문헌정보학과
+                  option(value="한일문화콘텐츠학과") 한일문화콘텐츠학과
+                  option(value="공간환경학부") 공간환경학부
+                  option(value="공공인재학부") 공공인재학부
+                  option(value="가족복지학과") 가족복지학과
+                  option(value="국가안보학과") 국가안보학과
+              .input-group.mb-3
+                .input-group-prepend
+                  span.input-group-text(style="color:red;") *
+                  span.input-group-text 닉네임
+                input#nickname.form-control(type='text', name="nickname", placeholder="닉네임", autocomplete="off")
+              .input-group.mb-3
+                .input-group-prepend
+                  span.input-group-text 전화번호
+                input.form-control(type='tel', name="phone1", placeholder="010", autocomplete="off", value="010")
+                input.form-control(type='tel', name="phone2", autocomplete="off")
+                input.form-control(type='tel', name="phone3", autocomplete="off")
+              p
+                input(type='hidden', name="kakaoId", value="#{kakaoId}")
+              p
+                input.btn.btn-success.form-control(type='button' value="등록하기" onclick='register()')
+    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
+    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
+    script(type='text/javascript', src='/js/registerForm.js')

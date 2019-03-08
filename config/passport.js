@@ -8,7 +8,7 @@ module.exports = function (app) {
     app.use(passport.session());
 
     passport.use(new LocalStrategy((username, password, done) => {
-        var sql = 'SELECT * FROM assoUser WHERE username=?';
+        var sql = 'SELECT * FROM users WHERE username=?';
         
         conn.query(sql, [username], (err, results) => {
             if (err)
@@ -39,7 +39,7 @@ module.exports = function (app) {
 
     passport.deserializeUser((username, done) => {
         console.log('deserializeUser');
-        var sql = 'SELECT * fROM assoUser WHERE username=?'
+        var sql = 'SELECT * fROM users WHERE username=?'
 
         conn.query(sql, [username], (err, results) => {
             if (err) {

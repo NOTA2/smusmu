@@ -1,0 +1,16 @@
+#buttons{
+    margin: 0 auto;
+    padding : 0.3rem;
+    text-align: center;
+}
+
+.button{
+    display : inline-block;
+    margin: 0 auto;
+    padding : 0.3rem;
+    text-align: center;
+}
+
+img{
+    height: 58px;
+}

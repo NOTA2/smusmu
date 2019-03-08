@@ -25,27 +25,27 @@ exports.search = function () {
 
       var today = (d.getFullYear() + '').substr(2, 2) + ("00" + (d.getMonth() + 1)).slice(-2) + ("00" + d.getDate()).slice(-2);
 
-      try{
+      try {
         var boardNo = $("td.subject > a:contains('" + today + "')").attr('href').split('\'');
         boardNo = boardNo[boardNo.length - 2];
-  
+
         request(urld + "?View&boardNo=" + boardNo, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             //HTML body
             var $ = cheerio.load(body);
-  
+
             $(".reply-content > img").each(function (idx, el) {
               result.detail.push('http://www.smpa.go.kr/' + $(el).attr("src"));
             });
 
           }
         });
-      }catch(e){
+      } catch (e) {
         console.log(e);
-      }finally{
+      } finally {
         check++;
       }
-      
+
     }
   });
 
@@ -87,28 +87,50 @@ exports.search = function () {
         result.idx++;
       });
 
+
+      var sql = `SELECT * FROM seoulAssembly WHERE date=?`
       jsondata = JSON.stringify(result);
-
-      var sql = `
-      INSERT INTO seoulAssembly SET ?  
-      ON DUPLICATE KEY UPDATE date=?, jsondata=?; `
-
       var param = {
-        "id" : null,
-        "date" : date, 
-        "jsondata" : jsondata
+        "date": date,
+        "jsonData": jsondata
       };
 
-      conn.query(sql, [param,date,jsondata], function (err, rows) {
-        if (!err) {
-          console.log('집회/공사 정보 업데이트 완료');
-        } else {
+      conn.query(sql, [date], function (err, rows) {
+        if (err) {
           console.log("query error 발생");
           console.log(err);
           throw err
-        };
-      });
-
+        }
+        if (rows.length > 0) { //이미 있으면 확인 후 UPDATE
+          var temp = JSON.parse(rows[0].jsonData);
+          
+          if (temp.idx > 0 && temp.detail.length > 0) {   //이미 전부다 있으면 업데이트할 필요가 없다.
+            return;
+          } else {
+            sql = `UPDATE seoulAssembly SET jsondata = ? WHERE date=?`
+            conn.query(sql, [jsondata, date], function (err, rows) {
+              if (!err) {
+                console.log('집회/공사 정보 업데이트 완료');
+              } else {
+                console.log("query error 발생");
+                console.log(err);
+                throw err
+              }
+            });
+          }
+        } else { //없으면 INSERT
+          sql = `INSERT INTO seoulAssembly SET ?`
+          conn.query(sql, [param], function (err, rows) {
+            if (!err) {
+              console.log('집회/공사 정보 업데이트 완료');
+            } else {
+              console.log("query error 발생");
+              console.log(err);
+              throw err
+            }
+          });
+        }
+      })
     }
   });
 }
