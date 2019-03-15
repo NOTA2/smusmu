@@ -1,0 +1,49 @@
+extends authLayout.pug
+block append scripts
+  script(type='text/javascript', src='/js/registerFormAsso.js')
+block append css
+  link(rel='stylesheet', href='/css/register.css')
+block content
+  h1#mtitle 학생회 등록
+  #agree
+    h4(style="color:red;") *표시가 있는 것은 필수입니다.
+    form#frm(name="frm" action='/auth/register/asso', method='post')
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text(style="color:red;") *
+          span.input-group-text 아이디
+        input#username.form-control(type='text', name="username", placeholder="아이디", maxlength="20", aria-describedby="basic-addon1",autocomplete="off")
+        .input-group-append
+          .btn.btn-outline-secondary#idbutton(onclick="idCheck();") 중복확인
+      p 영문자, 숫자만 입력 가능. 3자리 ~ 20자리 이내
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text(style="color:red;") *
+          span.input-group-text 비밀번호
+        input#password.form-control(type='password', name="password", placeholder="비밀번호",maxlength="20", style="color:black; font-family: 'Malgun Gothic';")
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text 비밀번호 확인
+        input#passwordCheck.form-control(type='password', name="passwordCheck", placeholder="비밀번호 확인",maxlength="20" onchange="passwordE();" style="font-family: 'Malgun Gothic'")
+      p 영문,숫자,특수문자 혼합하여 8~20자리 이내
+      p#passcheck
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text(style="color:red;") *
+          span.input-group-text 학번
+        input#schoolId.form-control(type="number", pattern="\d*", name="schoolId", placeholder="학번 (입력예. 201399392)", autocomplete="off")
+      p 학교 이메일 수집 및 여러 기능을 위해 사용됩니다.
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text(style="color:red;") *
+          label.input-group-text(for="grade") 직위
+        select.custom-select#grade(name="grade" onchange="gradeChange();")
+          option(value="99" selected="selected") 선택하세요.
+          option(value="1") 임원
+          option(value="2") 일반 부원
+      p 임원 계정은 단과대학마다 하나만 만들 수 있습니다.
+      #selectcollege.input-group.mb-3
+      #selectasso.input-group.mb-3
+      #phone.input-group.mb-3
+      p 가입완료 후 스뮤스뮤 관리자의 확인 후 계정이 생성됩니다.
+        input.btn.btn-success.form-control(type='button' value="등록하기" onclick='register()')

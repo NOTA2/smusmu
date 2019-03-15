@@ -4,6 +4,9 @@ const conn = require('../../config/db')();
 
 route.post('', function (req, res) {
   var kakaoId = req.body.userRequest.user.id;
+  var url = `https://smusmu.co.kr/auth/register/commu?kakaoId=${kakaoId}`
+  if (defaultObj.ipadd == '54.180.122.96')
+    url = `http://${defaultObj.ipadd}/auth/register/commu?kakaoId=${kakaoId}`
   
   message = {
     "version": "2.0",
@@ -18,7 +21,7 @@ route.post('', function (req, res) {
           "buttons": [{
             "label": "등록하기",
             "action": "webLink",
-            "webLinkUrl": `https://smusmu.co.kr/auth/register/commu?kakaoId=${kakaoId}`
+            "webLinkUrl": url
           }]
         }
       }],
@@ -37,14 +40,29 @@ route.post('', function (req, res) {
       return res.json(message);
     }
     if (rows.length > 0) {
-      message.template.outputs[0] = {
-        "simpleText": {
-          "text": '이미 등록되어 있스뮤!'
-        }
-      };
+      console.log(rows);
+      
+      if(rows[0].token != 'true'){
+        message.template.outputs[0] = {
+          "basicCard": {
+            "title": '학교 메일인증을 아직 안했스뮤!',
+            "buttons": [{
+              "label": "학교 이메일 확인하기",
+              "action": "webLink",
+              "webLinkUrl": 'https://outlook.office365.com/owa/?realm=sangmyung.kr&exsvurl=1&ll-cc=1042&modurl=0'
+            }]
+          }
+        };
+      
+      }
+      else{
+        message.template.outputs[0] = {
+          "simpleText": {
+            "text": '이미 등록되어 있스뮤!'
+          }
+        };
+      }
     }
-
-    console.log(rows.length);
     
 
     return res.json(message);

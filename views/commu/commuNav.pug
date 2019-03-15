@@ -1,0 +1,33 @@
+nav#sidebar(data-position="fixed")
+	#dismiss
+		i.fas.fa-arrow-left
+	.sidebar-header
+		img(src="/img/logo.png", alt="logo")
+		h3
+			a(href="/commu") 스뮤스뮤<br>커뮤니티
+	ul.list-unstyled.components
+		p #{user.username}님 반갑스뮤!
+		- if(user.grade == '1')
+			p 
+				strong [관리자 계정]
+		li.active
+			a.dropdown-toggle(href='#homeSubmenu', data-toggle='collapse', aria-expanded='false') 홈
+			ul#homeSubmenu.collapse.list-unstyled
+				li
+					a(href='#') 내정보
+				li
+					a(href='/auth/logout') 로그아웃
+		li
+			a(href='/commu/free') 자유게시판
+		li
+			a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false') 학생 청원 제도
+			ul#pageSubmenu.collapse.list-unstyled
+				li
+					a(href='/commu/petition') 진행중인 청원
+				li
+					a(href='/commu/petitionanswer') 답변 완료된 청원
+	//- ul.list-unstyled.CTAs
+	//-   li
+	//-     a.download(href='https://bootstrapious.com/tutorial/files/sidebar.zip') Download source
+	//-   li
+	//-     a.article(href='https://bootstrapious.com/p/bootstrap-sidebar') Back to article

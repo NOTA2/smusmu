@@ -13,13 +13,13 @@
   margin: 3% auto;
 }
 
-#container h1, h3 {
+#container h1, h2,h3 {
   clear: both;
   float: left;
   width: 100%;
   text-align: center;
   padding : 0.2em;
-  margin: 1em 0;
+  margin: 0em 0;
 }
 
 .form-group {
@@ -41,13 +41,38 @@ input {
 
 form{
   margin : 1% auto;
-  padding: 1%;
+  padding: 0.5% 1%;
 }
 
 .line .inputArea {
   float: left;
 }
+.buttonrow{
+  margin : .3rem;
+  padding : 0;
+}
 
+.imgcontainer {
+  text-align: center;
+  margin: 5px 0 0 0;
+}
+
+/* Avatar image */
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+#fail{
+  width : 70%;
+  margin : 1.2rem auto 0;
+}
+.alert{
+  margin-bottom : 0;
+}
+.alert.alert-danger{
+  text-align: center;
+}
 
 /*스마트폰에 적용*/
 
@@ -66,7 +91,7 @@ form{
 
     h1{
       color: #FFF;
-      font-size: 2rem;
+      font-size: 3rem;
     }
 
     .form-group.row {
@@ -75,4 +100,18 @@ form{
       color: #FFF;
       margin: 1rem 0;
     }
+
+    .buttonrow{
+      margin : 0rem;
+      padding : 0;
+    }
+
+    h3{
+      font-size: 1.2rem;
+    }
+    img.avatar {
+      width: 70%;
+      border-radius: 50%;
+    }
+
 }

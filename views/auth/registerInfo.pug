@@ -1,0 +1,38 @@
+extends authLayout.pug
+block append scripts
+  script(src="//developers.kakao.com/sdk/js/kakao.min.js")
+block append css
+  link(rel='stylesheet', href='/css/authmain.css')
+  link(rel='stylesheet', href='/css/registerInfo.css')
+block content
+  h2 스뮤스뮤 카카오톡<br>플러스친구를 통해서 가입해 주세요!
+  #buttons
+    .button
+      h2 스뮤스뮤 친구추가
+      #plusfriend-addfriend-button
+    .button
+      h2 스뮤스뮤 채팅하기
+      #plusfriend-chat-button
+  script(type='text/javascript')
+    //<![CDATA[
+      Kakao.init('0370012957b863828c893ab171e9fd59');
+      Kakao.PlusFriend.createAddFriendButton({
+        container: '#plusfriend-addfriend-button',
+        plusFriendId: '_plxiWxl',
+        size : 'large'
+      });
+    //]]>
+  script(type='text/javascript')
+    //<![CDATA[
+      Kakao.PlusFriend.createChatButton({
+        container: '#plusfriend-chat-button',
+        plusFriendId: '_plxiWxl',
+        size : 'large'
+      });
+    //]]>
+
+
+
+
+
+

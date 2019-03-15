@@ -6,8 +6,6 @@ require('./config/ip')(defaultObj);
 require('date-utils');
 var passport = require('./config/passport')(app);
 
-// require('./config/schedule')();
-
 var eatKakaoRouter = require('./routes/kakao/eat');
 var noticeKakaoRouter = require('./routes/kakao/notice');
 var weatherKakaoRouter = require('./routes/kakao/weather');
@@ -32,12 +30,12 @@ app.use('/kakao/auth', authKakaoRouter);
 var index = require('./routes/index');
 var auth = require('./routes/auth')(passport);
 var commu = require('./routes/commu');
-// var asso = require('./routes/asso');
+var asso = require('./routes/asso');
 
 app.use('/', index);
 app.use('/auth', auth);
 app.use('/commu', commu);
-// app.use('/asso', asso);
+app.use('/asso', asso);
 
 //서버를 계속 유지
 app.listen(80, function () {

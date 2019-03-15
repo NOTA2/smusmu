@@ -8,7 +8,7 @@ module.exports = function(){
     host : 'smusmutest.cew1lcmxgnch.ap-northeast-2.rds.amazonaws.com',
     user : 'smusmu',
     password : dbKey,
-    database : 'smusmu',
+    database : 'smusmutest',
     dateStrings: 'date',
     charset : 'utf8mb4'
   })

@@ -1,0 +1,36 @@
+extends authLayout.pug
+block append scripts
+  script(type='text/javascript', src='/js/login.js')
+block append css
+  link(rel='stylesheet', href='/css/authmain.css')
+block content
+  h1.title 스뮤스뮤
+  .imgcontainer
+    img.avatar(src='/img/logo.png', alt='logo')
+  if fail != undefined
+    #fail
+      .alert.alert-danger(role='alert')
+        | 아이디 또는 비밀번호를 다시 확인해주세요.
+  form(action='/auth/login', method='post', onsubmit='return checkSubmit()')
+    .form-group.row
+      label(for="inputId").col-sm-2.col-form-label.col-form-label-lg 아이디
+      .col-sm-9
+        input#inputId.memberId.form-control(type='text', name='username', placeholder="Enter id" autocomplete="off" style="font-family: 'Malgun Gothic'")
+    .form-group.row
+      label(for="inputPw").col-sm-2.col-form-label.col-form-label-lg 비밀번호
+      .col-sm-9
+        input#inputPw.memberPw.form-control(type="password", name='password', placeholder="Enter password" style="font-family: 'Malgun Gothic'")
+    - if(loginFail)
+      h3.alert.alert-danger(role="alert")= loginFail
+    .form-group.row.buttonrow
+      .col-sm-2
+      .form-group.col-sm-8.buttonrow
+        input.btn.btn-primary.btn-lg.btn-block(type='submit', value='로그인')
+    .form-group.row.buttonrow
+      .col-sm-2
+      .form-group.col-sm-8.buttonrow
+        a.btn.btn-warning.btn-lg.btn-block(href='/auth/register/commu' role="button") 일반학생 가입
+    .form-group.row.buttonrow
+      .col-sm-2
+      .form-group.col-sm-8.buttonrow
+        a.btn.btn-danger.btn-lg.btn-block(href='/auth/register/asso' role="button") 학생회로 가입

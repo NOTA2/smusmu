@@ -56,10 +56,8 @@ route.post('', function (req, res) {
             "items": []
           }
         }
-        // console.log(resultList);
         
         resultList.forEach((el) => {
-          // console.log(el);
           
           message.template.outputs[0].carousel.items.push({
             "title": el.title,
@@ -119,7 +117,7 @@ route.post('/result', (req, res) => {
       }, {
         "label": '공지 검색',
         "action": "block",
-        "messageText": '공지 검색',
+        "messageText": '공지 검색하기',
         "blockId": "5c279735384c5518d11fd216"
       }])
     }

@@ -1,0 +1,25 @@
+extends assoLayout.pug
+block append scripts
+block append css
+block append content
+  .wrapper
+    nav#sidebar(data-position="fixed")
+      #dismiss
+        i.fas.fa-arrow-left
+      .sidebar-header
+        img(src="img/logo.png", alt="logo")
+        h3
+          a(href="/asso") 스뮤스뮤<br> 관리자 페이지
+      ul.list-unstyled.components
+        p #{user.username}님 반갑스뮤!
+        li
+          a(href='/auth/logout') 로그아웃
+    #content
+      nav.navbar.navbar-expand-lg.navbar-light.bg-light
+        .container-fluid
+          button#sidebarCollapse.btn.btn-info(type='button')
+            i.fas.fa-align-left
+            span 메뉴보기
+          span#minititle HOME
+      h1 아직 승인되지 않은 계정입니다.
+    .overlay

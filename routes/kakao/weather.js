@@ -28,7 +28,6 @@ route.post('', function (req, res) {
 
     if(rows.length > 0){
       result = JSON.parse(rows[0].content);
-      console.log(result);
       
       message = {
         "version": "2.0",

@@ -1,4 +1,5 @@
 var idck = 0;
+var scck = 0;
 
 function collegeChange() {
     var selectBox = document.getElementById("college");
@@ -60,15 +61,18 @@ function collegeChange() {
 function passwordE(){
     var password = $("#password").val();
     var passwordCheck = $("#passwordCheck").val();
-
-    if(password == passwordCheck){
+    if(!chkPwd2($.trim(password))){
+        $("#passcheck").text('비밀번호 조건에 맞지 않습니다.')
+        $("#passcheck").css("color", "#dc3545")
+    } else if(password == passwordCheck){
         $("#passcheck").text('비밀번호가 일치합니다.')
         $("#passcheck").css("color", "#28a745")
-    } else{
+    } else if(password != passwordCheck){
         $("#passcheck").text('비밀번호가 일치하지 않습니다.')
         $("#passcheck").css("color", "#dc3545")
-    }
+    } 
 }
+
 function register() {
     var username = $("#username").val();
     var password = $("#password").val();
@@ -107,6 +111,9 @@ function register() {
     } else if (idck == 0) {
         alert('아이디 중복체크를 해주세요');
         return false;
+    }else if (scck == 0) {
+        alert('학번 중복체크를 해주세요');
+        return false;
     } else {
         alert("회원가입을 축하합니다. 학교메일을 통해서 인증받으세요.");
         $("#frm").submit();
@@ -121,7 +128,7 @@ function idCheck() {
         $('#username').focus();
         return false;
     }
-    fetch("https://smusmu.co.kr/auth/register/username", {
+    fetch("/auth/register/username", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -152,6 +159,43 @@ function idCheck() {
     });
 }
 
+function idSchoolId(){
+    var schoolId = $("#schoolId").val();
+    if (!chkschooId($.trim(schoolId))) {
+        $('#schoolId').val('');
+        $('#schoolId').focus();
+        return false;
+    }
+    fetch("/auth/register/schoolId", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `schoolId=${schoolId}`
+    }).then(function (res) {
+        res.json().then(function (data) {
+
+            if (data.status == true) {
+                alert("학번이 이미 존재합니다.");
+                $("#schoolId").css("background-color", "#dc3545")
+                $("#schoolId").css("color", "white")
+                $("#schoolId").focus();
+            } else {
+                alert("사용가능한 학번입니다.");
+                $("#schoolId").css("background-color", "#28a745")
+                $("#schoolId").css("color", "black")
+                //아이디가 중복하지 않으면  idck = 1 
+                scck = 1;
+            }
+        })
+    }, function (e) {
+        console.log(e);
+        
+        alert("잠시 문제가 생겼습니다. 다시 시도해주세요");
+    });
+}
+
+
 function chkPwd(str) {
 
     var pw = str;
@@ -176,6 +220,23 @@ function chkPwd(str) {
     return true;
 }
 
+function chkPwd2(str) {
+
+    var pw = str;
+    var num = pw.search(/[0-9]/g);
+    var eng = pw.search(/[a-z]/ig);
+    var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+    if (pw.length < 8 || pw.length > 20) 
+        return false;
+    if (pw.search(/₩s/) != -1) 
+        return false;
+    if (num < 0 || eng < 0 || spe < 0) 
+        return false;
+        
+    return true;
+}
+
 function chkId(str) {
 
     var id = str;
@@ -197,4 +258,18 @@ function chkId(str) {
 
     return true;
 
+}
+
+function chkschooId(str){
+    var idReg = /^[0-9]{9,9}$/g;
+
+    if (str.length == 0) {
+        alert('학번 입력하세요');
+        return false;
+    } else if (!idReg.test(str)) {
+        alert('학번을 제대로 입력해주세요.');
+        return false;
+    }
+
+    return true;
 }

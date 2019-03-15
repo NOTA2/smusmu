@@ -10,42 +10,42 @@ var seoulAssembly = require('./crawling/seoulAssembly');
 var calendar = require('./crawling/calendar');
 
 (function () {
-    var scheduleEat = new CronJob({
-        cronTime: "00 10 9-11 * * 0-2",
-        onTick: function () {
-            cEat.search();
-            chEat.search();
-        },
-        start: true,
-        timeZone: 'Asia/Seoul',
-        runOnInit: true
-    });
+  new CronJob({
+    cronTime: "00 10 9-11 * * 0-2",
+    onTick: function () {
+      cEat.search();
+      chEat.search();
+    },
+    start: true,
+    timeZone: 'Asia/Seoul',
+    runOnInit: true
+  });
 
-    //학사일정정보 업데이트
-    var scheduleCalendar = new CronJob({ 
-        cronTime: "00 00 12 * * *",
-        onTick: calendar.crawling,
-        start: true,
-        timeZone: 'Asia/Seoul',
-        runOnInit: true
-    });
+  //학사일정정보 업데이트
+  new CronJob({
+    cronTime: "00 00 12 * * *",
+    onTick: calendar.crawling,
+    start: true,
+    timeZone: 'Asia/Seoul',
+    runOnInit: true
+  });
 
-    if (defaultObj.ipadd != '54.180.122.926') { //테스트 서버일 땐 하지 않습니다.
-        var scheduleWeather = new CronJob({
-            cronTime: "00 43 * * * *",
-            onTick: kmaWeather.search,
-            start: true,
-            timeZone: 'Asia/Seoul',
-            runOnInit: true
-        });
-    }
-
-    //집회정보 업데이트
-    var scheduleSeoulAssembly = new CronJob({
-        cronTime: "00 */5 0,6-8 * * *",
-        onTick: seoulAssembly.search,
-        start: true,
-        timeZone: 'Asia/Seoul',
-        runOnInit: true
+  if (defaultObj.ipadd != '54.180.122.969') { //테스트 서버일 땐 하지 않습니다.
+    new CronJob({
+      cronTime: "00 43 * * * *",
+      onTick: kmaWeather.search,
+      start: true,
+      timeZone: 'Asia/Seoul',
+      runOnInit: true
     });
+  }
+
+  //집회정보 업데이트
+  new CronJob({
+    cronTime: "00 */5 0,6-8 * * *",
+    onTick: seoulAssembly.search,
+    start: true,
+    timeZone: 'Asia/Seoul',
+    runOnInit: true
+  });
 })();
