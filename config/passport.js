@@ -66,26 +66,24 @@ module.exports = function (app) {
         console.log(err);
         return done('There is no user');
       } else {
-        if (results.length > 0){
+        if (results.length > 0) {
           var user = results[0];
           delete user.password;
           delete user.salt;
           return done(null, user)
-        }
-        else {
-          sql = 'select * from assoUser LEFT JOIN asso ON assoUser.id=asso.assoUserId WHERE username=?'
+        } else {
+          sql = `
+          SELECT assoUser.id as id, username, token,email,grade,assoId,college,name,location,logo,description,phone,assoemail
+          from assoUser LEFT OUTER JOIN asso ON assoUser.assoId=asso.id WHERE username=?`
 
           conn.query(sql, [username], (err, results) => {
             if (err) {
               console.log(err);
               return done('There is no user');
             } else {
-              if(results.length>0){
+              if (results.length > 0) {
+
                 var user = results[0];
-                delete user.password;
-                delete user.salt;
-                delete user.assoId;
-                delete user.assoUserId;
                 return done(null, user)
               }
             }

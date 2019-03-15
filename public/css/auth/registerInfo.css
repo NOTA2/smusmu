@@ -1,3 +1,10 @@
+html{
+    height:100vh;
+}
+#wrap {
+    height: 100%;
+}
+
 #buttons{
     margin: 0 auto;
     padding : 0.3rem;
@@ -13,4 +20,14 @@
 
 img{
     height: 58px;
+}
+
+hr{
+    /* background-color: #000; */
+    border: 0;
+    border-top: 1px dashed #000;
+}
+
+hr.two{
+    border-top: 8px double #000;
 }

@@ -1,5 +1,22 @@
 var idck = 0;
 var scck = 0;
+var nick = 0;
+
+function idchange() {
+    idck = 0;
+}
+
+
+function schoolchange() {
+    scck = 0;
+}
+
+
+function nickchange() {
+    nick = 0;
+}
+
+
 
 function collegeChange() {
     var selectBox = document.getElementById("college");
@@ -58,19 +75,20 @@ function collegeChange() {
         `
     }
 }
-function passwordE(){
+
+function passwordE() {
     var password = $("#password").val();
     var passwordCheck = $("#passwordCheck").val();
-    if(!chkPwd2($.trim(password))){
+    if (!chkPwd2($.trim(password))) {
         $("#passcheck").text('비밀번호 조건에 맞지 않습니다.')
         $("#passcheck").css("color", "#dc3545")
-    } else if(password == passwordCheck){
+    } else if (password == passwordCheck) {
         $("#passcheck").text('비밀번호가 일치합니다.')
         $("#passcheck").css("color", "#28a745")
-    } else if(password != passwordCheck){
+    } else if (password != passwordCheck) {
         $("#passcheck").text('비밀번호가 일치하지 않습니다.')
         $("#passcheck").css("color", "#dc3545")
-    } 
+    }
 }
 
 function register() {
@@ -111,8 +129,11 @@ function register() {
     } else if (idck == 0) {
         alert('아이디 중복체크를 해주세요');
         return false;
-    }else if (scck == 0) {
+    } else if (scck == 0) {
         alert('학번 중복체크를 해주세요');
+        return false;
+    } else if (nick == 0) {
+        alert('닉네임 중복체크를 해주세요');
         return false;
     } else {
         alert("회원가입을 축하합니다. 학교메일을 통해서 인증받으세요.");
@@ -122,6 +143,7 @@ function register() {
 
 
 function idCheck() {
+    idck = 0;
     var username = $("#username").val();
     if (!chkId($.trim(username))) {
         $('#username').val('');
@@ -142,6 +164,7 @@ function idCheck() {
                 $("#username").css("background-color", "#dc3545")
                 $("#username").css("color", "white")
                 $("#username").focus();
+                idck = 0;
             } else {
                 alert("사용가능한 아이디입니다.");
                 $("#username").css("background-color", "#28a745")
@@ -153,13 +176,12 @@ function idCheck() {
             }
         })
     }, function (e) {
-        console.log(e);
-        
         alert("잠시 문제가 생겼습니다. 다시 시도해주세요");
     });
 }
 
-function idSchoolId(){
+function schoolIdAjax() {
+    scck = 0;
     var schoolId = $("#schoolId").val();
     if (!chkschooId($.trim(schoolId))) {
         $('#schoolId').val('');
@@ -180,6 +202,7 @@ function idSchoolId(){
                 $("#schoolId").css("background-color", "#dc3545")
                 $("#schoolId").css("color", "white")
                 $("#schoolId").focus();
+                scck = 0;
             } else {
                 alert("사용가능한 학번입니다.");
                 $("#schoolId").css("background-color", "#28a745")
@@ -189,8 +212,43 @@ function idSchoolId(){
             }
         })
     }, function (e) {
-        console.log(e);
-        
+        alert("잠시 문제가 생겼습니다. 다시 시도해주세요");
+    });
+}
+
+
+function chNick() {
+    var nickname = $("#nickname").val();
+    nick = 0;
+    if (!chkNick($.trim(nickname))) {
+        $('#nickname').val('');
+        $('#nickname').focus();
+        return false;
+    }
+    fetch("/auth/register/nickname", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `nickname=${nickname}`
+    }).then(function (res) {
+        res.json().then(function (data) {
+
+            if (data.status == true) {
+                alert("닉네임이 이미 존재합니다.");
+                $("#nickname").css("background-color", "#dc3545")
+                $("#nickname").css("color", "white")
+                $("#nickname").focus();
+                nick = 0;
+            } else {
+                alert("사용가능한 닉네임입니다.");
+                $("#nickname").css("background-color", "#28a745")
+                $("#nickname").css("color", "black")
+                //아이디가 중복하지 않으면  idck = 1 
+                nick = 1;
+            }
+        })
+    }, function (e) {
         alert("잠시 문제가 생겼습니다. 다시 시도해주세요");
     });
 }
@@ -227,13 +285,13 @@ function chkPwd2(str) {
     var eng = pw.search(/[a-z]/ig);
     var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
 
-    if (pw.length < 8 || pw.length > 20) 
+    if (pw.length < 8 || pw.length > 20)
         return false;
-    if (pw.search(/₩s/) != -1) 
+    if (pw.search(/₩s/) != -1)
         return false;
-    if (num < 0 || eng < 0 || spe < 0) 
+    if (num < 0 || eng < 0 || spe < 0)
         return false;
-        
+
     return true;
 }
 
@@ -260,7 +318,7 @@ function chkId(str) {
 
 }
 
-function chkschooId(str){
+function chkschooId(str) {
     var idReg = /^[0-9]{9,9}$/g;
 
     if (str.length == 0) {
@@ -268,6 +326,24 @@ function chkschooId(str){
         return false;
     } else if (!idReg.test(str)) {
         alert('학번을 제대로 입력해주세요.');
+        return false;
+    }
+
+    return true;
+}
+
+function chkNick(str) {
+    var idReg = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9]+$/g;
+    var check = idReg.test(str);
+
+    if (str.length == 0) {
+        alert('닉네임을 입력하세요');
+        return false;
+    } else if (str.length < 2 || str.length > 10) {
+        alert('닉네임은 2자리 ~ 10자리 이내.');
+        return false;
+    } else if (!check) {
+        alert('닉네임은 한글 및 영문자, 숫자만 입력 가능.');
         return false;
     }
 

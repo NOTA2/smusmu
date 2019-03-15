@@ -1,0 +1,65 @@
+extends commuLayout.pug
+block append scripts
+	script(type='text/javascript').
+		var depart = "#{user.department}";
+	script(type='text/javascript', src='/js/commu/myinfo.js')
+block append css
+	link(rel="stylesheet" href="/css/commu/myinfo.css")
+block append content
+	#article
+		h2 정보수정 
+		hr
+		form#frm(name="frm" action='/commu/myinfo', method='post')
+			.input-group.mb-3
+				.input-group-prepend
+					span.input-group-text 아이디
+				input#username.form-control(name="username" value=user.username, disabled, aria-describedby="basic-addon1",autocomplete="off")
+			.input-group.mb-3
+				.input-group-prepend
+					span.input-group-text 학번
+				input#schoolId.form-control(type="number",	 pattern="\d*", name="schoolId," disabled, value=user.schoolId, autocomplete="off")
+			.input-group.mb-3
+				.input-group-prepend
+					span.input-group-text(style="color:red;") *
+					span.input-group-text 이름
+				input#name.form-control(type='text', name="name", value=user.name, autocomplete="off")
+			.input-group.mb-3
+				.input-group-prepend
+					span.input-group-text(style="color:red;") *
+					label.input-group-text(for="college") 단과 대학
+				select.custom-select#college(name="college" onchange="collegeChange();")
+					option(value="인문사회과학" selected= user.college=="인문사회과학") 인문사회과학대학
+					option(value="사범" selected= user.college=="사범") 사범대학
+					option(value="경영경제" selected= user.college=="경영경제") 경영경제대학
+					option(value="융합공과" selected= user.college=="융합공과") 융합공과대학
+					option(value="문화예술" selected= user.college=="문화예술") 문화예술대학
+			.input-group.mb-3
+				.input-group-prepend
+					span.input-group-text(style="color:red;") *
+					label.input-group-text(for="department") 소속 학과
+				select.custom-select#department(name="department")
+					option(value="역사콘텐츠학과") 역사콘텐츠학과
+					option(value="지적재산권학과") 지적재산권학과
+					option(value="문헌정보학과") 문헌정보학과
+					option(value="한일문화콘텐츠학과") 한일문화콘텐츠학과
+					option(value="공간환경학부") 공간환경학부
+					option(value="공공인재학부") 공공인재학부
+					option(value="가족복지학과") 가족복지학과
+					option(value="국가안보학과") 국가안보학과
+			.input-group.mb-3
+				.input-group-prepend
+					span.input-group-text(style="color:red;") *
+					span.input-group-text 닉네임
+				input#nickname.form-control(type='text', name="nickname",value=user.nickname, autocomplete="off" , onchange="nickchange();")
+				.input-group-append
+					.btn.btn-outline-dark#idbutton(onclick="chNick();") 중복확인
+			p 한글, 영문자, 숫자만 입력 가능. 2~ 10자리 이내
+			.input-group.mb-3
+				.input-group-prepend
+					span.input-group-text 전화번호
+				input.form-control(type='tel', name="phone1", value=user.phone[0], autocomplete="off",  maxlength="3")
+				input.form-control(type='tel', name="phone2", value=user.phone[1], autocomplete="off", maxlength="4")
+				input.form-control(type='tel', name="phone3", value=user.phone[2], autocomplete="off", maxlength="4")
+			input(type='hidden', name="id", value=user.id)
+			p
+				input.btn.btn-success.form-control(type='button' value="수정하기" onclick='update()')

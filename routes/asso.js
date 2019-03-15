@@ -1,30 +1,134 @@
 var conn = require('../config/db')();
 var route = require('express').Router();
-
-
-route.get('*', (req, res,next) =>{
-    var user = req.user;
-    
-    if(user && user.grade){
-        if(user.token == 'true')
-            next();
-        else
-            res.render('asso/wait', {user : req.user})
-    }else if(user && user.kakaoId){
-        res.redirect('/commu');
-    } else{
-        res.redirect('/auth/login');
-    }
-
+var multer = require('multer'); // express에 multer모듈 적용 (for 파일업로드)
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/logo') // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
+  },
+  filename: function (req, file, cb) {
+    cb(null, req.user.name+'.'+file.mimetype.split('/')[1]) // cb 콜백함수를 통해 전송된 파일 이름 설정
+  }
 })
+var upload = multer({ storage: storage })
 
+route.get('/', (req, res, next) => {
+  if (req.user && req.user.grade) {
+    if (req.user.token == 'true') next();
+    else res.render('asso/wait', {
+      user: req.user,
+      info: {
+        title: 'HOME',
+        headbar: []
+      }
+    })
+  } else if (req.user && req.user.kakaoId)
+    res.redirect('/commu');
+  else
+    res.redirect('/auth/login');
+}, (req, res) => {
 
-route.get('/', (req, res) => {
-
-    res.render('asso/index', {user : req.user});
-
+  res.render('asso/index', {
+    user: req.user,
+    info: {
+      title: 'HOME',
+      headbar: []
+    }
+  });
 });
 
+route.get('/myinfo', (req, res, next) => { 
+  if (req.user && req.user.grade) {
+    if (req.user.token == 'true') next();
+    else res.render('asso/wait', {
+      user: req.user,
+      info: {
+        title: 'HOME',
+        headbar: []
+      }
+    })
+  } else if (req.user && req.user.kakaoId)
+    res.redirect('/commu');
+  else
+    res.redirect('/auth/login');
+}, (req, res) => {
+  req.user.phone = req.user.phone.split('-');
+  res.render('asso/myinfo', {
+    user: req.user,
+    info: {
+      title: '정보 수정',
+      headbar: []
+    }
+  });
+});
 
+route.post('/myinfo', upload.single('logo'), (req, res) => {
+  var logo = req.file.path.replace('public/','');
+  var userparam = [
+    req.body.email,
+    req.user.id
+  ]
+  var assoparam = [
+    req.body.name,
+    req.body.location,
+    req.body.description,
+    req.body.assoemail,
+    req.body.phone1 + '-' + req.body.phone2 + '-' + req.body.phone3,
+    logo,
+    req.user.assoId
+  ]
+  
+  if (req.user.grade == 1) {
+    var sql = 'UPDATE assoUser SET email=? WHERE id=?'
+    conn.query(sql, userparam, (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      } else {
+        sql = 'UPDATE asso SET name=?, location=?, description=?, assoemail=?, phone=?, logo=? WHERE id=?'
+        conn.query(sql, assoparam, (err, results) => {
+          if (err) {
+            console.log(err);
+            res.status(500).end();
+          }
+          req.user.name = req.body.name
+          req.user.location = req.body.location
+          req.user.description = req.body.description
+          req.user.assoemail = req.body.assoemail
+          req.user.email = req.body.email
+          req.user.logo = logo;
+          req.user.phone = [req.body.phone1, req.body.phone2, req.body.phone3]
+
+          return res.render('asso/myinfo', {
+            user: req.user,
+            info: {
+              title: '정보 수정',
+              headbar: []
+            }
+          });
+        })
+      }
+    })
+  } else {
+    var sql = 'UPDATE assoUser SET email=? WHERE id=?';
+    conn.query(sql, userparam, (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      } else {
+        req.user.email = req.body.email;
+        req.user.phone = req.user.phone.split('-');
+
+        res.render('asso/myinfo', {
+          user: req.user,
+          info: {
+            title: '정보 수정',
+            headbar: []
+          }
+        });
+      }
+    })
+  }
+
+})
 
 module.exports = route;

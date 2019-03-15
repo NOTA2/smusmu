@@ -1,0 +1,51 @@
+#tables {
+    width: 95%;
+    margin: 5rem auto;
+    text-align: center;
+}
+
+.hometable {
+    display: inline-block;
+    width: 40%;
+    /* padding : 0 2%; */
+    margin: 0 2%;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    #tables {
+        width: 100%;
+        margin: 0;
+    }
+
+    .hometable {
+        display: block;
+        width: 100%;
+        margin: 10% 0 10%;
+    }
+
+    .tableHeader {
+        padding-left: 13px;
+    }
+
+    .table {
+        font-size: 0.7rem;
+    }
+
+    thead tr {
+        text-align: center;
+    }
+
+    #free td:nth-child(2),
+    #free thead  {
+        display: none;
+    }
+
+    #petition td:nth-child(2),
+    #petition td:nth-child(3),
+    #petition td:nth-child(4),
+    #petition thead {
+        display: none;
+    }
+
+}

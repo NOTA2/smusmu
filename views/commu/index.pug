@@ -1,22 +1,51 @@
 extends commuLayout.pug
 block append scripts
 block append css
+  link(rel='stylesheet', href='/css/commu/home.css')
 block append content
-  .wrapper
-    include commuNav.pug
-    #content
-      nav.navbar.navbar-expand-lg.navbar-light.bg-light
-        .container-fluid
-          button#sidebarCollapse.btn.btn-info(type='button')
-            i.fas.fa-align-left
-            span  메뉴
-          span#minititle HOME
-          button.btn.btn-dark.d-inline-block.d-lg-none.ml-auto(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
-            i.fas.fa-align-justify
-          #navbarSupportedContent.collapse.navbar-collapse
-            ul.nav.navbar-nav.ml-auto
-              li.nav-item
-                a.btn.nav-link(href='/commu/infoupdate') 내정보
-              li.nav-item
-                a.btn.nav-link(href='/auth/logout') 로그아웃
-    .overlay
+  #tables
+    #free.hometable
+      .tableHeader
+        h1
+          a(href='/commu/free') 자유게시판
+        hr
+      table.table.table-striped
+        thead.thead-light
+          tr
+            th(scope="col2") 제목
+            th(scope="col") 작성일
+        tbody
+          tr
+            td 오이무침 맛있다.
+            td 2019-03-22
+          tr
+            td 오이무침 맛있다.
+            td 2019-03-22
+    #petition.hometable
+      .tableHeader
+        h1 
+          a(href='/commu/petition') 학생 청원 제도
+        hr
+      table.table.table-striped
+        thead.thead-light
+          tr
+            th(scope="col") 제목
+            th(scope="col") 청원인
+            th(scope="col") 청원일
+            th(scope="col") 참여인원
+        tbody
+          tr
+            td 오이무침 맛있다.
+            td 컴과13김동현
+            td 2019-03-22
+            td 22
+          tr
+            td 오이무침 맛있다.
+            td 컴과13김동현
+            td 2019-03-22
+            td 22
+          tr
+            td 오이무침 맛있다.
+            td 컴과13김동현
+            td 2019-03-22
+            td 22

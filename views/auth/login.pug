@@ -1,10 +1,9 @@
 extends authLayout.pug
 block append scripts
-  script(type='text/javascript', src='/js/login.js')
+  script(type='text/javascript', src='/js/auth/login.js')
 block append css
-  link(rel='stylesheet', href='/css/authmain.css')
+  link(rel='stylesheet', href='/css/auth/authmain.css')
 block content
-  h1.title 스뮤스뮤
   .imgcontainer
     img.avatar(src='/img/logo.png', alt='logo')
   if fail != undefined
@@ -29,7 +28,7 @@ block content
     .form-group.row.buttonrow
       .col-sm-2
       .form-group.col-sm-8.buttonrow
-        a.btn.btn-warning.btn-lg.btn-block(href='/auth/register/commu' role="button") 일반학생 가입
+        a.btn.btn-success.btn-lg.btn-block(href='/auth/register/commu' role="button") 일반학생 가입
     .form-group.row.buttonrow
       .col-sm-2
       .form-group.col-sm-8.buttonrow

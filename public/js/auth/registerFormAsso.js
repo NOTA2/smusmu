@@ -1,5 +1,9 @@
 var idck = 0;
 
+function idchange() {
+  idck = 0;
+}
+
 function gradeChange() {
   var gradeBox = document.getElementById("grade");
   var selectCollege = document.getElementById("selectcollege");
@@ -11,7 +15,15 @@ function gradeChange() {
     selectCollege.innerHTML = '';
     selectAsso.innerHTML = '';
     phone.innerHTML = ``;
+
+    selectCollege.classList.add('hiddens');
+    selectAsso.classList.add('hiddens');
+    phone.classList.add('hiddens');
   } else {
+
+    selectCollege.classList.remove('hiddens');
+    selectAsso.classList.remove('hiddens');
+    phone.classList.remove('hiddens');
     fetch("/auth/register/assolist", {
       method: "POST",
       headers: {
@@ -19,7 +31,6 @@ function gradeChange() {
       }
     }).then(function (res) {
       res.json().then(function (data) {
-        console.log(data);
 
         if (grade == '1') {
           var str = `
@@ -35,9 +46,7 @@ function gradeChange() {
             <option value="문화예술">문화예술대학</option>
           </select>
             `
-          // for (var i = 0; i < data.college.length; i++) {
-          //   str = str.replace(data.college[i], `${data.college[i]}" disabled`);
-          // }
+
           selectCollege.innerHTML = str;
           selectasso.innerHTML = `
                     <div class="input-group-prepend"><span class="input-group-text" style="color:red;">*</span><span class="input-group-text">학생회 이름</span></div>
@@ -46,17 +55,17 @@ function gradeChange() {
           phone.innerHTML = `
           <div class="input-group mb-3">
             <div class="input-group-prepend"><span class="input-group-text">대표 전화번호</span></div>
-            <input class="form-control" type="tel" name="phone1" placeholder="010" autocomplete="off" value="010" maxlength="4" />
+            <input class="form-control" type="tel" name="phone1" placeholder="010" autocomplete="off" value="010" maxlength="3" />
             <input class="form-control" type="tel" name="phone2" autocomplete="off" maxlength="4" />
             <input class="form-control" type="tel" name="phone3" autocomplete="off" maxlength="4" />
           </div>
           `
-          for (var i = 0; i < data.college.length; i++) 
+          for (var i = 0; i < data.college.length; i++)
             document.querySelector(`#college option[value=${data.college[i]}]`).disabled = true;
-          
+
           option = document.querySelectorAll('#college option')
-          for(var i=0; i<option.length;i++){
-            if(option[i].disabled == false){
+          for (var i = 0; i < option.length; i++) {
+            if (option[i].disabled == false) {
               option[i].selected = 'selected';
               break;
             }
@@ -69,9 +78,13 @@ function gradeChange() {
             selectCollege.innerHTML = ''
             selectAsso.innerHTML = ''
             phone.innerHTML = '';
+
+            selectCollege.classList.add('hiddens');
+            selectAsso.classList.add('hiddens');
+            phone.classList.add('hiddens');
             $("#grade").val("99").prop("selected", true);
           } else {
-            var str =  `
+            var str = `
               <div class="input-group-prepend"><span class="input-group-text" style="color:red;">*</span>
                   <label class="input-group-text" for="college">학생회 소속</label>
               </div>
@@ -86,14 +99,14 @@ function gradeChange() {
             str += `</select>`;
             selectasso.innerHTML = '';
             phone.innerHTML = '';
-            
+            selectAsso.classList.add('hiddens');
+            phone.classList.add('hiddens');
             selectCollege.innerHTML = str
 
           }
         }
       })
     }, function (e) {
-      console.log(e);
       alert("잠시 문제가 생겼습니다. 다시 시도해주세요");
     });
 
@@ -120,8 +133,10 @@ function register() {
   var password = $("#password").val();
   var name = $("#name").val();
   var passwordCheck = $("#passwordCheck").val();
+  
+  var email = $("#email").val();
+  var emailRule = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;//이메일 정규식
 
-  var schoolId = $("#schoolId").val();
   var gradeBox = document.getElementById("grade");
   var grade = gradeBox.options[gradeBox.selectedIndex].value;
 
@@ -140,10 +155,10 @@ function register() {
     $('#password').focus();
     $('#passwordCheck').val('');
     return false;
-  } else if (!schoolId) {
-    alert('학번 입력하세요');
-  } else if (schoolId.length != 9) {
-    alert('학번을 제대로 입력해주세요.')
+  } else if (!email) {
+    alert('이메일을 입력하세요');
+  } else if (!emailRule.test(email)) {
+    alert('이메일을 제대로 입력해주세요.')
   } else if (grade == '99') {
     alert('직위를 선택해 주세요.')
   } else if (!name && grade == '1') {
@@ -152,13 +167,14 @@ function register() {
     alert('아이디 중복체크를 해주세요');
     return false;
   } else {
-    alert("스뮤스뮤 관리자의 확인 후 계정이 생성됩니다.\n하루만 기다려 주세요.");
+    alert("관리자의 확인 후 계정이 생성됩니다.\n하루만 기다려 주세요.");
     $("#frm").submit();
   }
 }
 
 
 function idCheck() {
+  idck = 0;
   var username = $("#username").val();
   if (!chkId($.trim(username))) {
     $('#username').val('');
@@ -179,6 +195,7 @@ function idCheck() {
         $("#username").css("background-color", "#dc3545")
         $("#username").css("color", "white")
         $("#username").focus();
+        idck = 0;
       } else {
         alert("사용가능한 아이디입니다.");
         $("#username").css("background-color", "#28a745")
@@ -189,7 +206,6 @@ function idCheck() {
       }
     })
   }, function (e) {
-    console.log(e);
     alert("잠시 문제가 생겼습니다. 다시 시도해주세요");
   });
 }

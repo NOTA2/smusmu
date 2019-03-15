@@ -1,8 +1,8 @@
 extends authLayout.pug
 block append scripts
-  script(type='text/javascript', src='/js/registerForm.js')
+  script(type='text/javascript', src='/js/auth/registerForm.js')
 block append css
-  link(rel='stylesheet', href='/css/register.css')
+  link(rel='stylesheet', href='/css/auth/register.css')
 block content
   h1#mtitle 등록하기
   #agree
@@ -27,9 +27,9 @@ block content
         .input-group-prepend
           span.input-group-text(style="color:red;") *
           span.input-group-text 아이디
-        input#username.form-control(type='text', name="username", placeholder="아이디", maxlength="20", aria-describedby="basic-addon1",autocomplete="off")
+        input#username.form-control(type='text', name="username", placeholder="아이디", maxlength="20", aria-describedby="basic-addon1",autocomplete="off", onchange="idchange()")
         .input-group-append
-          .btn.btn-outline-secondary#idbutton(onclick="idCheck();") 중복확인
+          .btn.btn-outline-dark#idbutton(onclick="idCheck();") 중복확인
       p 영문자, 숫자만 입력 가능. 3자리 ~ 20자리 이내
       .input-group.mb-3
         .input-group-prepend
@@ -51,9 +51,9 @@ block content
         .input-group-prepend
           span.input-group-text(style="color:red;") *
           span.input-group-text 학번
-        input#schoolId.form-control(type="number", pattern="\d*", name="schoolId", placeholder="학번 (입력예. 201399392)", autocomplete="off")
+        input#schoolId.form-control(type="number", pattern="\d*", name="schoolId", placeholder="학번 (입력예. 201399392)", maxlength="9",autocomplete="off", onchange="schoolchange()")
         .input-group-append
-          .btn.btn-outline-secondary#idbutton(onclick="idSchoolId();") 중복확인
+          .btn.btn-outline-dark#idbutton(onclick="schoolIdAjax();") 중복확인
       p 학교 이메일 수집 및 여러 기능을 위해 사용됩니다.
       .input-group.mb-3
         .input-group-prepend
@@ -82,11 +82,14 @@ block content
         .input-group-prepend
           span.input-group-text(style="color:red;") *
           span.input-group-text 닉네임
-        input#nickname.form-control(type='text', name="nickname", placeholder="닉네임", autocomplete="off")
+        input#nickname.form-control(type='text', name="nickname", placeholder="닉네임", maxlength="10",autocomplete="off", onchange="nickchange()")
+        .input-group-append
+          .btn.btn-outline-dark#idbutton(onclick="chNick();") 중복확인
+      p 한글, 영문자, 숫자만 입력 가능. 2~10자리 이내
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 전화번호
-        input.form-control(type='tel', name="phone1", placeholder="010", autocomplete="off", value="010", maxlength="4")
+        input.form-control(type='tel', name="phone1", placeholder="010", autocomplete="off", value="010", maxlength="3")
         input.form-control(type='tel', name="phone2", autocomplete="off", maxlength="4")
         input.form-control(type='tel', name="phone3", autocomplete="off", maxlength="4")
       p

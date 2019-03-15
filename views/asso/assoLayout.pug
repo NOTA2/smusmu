@@ -23,19 +23,79 @@ html(lang='ko')
     meta(name='theme-color', content='#ffffff')
     link(rel='icon', type='image/png', href='/favicon/favicon.ico', sizes='32x32')
     link(rel='icon', type='image/png', href='/favicon/favicon.ico', sizes='16x16')
-    title smusmu 관리자 페이지
+    title 스뮤스뮤 관리자 페이지
+    block css
+      link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
+      link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.7.2/css/all.css', integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr', crossorigin='anonymous')
+      link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css')
+      link(rel='stylesheet', href='/css/base.css')
+      link(rel='stylesheet', href='/css/asso/assomain.css')
+  body
+    .wrapper
+      nav#sidebar(data-position="fixed")
+        #dismiss
+          i.fas.fa-arrow-left
+        a(href="/asso")
+          .sidebar-header
+            img(src="/img/logo.png", alt="logo")
+            h3 스뮤스뮤<br>관리자 페이지
+        ul.list-unstyled.components
+          - 
+            var grade = '임원', college=user.college;
+            if(user.grade==2) grade = '부원'
+            if(user.college == '총학생회')
+              college = '총'
+            else
+              college = user.college+'대학 '
+          p #{user.name}님 반갑스뮤!<br>[#{college}학생회 #{grade}계정]
+          li
+            a.dropdown-toggle(href='#homeSubmenu', data-toggle='collapse', aria-expanded='false') 홈
+            ul#homeSubmenu.collapse.list-unstyled
+              li
+                a(href='/asso/myinfo') 정보 수정
+              li
+                a(href='/auth/logout') 로그아웃
+          li
+            a(href='/commu') 스뮤스뮤 커뮤니티
+          //- li
+          //-   a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false') 대여물품 관리
+          //-   ul#pageSubmenu.collapse.list-unstyled
+          //-     li
+          //-       a(href='#') 물품 등록/관리
+          //-     li
+          //-       a(href='#') 대여 기록
+        //- ul.list-unstyled.CTAs
+        //-   li
+        //-     a.download(href='https://bootstrapious.com/tutorial/files/sidebar.zip') Download source
+        //-   li
+        //-     a.article(href='https://bootstrapious.com/p/bootstrap-sidebar') Back to article
+      #content
+        nav.navbar.navbar-expand-lg.navbar-light.bg-light
+          .container-fluid
+            button#sidebarCollapse.btn.btn-warning(type='button')
+              i.fas.fa-bars
+            span#minititle= info.title
+            button.btn.btn-danger.d-inline-block.d-lg-none(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+              i.fas.fa-angle-double-down
+            #navbarSupportedContent.collapse.navbar-collapse
+              ul.nav.navbar-nav.ml-auto
+                li.nav-item
+                  a.btn.nav-link(href='/asso') HOME
+                - if(info.headbar.length>0)
+                    each item in info.headbar
+                      - var href=item.href, title=item.title
+                        li.nav-item 
+                            a.btn.nav-link(href=href)= title
+                li.nav-item
+                    a.btn.nav-link(href='/asso/myinfo') 정보 수정
+                li.nav-item
+                  a.btn.nav-link(href='/auth/logout') 로그아웃
+        block content
+      .overlay
     block scripts
       script(type='text/javascript', src='/js/prefixfree.min.js')
       script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
       script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous")
       script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous")
       script(src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js')
-      script(type="text/javascript", src="/js/asso.js")
-    block css
-      link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous")
-      link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.7.2/css/all.css', integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr', crossorigin='anonymous')
-      link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css')
-      link(rel='stylesheet', href='/css/base.css')
-      link(rel='stylesheet', href='/css/assomain.css')
-  body
-    block content
+      script(type="text/javascript", src="/js/asso/asso.js")

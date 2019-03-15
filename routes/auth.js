@@ -6,16 +6,46 @@ module.exports = function (passport) {
   const crypto = require('crypto');
   const nodemailer = require('nodemailer');
 
+
   route.get('/register', (req, res) => {
     res.redirect('/auth/login');
   });
 
-  route.get('/register/info', (req, res) => {
+  route.get('/register/info', (req, res, next) => {
+    if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
+      //일반 학생 계정일 경우
+      if (req.user.kakaoId) {
+        if (req.user.token == 'true')
+          return res.redirect('/commu')
+        else
+          return res.redirect(`auth/register/commu/email?kakaoId=${req.user.kakaoId}`);
+      }
+      //학생회 계정일경우
+      else
+        return res.redirect('/asso');
+    } else {
+      next();
+    }
+  }, (req, res) => {
     res.render('auth/registerInfo');
   });
 
-  route.get('/register/commu', (req, res) => {
-
+  route.get('/register/commu', (req, res, next) => {
+    if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
+      //일반 학생 계정일 경우
+      if (req.user.kakaoId) {
+        if (req.user.token == 'true')
+          return res.redirect('/commu')
+        else
+          return res.redirect(`auth/register/commu/email?kakaoId=${req.user.kakaoId}`);
+      }
+      //학생회 계정일경우
+      else
+        return res.redirect('/asso');
+    } else {
+      next();
+    }
+  }, (req, res) => {
     var kakaoId = req.query.kakaoId;
 
     if (!kakaoId)
@@ -42,8 +72,6 @@ module.exports = function (passport) {
   });
 
   route.post('/register/commu', (req, res) => {
-
-
     crypto.randomBytes(20, function (err, buffer) {
       var token = buffer.toString('hex');
 
@@ -69,7 +97,7 @@ module.exports = function (passport) {
         conn.query(sql, user, (err, results) => {
           if (err) {
             console.log(err);
-            res.status(500);
+            res.status(500).end();
           } else {
 
             var transporter = nodemailer.createTransport({
@@ -178,7 +206,125 @@ module.exports = function (passport) {
     });
   });
 
-  route.get('/register/commu/email', (req, res) => {
+  route.post('/register/nickname', (req, res) => {
+    
+    if (req.body.username) {
+      var sql = 'SELECT nickname FROM users WHERE username=?';
+      conn.query(sql, [req.body.username], (err, results) => {
+        if (err) {
+          console.log(err);
+          res.status(500);
+        } else {
+          console.log(results[0]);
+          
+          if (results.length > 0) { //내 정보가 있을 때
+            if (results[0].nickname == req.body.nickname){
+              console.log(req.body.nickname);
+              
+              res.json({
+                status: false
+              });
+              return res.end();
+            }
+            else {
+
+              var sql = 'SELECT token FROM users WHERE nickname=?';
+              conn.query(sql, [req.body.nickname], (err, results) => {
+                if (err) {
+                  console.log(err);
+                  res.status(500);
+                } else {
+                  if (results.length > 0) { //정보가 있을 경우 중복
+                    if (results[0].token == 'true')
+                      return res.json({
+                        status: true
+                      });
+                    else {
+                      return res.json({
+                        status: false
+                      })
+                    }
+                  } else {
+                    return res.json({
+                      status: false
+                    })
+                  }
+                }
+              });
+            }
+          } else {
+            var sql = 'SELECT token FROM users WHERE nickname=?';
+            conn.query(sql, [req.body.nickname], (err, results) => {
+              if (err) {
+                console.log(err);
+                res.status(500);
+              } else {
+                if (results.length > 0) { //정보가 있을 경우 중복
+                  if (results[0].token == 'true')
+                    return res.json({
+                      status: true
+                    });
+                  else {
+                    return res.json({
+                      status: false
+                    })
+                  }
+                } else {
+                  return res.json({
+                    status: false
+                  })
+                }
+              }
+            });
+          }
+        }
+      });
+
+    }else{
+      var sql = 'SELECT token FROM users WHERE nickname=?';
+      conn.query(sql, [req.body.nickname], (err, results) => {
+        if (err) {
+          console.log(err);
+          res.status(500);
+        } else {
+          if (results.length > 0) { //정보가 있을 경우 중복
+            if (results[0].token == 'true')
+              return res.json({
+                status: true
+              });
+            else {
+              return res.json({
+                status: false
+              })
+            }
+          } else {
+            return res.json({
+              status: false
+            })
+          }
+        }
+      });
+    }
+
+  });
+
+
+  route.get('/register/commu/email', (req, res, next) => {
+    if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
+      //일반 학생 계정일 경우
+      if (req.user.kakaoId) {
+        if (req.user.token == 'true')
+          return res.redirect('/commu')
+        else
+          next();
+      }
+      //학생회 계정일경우
+      else
+        return res.redirect('/asso');
+    } else {
+      next();
+    }
+  }, (req, res) => {
     var sql = 'SELECT * FROM users WHERE username=?';
     conn.query(sql, [req.query.username], (err, results) => {
       if (err) {
@@ -266,7 +412,21 @@ module.exports = function (passport) {
   })
 
 
-  route.get('/register/asso', (req, res) => {
+  route.get('/register/asso', (req, res, next) => {
+    if (req.user) { 
+      if (req.user.kakaoId) {
+        if (req.user.token == 'true')
+          return res.redirect('/commu')
+        else
+          return res.redirect(`auth/register/commu/email?kakaoId=${req.user.kakaoId}`);
+      }
+      //학생회 계정일경우
+      else
+        return res.redirect('/asso');
+    } else {
+      next();
+    }
+  }, (req, res) => {
     res.render('auth/registerAsso');
   });
 
@@ -284,7 +444,7 @@ module.exports = function (passport) {
           password: hash,
           salt: salt,
           token: token,
-          email: req.body.schoolId + '@sangmyung.kr',
+          email: req.body.email,
           grade: grade
         }
 
@@ -350,7 +510,7 @@ module.exports = function (passport) {
         res.status(500);
       } else {
         if (results.length > 0) { //정보가 있을 경우 중복
-          var college = results.filter(x => x.token == 'true').map(x=>x.college);
+          var college = results.filter(x => x.token == 'true').map(x => x.college);
           console.log(college);
 
           if (college.length > 0) {
@@ -374,24 +534,27 @@ module.exports = function (passport) {
     });
   });
 
-  route.get('/login', (req, res) => {
+  route.get('/login', (req, res, next) => {
     if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
       //일반 학생 계정일 경우
       if (req.user.kakaoId) {
         if (req.user.token == 'true')
-          res.redirect('/commu')
+          return res.redirect('/commu')
         else
-          res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`);
+          return res.redirect(`auth/register/commu/email?kakaoId=${req.user.kakaoId}`);
       }
-
       //학생회 계정일경우
       else
-        res.redirect('/asso');
+        return res.redirect('/asso');
     } else {
-      res.render('auth/login', {
-        fail: req.query.loginfail
-      });
+      next();
     }
+  }, (req, res) => {
+
+    res.render('auth/login', {
+      fail: req.query.loginfail
+    });
+
   });
 
   route.post('/login', passport.authenticate('local', {

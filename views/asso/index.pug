@@ -1,39 +1,34 @@
 extends assoLayout.pug
 block append scripts
 block append css
+  link(rel="stylesheet" href="/css/asso/home.css")
 block append content
-  .wrapper
-    include assoNav.pug
-    #content
-      nav.navbar.navbar-expand-lg.navbar-light.bg-light
-        .container-fluid
-          button#sidebarCollapse.btn.btn-info(type='button')
-            i.fas.fa-align-left
-          span#minititle  HOME
-          button.btn.btn-dark.d-inline-block.d-lg-none.ml-auto(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
-            i.fas.fa-align-justify
-          #navbarSupportedContent.collapse.navbar-collapse
-            ul.nav.navbar-nav.ml-auto
-              li.nav-item
-                a.btn.nav-link(href='#') 정보수정
-              li.nav-item
-                a.btn.nav-link(href='/auth/logout') 로그아웃
-      - 
-        if(user.location == NULL) user.location = '정보가 없습니다.'
-        if(user.description == NULL) user.description = '정보가 없습니다.'
-        if(user.logo == NULL) user.logo = '정보가 없습니다.'
-      h1 #{college}학생회 [#{user.name}] 관리자 페이지
-      .info
-        h2 위치
-          hr
-          h4 #{user.location}
-      .info
-        h2 설명
-          hr
-          h4 #{user.description}
-      .info
-        h2 기타정보
-          hr
-          h4 대표 이메일 : #{user.email}
-          h4 대표 번호 : #{user.phone}
-    .overlay
+  #article
+    - 
+      if(!user.location) user.location = '정보가 없습니다.'
+      if(!user.description) user.description = '정보가 없습니다.'
+      if(!user.assoemail) user.assoemail = '정보가 없습니다.'
+    h1 #{college}학생회 [#{user.name}] 관리자 페이지
+    .info
+      h2 로고
+        hr
+        - if(!user.logo)
+          h4 정보가 없습니다.
+        -  else
+          #logo
+            img(src=user.logo)
+    .info
+      h2 위치
+        hr
+        h4 #{user.location}
+    .info
+      h2 설명
+        hr
+        h4(style="white-space: pre-line;") #{user.description}
+    .info
+      h2 기타정보
+        hr
+        h3 대표 이메일
+          h5 #{user.assoemail}
+        h3 대표 번호
+          h5 #{user.phone}

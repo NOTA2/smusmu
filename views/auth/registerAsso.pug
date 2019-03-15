@@ -1,8 +1,8 @@
 extends authLayout.pug
 block append scripts
-  script(type='text/javascript', src='/js/registerFormAsso.js')
+  script(type='text/javascript', src='/js/auth/registerFormAsso.js')
 block append css
-  link(rel='stylesheet', href='/css/register.css')
+  link(rel='stylesheet', href='/css/auth/register.css')
 block content
   h1#mtitle 학생회 등록
   #agree
@@ -12,9 +12,9 @@ block content
         .input-group-prepend
           span.input-group-text(style="color:red;") *
           span.input-group-text 아이디
-        input#username.form-control(type='text', name="username", placeholder="아이디", maxlength="20", aria-describedby="basic-addon1",autocomplete="off")
+        input#username.form-control(type='text', name="username", placeholder="아이디", maxlength="20", aria-describedby="basic-addon1",autocomplete="off", onchange="idchange()")
         .input-group-append
-          .btn.btn-outline-secondary#idbutton(onclick="idCheck();") 중복확인
+          .btn.btn-outline-dark#idbutton(onclick="idCheck();") 중복확인
       p 영문자, 숫자만 입력 가능. 3자리 ~ 20자리 이내
       .input-group.mb-3
         .input-group-prepend
@@ -30,9 +30,8 @@ block content
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text(style="color:red;") *
-          span.input-group-text 학번
-        input#schoolId.form-control(type="number", pattern="\d*", name="schoolId", placeholder="학번 (입력예. 201399392)", autocomplete="off")
-      p 학교 이메일 수집 및 여러 기능을 위해 사용됩니다.
+          span.input-group-text 이메일
+        input#email.form-control(type="text", name="email", placeholder="", autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text(style="color:red;") *
@@ -42,8 +41,8 @@ block content
           option(value="1") 임원
           option(value="2") 일반 부원
       p 임원 계정은 단과대학마다 하나만 만들 수 있습니다.
-      #selectcollege.input-group.mb-3
-      #selectasso.input-group.mb-3
-      #phone.input-group.mb-3
-      p 가입완료 후 스뮤스뮤 관리자의 확인 후 계정이 생성됩니다.
+      #selectcollege.input-group.mb-3.hiddens
+      #selectasso.input-group.mb-3.hiddens
+      #phone.input-group.mb-3.hiddens
+      p 가입완료 후 관리자의 승인 후 계정이 생성됩니다.
         input.btn.btn-success.form-control(type='button' value="등록하기" onclick='register()')

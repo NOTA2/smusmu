@@ -1,0 +1,11 @@
+#article {
+  width: 55%;
+  margin: 5rem auto;
+}
+
+@media (max-width: 768px) {
+  #article {
+    width: 95%;
+    margin: 2rem auto;
+  }
+}

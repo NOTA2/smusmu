@@ -2,47 +2,30 @@ extends commuLayout.pug
 block append scripts
 block append css
 block append content
-  .wrapper
-    include commuNav.pug
-    #content
-      nav.navbar.navbar-expand-lg.navbar-light.bg-light
-        .container-fluid
-          button#sidebarCollapse.btn.btn-info.d-inline-block.d-lg-none(type='button')
-            i.fas.fa-align-left
-          #minititle 학생청원 제도
-          button#scrollbar.btn.btn-dark.d-inline-block.d-lg-none(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
-            i.fas.fa-align-justify
-          #navbarSupportedContent.collapse.navbar-collapse
-            ul.nav.navbar-nav.ml-auto
-              li.nav-item
-                a.btn.nav-link(href='#') 진행중인 청원
-              li.nav-item
-                a.btn.nav-link(href='#') 답변 완료된 청원
-      table.table.table-striped
-        thead.thead-light
-          tr
-            th(scope="col") 번호
-            th(scope="col2") 제목
-            th(scope="col") 청원인
-            th(scope="col") 청원일
-            th(scope="col") 참여인원
-        tbody
-          tr
-            td 1
-            td 오이무침 맛있다.
-            td 컴과13김동현
-            td 2019-03-22
-            td 22
-          tr
-            td 1
-            td 오이무침 맛있다.
-            td 컴과13김동현
-            td 2019-03-22
-            td 22
-          tr
-            td 1
-            td 오이무침 맛있다.
-            td 컴과13김동현
-            td 2019-03-22
-            td 22
-    .overlay
+  table.table.table-striped
+    thead.thead-light
+      tr
+        th(scope="col") 번호
+        th(scope="col2") 제목
+        th(scope="col") 청원인
+        th(scope="col") 청원일
+        th(scope="col") 참여인원
+    tbody
+      tr
+        td 1
+        td 오이무침 맛있다.
+        td 컴과13김동현
+        td 2019-03-22
+        td 22
+      tr
+        td 1
+        td 오이무침 맛있다.
+        td 컴과13김동현
+        td 2019-03-22
+        td 22
+      tr
+        td 1
+        td 오이무침 맛있다.
+        td 컴과13김동현
+        td 2019-03-22
+        td 22

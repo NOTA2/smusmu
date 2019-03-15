@@ -22,7 +22,7 @@ a:focus {
 
 .navbar {
     padding: 15px 10px;
-    background: #fff;
+    background: #000;
     border: none;
     border-radius: 0;
     margin-bottom: 40px;
@@ -63,8 +63,8 @@ a:focus {
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: #7386D5;
-    color: #fff;
+    background: #FFC943;
+    color: #000;
     transition: all 0.3s;
 }
 
@@ -74,7 +74,7 @@ a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #6d7fcc;
+    background: #F4B020;
     
 }
 
@@ -82,19 +82,20 @@ a:focus {
     font-size: 2.2rem;
 }
 .sidebar-header img{
-    width: 3rem;
-    height: 3rem;
+    width: 5rem;
+    height: 5rem;
     border-radius: 50%;
     margin-bottom : 1rem;
+    box-shadow: 1px 1px 5px #9B5526;
 }
 
 #sidebar ul.components {
     padding: 0 0 20px 0;
-    border-bottom: 1px solid #47748b;
+    border-bottom: 1px solid #C97943;
 }
 
 #sidebar ul p {
-    color: #fff;
+    color: #000;
     padding: 10px;
     margin:0;
     text-align: center;
@@ -107,14 +108,14 @@ a:focus {
 }
 
 #sidebar ul li a:hover {
-    color: #7386D5;
+    color: #FFC943;
     background: #fff;
 }
 
 #sidebar ul li.active>a,
 a[aria-expanded="true"] {
-    color: #fff;
-    background: #6d7fcc;
+    color: #000;
+    background: #F4B020;
 }
 
 a[data-toggle="collapse"] {
@@ -132,7 +133,7 @@ a[data-toggle="collapse"] {
 ul ul a {
     font-size: 0.9em !important;
     padding-left: 30px !important;
-    background: #6d7fcc;
+    background: #F4B020;
 }
 
 ul.CTAs {
@@ -148,14 +149,14 @@ ul.CTAs a {
 }
 
 a.download {
-    background: #fff;
-    color: #7386D5;
+    background: #000;
+    color: #FFC943;
 }
 
 a.article,
 a.article:hover {
-    background: #6d7fcc !important;
-    color: #fff !important;
+    background: #F4B020 !important;
+    color: #000 !important;
 }
 #minititle{
     font-size : 2rem;
@@ -189,8 +190,8 @@ a.article:hover {
         left: -250px;
         height: 100vmax;
         z-index: 999;
-        background: #7386D5;
-        color: #fff;
+        background: #FFC943;
+        color: #000;
         transition: all 0.3s;
         overflow-y: scroll;
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
@@ -200,11 +201,10 @@ a.article:hover {
     
     #sidebar.active {
         position: fixed;
+        -webkit-backface-visibility: hidden;
         left: 0;
         margin-left: 0;
     }
-    
-
 
     #dismiss {
         display: block;
@@ -212,7 +212,7 @@ a.article:hover {
         height: 35px;
         line-height: 35px;
         text-align: center;
-        background: #7386D5;
+        background: #FFC943;
         position: absolute;
         top: 10px;
         right: 10px;
@@ -223,8 +223,8 @@ a.article:hover {
     }
     
     #dismiss:hover {
-        background: #fff;
-        color: #7386D5;
+        background: #000;
+        color: #FFC943;
     }
     
     .overlay {
@@ -259,6 +259,11 @@ a.article:hover {
     .container-fluid{
         vertical-align: -webkit-baseline-middle;
     }
+
+    .navbar {
+        padding: 8px 10px;
+        margin-bottom: 20px;
+    }
 }
 /* #header {
     position: fixed;
@@ -279,7 +284,7 @@ a.article:hover {
     height: 100%;
     padding: 5px 0.4em;
     font-size: 1.3em;
-    color: #FFF;
+    color: #000;
 }
 
 #header img {
