@@ -1,0 +1,8 @@
+extends ./auth/authLayout.pug
+block append scripts
+block append css
+  link(rel='stylesheet', href='/css/auth/authmain.css')
+block content
+  .imgcontainer
+    img.avatar.err(src='/img/logo.png', alt='logo')
+  h2 죄송해요. 😥 서버에 잠시 문제가 생겼어요. 다시 시도해주세요! 😉

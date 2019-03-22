@@ -4,23 +4,17 @@ block append css
   link(rel='stylesheet', href='/css/commu/home.css')
 block append content
   #tables
-    #free.hometable
-      .tableHeader
-        h1
-          a(href='/commu/free') 자유게시판
-        hr
-      table.table.table-striped
-        thead.thead-light
-          tr
-            th(scope="col2") 제목
-            th(scope="col") 작성일
-        tbody
-          tr
-            td 오이무침 맛있다.
-            td 2019-03-22
-          tr
-            td 오이무침 맛있다.
-            td 2019-03-22
+    //- #free.hometable
+    //-   .tableHeader
+    //-     h1
+    //-       a(href='#') 자유게시판
+    //-     hr
+    //-   table.table.table-striped
+    //-     thead.thead-light
+    //-       tr
+    //-         th(scope="col2") 제목
+    //-         th(scope="col") 작성일
+    //-     tbody
     #petition.hometable
       .tableHeader
         h1 
@@ -30,22 +24,17 @@ block append content
         thead.thead-light
           tr
             th(scope="col") 제목
-            th(scope="col") 청원인
             th(scope="col") 청원일
             th(scope="col") 참여인원
         tbody
-          tr
-            td 오이무침 맛있다.
-            td 컴과13김동현
-            td 2019-03-22
-            td 22
-          tr
-            td 오이무침 맛있다.
-            td 컴과13김동현
-            td 2019-03-22
-            td 22
-          tr
-            td 오이무침 맛있다.
-            td 컴과13김동현
-            td 2019-03-22
-            td 22
+          - for(var i=0;i<topics.length;i++)
+            tr
+              td.title
+                - if(topics[i].lik >= 200)
+                  span.badge.badge-warning 답변대기
+                a(href="/commu/petition/content?id="+topics[i].id)= topics[i].title
+                  span.comment [
+                    | #{topics[i].comment}]
+              td.date= topics[i].date
+              td.like= topics[i].lik
+

@@ -57,7 +57,6 @@ module.exports = function (passport) {
         console.log(err);
         return res.status(500);
       }
-      console.log(results[0]);
 
       if (results.length > 0) { //가입했을 때
         if (results[0].token == 'true') //인증을 받았다면
@@ -207,7 +206,7 @@ module.exports = function (passport) {
   });
 
   route.post('/register/nickname', (req, res) => {
-    
+
     if (req.body.username) {
       var sql = 'SELECT nickname FROM users WHERE username=?';
       conn.query(sql, [req.body.username], (err, results) => {
@@ -215,18 +214,15 @@ module.exports = function (passport) {
           console.log(err);
           res.status(500);
         } else {
-          console.log(results[0]);
-          
+
           if (results.length > 0) { //내 정보가 있을 때
-            if (results[0].nickname == req.body.nickname){
-              console.log(req.body.nickname);
-              
+            if (results[0].nickname == req.body.nickname) {
+
               res.json({
                 status: false
               });
               return res.end();
-            }
-            else {
+            } else {
 
               var sql = 'SELECT token FROM users WHERE nickname=?';
               conn.query(sql, [req.body.nickname], (err, results) => {
@@ -280,7 +276,7 @@ module.exports = function (passport) {
         }
       });
 
-    }else{
+    } else {
       var sql = 'SELECT token FROM users WHERE nickname=?';
       conn.query(sql, [req.body.nickname], (err, results) => {
         if (err) {
@@ -413,7 +409,7 @@ module.exports = function (passport) {
 
 
   route.get('/register/asso', (req, res, next) => {
-    if (req.user) { 
+    if (req.user) {
       if (req.user.kakaoId) {
         if (req.user.token == 'true')
           return res.redirect('/commu')
@@ -439,11 +435,12 @@ module.exports = function (passport) {
       }, (err, pass, salt, hash) => {
 
         var grade = req.body.grade
+
         var user = {
           username: req.body.username,
           password: hash,
           salt: salt,
-          token: token,
+          token: 'true',
           email: req.body.email,
           grade: grade
         }
@@ -455,6 +452,9 @@ module.exports = function (passport) {
             college: req.body.college,
             name: req.body.name,
             phone: req.body.phone1 + '-' + req.body.phone2 + '-' + req.body.phone3
+          }
+          if (user.grade == '1' && asso.college != '총학생회') {
+            user.grade = '2';
           }
           sql = "INSERT INTO asso SET ?"
           conn.query(sql, asso, (err, results) => {
@@ -503,7 +503,7 @@ module.exports = function (passport) {
 
 
   route.post('/register/assolist', (req, res) => {
-    var sql = 'select * from assoUser LEFT JOIN asso ON assoUser.id=asso.assoUserId WHERE grade=1';
+    var sql = 'select * from assoUser LEFT JOIN asso ON assoUser.id=asso.assoUserId WHERE grade=1 OR grade=2';
     conn.query(sql, [], (err, results) => {
       if (err) {
         console.log(err);
@@ -511,7 +511,6 @@ module.exports = function (passport) {
       } else {
         if (results.length > 0) { //정보가 있을 경우 중복
           var college = results.filter(x => x.token == 'true').map(x => x.college);
-          console.log(college);
 
           if (college.length > 0) {
             return res.json({

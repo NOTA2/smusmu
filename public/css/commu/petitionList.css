@@ -1,0 +1,221 @@
+#condition {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 3rem;
+  box-shadow: 1.2px 1.2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#petitionList td.title a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: .75rem;
+}
+
+#petitionList tr:hover {
+  background: #F4B020 !important;
+  color: #000 !important;
+}
+
+#petitionList th.id {
+  text-align: center;
+}
+
+#petitionList td.id {
+  width: 5%;
+  text-align: center;
+}
+
+#petitionList td.like, #petitionList th.like, #petitionList td.auth, #petitionList th.auth, #petitionList td.date, #petitionList th.date {
+  text-align: center;
+}
+
+#petitionList th.title {
+  width: 60%;
+}
+
+#petitionList td.title {
+  width: 60%;
+  padding: 0 !important;
+  word-break:break-all;
+}
+
+#petitionList .auth {
+  width: 12%;
+}
+
+#petitionList .date {
+  width: 12%;
+}
+
+#petitionList .like {
+  width: 8%;
+}
+
+#petitionList #write {
+  text-align: right;
+}
+
+#petitionList #write a {
+  margin-right: 2rem;
+  width: 6rem;
+}
+
+#petitionList .btn-group {
+  margin-right: 2rem;
+}
+
+#petitionList #page {
+  margin: 1rem 2rem 7rem;
+  text-align: center;
+}
+
+#petitionList #page nav {
+  display: inline-block;
+}
+
+#petitionList #boardmode {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+#petitionList .comment{
+  margin-left: 5px;
+  color : rgb(49, 49, 165);
+  font-size : 80%;
+}
+
+#petitionList tr.active{
+  background:#FFC943;
+}
+
+
+#id{
+  text-align: center;
+  width:100%;
+}
+.badge-success{
+  font-weight : 300;
+  height: 15px;
+}
+
+#mostcontent{
+  padding: 15px 10px;
+  border: none;
+  border-radius: 0;
+  margin-bottom: 40px;
+  box-shadow: 1.2px 1.2px 4px rgba(0, 0, 0, 0.2);
+  word-break:break-all;
+}
+
+#mostcontent h5 span{
+  margin-right: 10px;
+}
+
+#mostcontent p{
+  white-space: nowrap;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  
+  /* 여러 줄 자르기 추가 스타일 */
+  white-space: normal;
+  line-height: 1.2;
+  max-height: 3.6em;
+
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+#mostcontent ul{
+  list-style: none;
+  margin : 0;
+  padding-left: 10px;
+}
+#mostcontent ul strong{
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+}
+#mostcontent ul span{
+  display: block;
+  width: auto;
+  padding-left: 100px;
+}
+
+@media (max-width: 768px) {
+  #condition {
+    padding: 1rem 0.3rem;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 3rem;
+    box-shadow: 1.2px 1.2px 4px rgba(0, 0, 0, 0.2);
+    width:100vw;
+  }
+
+  #condition h3 {
+    font-size: 1.2rem;
+  }
+
+  #condition li {
+    font-size: 0.6rem;
+  }
+
+  #condition ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+  }
+
+  #petitionList .table {
+    font-size: 0.7rem;
+  }
+
+  #petitionList .table td:nth-child(1),
+  #petitionList .table td:nth-child(3),
+  #petitionList .table thead {
+    display: none;
+  }
+
+  #petitionList .title {
+    width: 60%;
+    /* table-layout:fixed;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space: nowrap; */
+    word-break:break-all;
+  }
+
+  #petitionList .date {
+    width: 30%;
+  }
+
+  #petitionList .like {
+    width: 10%;
+  }
+
+  #petitionList .btn-group {
+    margin-right: .5rem;
+    height: 1.9rem;
+    /* width: 8rem; */
+  }
+
+  #petitionList #write a {
+    margin-right: .5rem;
+    height: 1.9rem;
+  }
+
+  #petitionList #write a,
+  #petitionList #boardmode a {
+    width: 5rem;
+    font-size: 0.8rem;
+  }
+
+  td.id{
+    display: block !important;
+  }
+
+
+  #petitionList td.id {
+    width: 100%;
+  }
+}

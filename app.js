@@ -37,6 +37,16 @@ app.use('/auth', auth);
 app.use('/commu', commu);
 app.use('/asso', asso);
 
+
+app.use(function(req, res, next) {
+  res.status(404).render('404');
+});
+
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).render('500');
+})
+
 //서버를 계속 유지
 app.listen(80, function () {
   console.log('Connect 80 port');

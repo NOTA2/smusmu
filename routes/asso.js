@@ -17,7 +17,8 @@ route.get('/', (req, res, next) => {
     else res.render('asso/wait', {
       user: req.user,
       info: {
-        title: 'HOME',
+        title: '관리페이지 홈',
+        titlehref:'/asso',
         headbar: []
       }
     })
@@ -30,7 +31,8 @@ route.get('/', (req, res, next) => {
   res.render('asso/index', {
     user: req.user,
     info: {
-      title: 'HOME',
+      title: '관리페이지 홈',
+      titlehref:'/asso',
       headbar: []
     }
   });
@@ -42,7 +44,8 @@ route.get('/myinfo', (req, res, next) => {
     else res.render('asso/wait', {
       user: req.user,
       info: {
-        title: 'HOME',
+        title: '관리페이지 홈',
+        titlehref:'/asso',
         headbar: []
       }
     })
@@ -56,6 +59,7 @@ route.get('/myinfo', (req, res, next) => {
     user: req.user,
     info: {
       title: '정보 수정',
+      titlehref:'/asso/myinfo',
       headbar: []
     }
   });
@@ -102,6 +106,7 @@ route.post('/myinfo', upload.single('logo'), (req, res) => {
             user: req.user,
             info: {
               title: '정보 수정',
+              titlehref:'/asso/myinfo',
               headbar: []
             }
           });
@@ -122,13 +127,130 @@ route.post('/myinfo', upload.single('logo'), (req, res) => {
           user: req.user,
           info: {
             title: '정보 수정',
+            titlehref:'/asso/myinfo',
             headbar: []
           }
         });
       }
     })
   }
-
 })
+
+route.get('/rent/now', (req, res, next) => { 
+  if (req.user && req.user.grade) {
+    if (req.user.token == 'true') next();
+    else res.render('asso/wait', {
+      user: req.user,
+      info: {
+        title: '관리페이지 홈',
+        titlehref:'/asso',
+        headbar: []
+      }
+    })
+  } else if (req.user && req.user.kakaoId)
+    res.redirect('/commu');
+  else
+    res.redirect('/auth/login');
+}, (req, res) => {
+
+  req.user.phone = req.user.phone.split('-');
+  res.render('asso/rentnow', {
+    user: req.user,
+    info: {
+      title: '대여물품 현황',
+      titlehref:'/asso/rent/now',
+      headbar: [{
+        title: '대여물품 현황',
+        href: '/asso/rent/now'
+      }, {
+        title: '물품 등록/관리',
+        href: '/commu/rent/setting'
+      }, {
+        title: '대여 기록',
+        href: '/commu/rent/list'
+      }]
+    }
+  });
+
+});
+
+
+route.get('/rent/setting', (req, res, next) => { 
+  if (req.user && req.user.grade) {
+    if (req.user.token == 'true') next();
+    else res.render('asso/wait', {
+      user: req.user,
+      info: {
+        title: '관리페이지 홈',
+        titlehref:'/asso',
+        headbar: []
+      }
+    })
+  } else if (req.user && req.user.kakaoId)
+    res.redirect('/commu');
+  else
+    res.redirect('/auth/login');
+}, (req, res) => {
+
+  req.user.phone = req.user.phone.split('-');
+  res.render('asso/rentsetting', {
+    user: req.user,
+    info: {
+      title: '물품 등록/관리',
+      titlehref:'/asso/rent/setting',
+      headbar:  [{
+        title: '대여물품 현황',
+        href: '/asso/rent/now'
+      }, {
+        title: '물품 등록/관리',
+        href: '/commu/rent/setting'
+      }, {
+        title: '대여 기록',
+        href: '/commu/rent/list'
+      }]
+    }
+  });
+
+
+});
+
+route.get('/rent/list', (req, res, next) => { 
+  if (req.user && req.user.grade) {
+    if (req.user.token == 'true') next();
+    else res.render('asso/wait', {
+      user: req.user,
+      info: {
+        title: '관리페이지 홈',
+        titlehref:'/asso',
+        headbar: []
+      }
+    })
+  } else if (req.user && req.user.kakaoId)
+    res.redirect('/commu');
+  else
+    res.redirect('/auth/login');
+}, (req, res) => {
+
+  req.user.phone = req.user.phone.split('-');
+  res.render('asso/rentlist', {
+    user: req.user,
+    info: {
+      title: '대여 기록',
+      titlehref:'/asso/rent/list',
+      headbar:  [{
+        title: '대여물품 현황',
+        href: '/asso/rent/now'
+      }, {
+        title: '물품 등록/관리',
+        href: '/commu/rent/setting'
+      }, {
+        title: '대여 기록',
+        href: '/commu/rent/list'
+      }]
+    }
+  });
+
+});
+
 
 module.exports = route;

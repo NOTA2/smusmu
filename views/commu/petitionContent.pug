@@ -1,0 +1,133 @@
+extends commuLayout.pug
+block append scripts
+  script(src="/js/autosize.min.js")
+  script(src="/js/commu/petition.js")
+block append css
+  link(rel='stylesheet', href='/css/commu/petitionList.css')
+  link(rel='stylesheet', href='/css/commu/petition.css')
+block append content
+  #article
+    - if(topic.answerState == 0)
+      p [청원진행중]
+    - else
+      p [청원종료]
+    #title
+      h1= topic.title
+    p.lik 참여인원 [
+      span= topic.lik
+      | 명]
+    #contentinfo.alert.alert-secondary(role='alert')
+      ul.petitionsView_info_list
+        li
+          span 청원시작
+          | #{topic.onTime}
+        - if(topic.enrollTime)
+          li
+            span 답변완료
+            | #{topic.enrollTime}
+        li
+          span 청원인
+          - if(topic.mode == 1 || (topic.mode ==2 && user.college == '총학생회'))
+            | #{topic.name}
+          - else
+            | 익명
+        - if((topic.mode ==1 && user.college == '총학생회') || (topic.mode ==2 && user.college == '총학생회'))
+          li
+            span 소속
+            | #{topic.college}대학 #{topic.department}
+          li 
+            span 전화번호
+            | #{topic.phone}
+    #topiccontent !{topic.content}
+    - if(topic.answerId)
+      #answercontent
+        hr.line
+        h1 답변입니다.
+        .content !{answer.content}
+    - if(user.kakaoId)
+      #likebuttonarea
+        button.btn.btn-primary(onclick='like("'+topic.pid+'", "'+user.id+'", "'+topic.authId+'", 1)')
+          i.far.fa-thumbs-up
+          | <br>추천
+    - if(user.grade == 1)
+      #answerbuttonarea
+        a.btn.btn-danger(href='/commu/petition/answerwrite?id='+topic.pid)
+          i.fas.fa-pen-alt
+          - if(topic.answerId)
+            | <br>답변 수정
+          - else
+            | <br>답변 달기
+        button.btn.btn-primary(onclick='answerok("'+topic.pid+'")')
+          i.far.fa-check-circle
+          | <br>답변 완료
+        button.btn.btn-secondary(onclick='deletetopic("'+topic.pid+'")')
+          i.far.fa-trash-alt
+          | <br>게시글 삭제
+    hr.line
+    -
+      function passing_time(c) {
+        var rt;
+        if(c.dtime < 60) {
+          rt = "방금";
+        } else if(c.dtime >= 60 && c.dtime < 3600) {
+          rt = parseInt(c.dtime/60) + "분 전";
+        } else if(c.dtime >= 3600 && c.dtime < 86400) {
+          rt = parseInt(c.dtime/3600)+"시간 전";
+        } else if(c.dtime >= 86400 && c.dtime < 2419200) {
+          rt = parseInt(c.dtime/86400)+"일 전";
+        } else {
+          rt = c.date
+        } 
+        return rt;
+      }
+    #commentlist
+      - for(var i=0;i<comments.length;i++)
+        //- - if(comments[i].recommentId)
+        div(class=comments[i].recommentId?'comment reco':'comment')
+          div(class=comments[i].authId==user.id?'commentid my':comments[i].authId==topic.authId?'commentid mas':'commentid')
+            .commentidh
+              - if(comments[i].authId==topic.authId)
+                span 글쓴이
+              - else
+                span 익명
+            .commentidt
+            sapn= passing_time(comments[i])
+          .commentcontent !{comments[i].content}
+          - if(user.kakaoId)
+            .commentetc
+              span.cbtn(onclick='like("'+comments[i].id+'", "'+user.id+'", "'+comments[i].authId+'", 2, this)')
+                i.far.fa-thumbs-up
+                span  #{comments[i].lik}
+              - if(comments[i].recommentId)
+                span.cbtn(onclick='recomment(this, "'+topic.pid+'", "'+user.id+'", "'+comments[i].authId+'", "'+comments[i].recommentId+'")')
+                  i.far.fa-comments
+                  |  답글
+              - else
+                span.cbtn(onclick='recomment(this, "'+topic.pid+'", "'+user.id+'", "'+comments[i].authId+'", "'+comments[i].id+'")')
+                  i.far.fa-comments
+                  |  답글
+              //- span.cbtn(onclick="update()")
+              //-   i.fas.fa-edit
+              //-   |  수정
+          - else
+            .commentetc
+              span.btn
+                i.far.fa-thumbs-up
+                |   #{comments[i].lik}
+              - if(user.grade==1)
+                span.cbtn(onclick="deletecomment('"+comments[i].id+"')")
+                  i.far.fa-trash-alt
+                  |  삭제
+
+
+    if(user.kakaoId)
+      #maincomment.Reply_area_write
+        .Reply_area_write_pg
+          form#frm(name="frm" action='/commu/petition/comment', method='post')
+            input(type='hidden', name='uid', value=user.id)
+            input(type='hidden', name='pid', value=topic.pid)
+            textarea#tw_contents.petitionsReply_write.form-control(name='body', required='', placeholder='최대 100자까지 적을 수 있습니다.', onkeyup="len_chk()")
+            input.submit.btn.btn-warning.form-control(type='button' value="등록" onclick='comment()')
+  hr.line
+  #petitionList
+    include petitionList.pug

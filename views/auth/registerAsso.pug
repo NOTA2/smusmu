@@ -20,11 +20,11 @@ block content
         .input-group-prepend
           span.input-group-text(style="color:red;") *
           span.input-group-text 비밀번호
-        input#password.form-control(type='password', name="password", placeholder="비밀번호",maxlength="20", style="color:black; font-family: 'Malgun Gothic';")
+        input#password.form-control(type='password', name="password", placeholder="비밀번호",maxlength="20", style="color:black; font-family: 'Malgun Gothic';" , onchange="passwordE();")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 비밀번호 확인
-        input#passwordCheck.form-control(type='password', name="passwordCheck", placeholder="비밀번호 확인",maxlength="20" onchange="passwordE();" style="font-family: 'Malgun Gothic'")
+        input#passwordCheck.form-control(type='password', name="passwordCheck", placeholder="비밀번호 확인",maxlength="20", onchange="passwordE();", style="font-family: 'Malgun Gothic'")
       p 영문,숫자,특수문자 혼합하여 8~20자리 이내
       p#passcheck
       .input-group.mb-3
@@ -39,7 +39,7 @@ block content
         select.custom-select#grade(name="grade" onchange="gradeChange();")
           option(value="99" selected="selected") 선택하세요.
           option(value="1") 임원
-          option(value="2") 일반 부원
+          option(value="3") 일반 부원
       p 임원 계정은 단과대학마다 하나만 만들 수 있습니다.
       #selectcollege.input-group.mb-3.hiddens
       #selectasso.input-group.mb-3.hiddens

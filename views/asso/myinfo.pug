@@ -1,5 +1,6 @@
 extends assoLayout.pug
 block append scripts
+  script(src="/js/autosize.min.js")
   script(type='text/javascript', src='/js/asso/myinfo.js')
 block append css
   link(rel="stylesheet" href="/css/asso/home.css")
@@ -16,7 +17,7 @@ block append content
         .input-group-prepend
           span.input-group-text 직위
         -
-          if(user.grade == '1') grade='임원';
+          if(user.grade == '1' || user.grade == '2') grade='임원';
           else grade = '부원'
         input#grade.form-control(type='text', value=grade,disabled, autocomplete="off")
       .input-group.mb-3
@@ -27,34 +28,35 @@ block append content
         .input-group-prepend
           span.input-group-text(style="color:red;") *
           span.input-group-text 이름
-        - if(user.grade == '1')
+        - if(user.grade == '1' || user.grade == '2')
           input#name.form-control(type='text', name="name",value=user.name, autocomplete="off")
-        - if(user.grade == '2')
-          input#name.form-control(type='text',value=user.name, disabled, autocomplete="off")
+        - if(user.grade == '3')
+          input#name.form-control(type='text', value=user.name, disabled, autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 위치
-        - if(user.grade == '1')
+        - if(user.grade == '1' || user.grade == '2')
           input#location.form-control(type='text', name="location",value=user.location, placeholder="예) 학생회관 326호(H236)", autocomplete="off")
-        - if(user.grade == '2')
+        - if(user.grade == '3')
           input#location.form-control(type='text', value=user.location, disabled, autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 설명
-        - if(user.grade == '1')
+        - if(user.grade == '1' || user.grade == '2')
           textarea#description.form-control(type='text', name="description",rows="3", autocomplete="off")= user.description
-        - if(user.grade == '2')
+        - if(user.grade == '3')
           textarea#description.form-control(type='text', disabled, rows="3", autocomplete="off")= user.description
       .input-group.mb-3
         .input-group-prepend
           span#inputGroupFileAddon01.input-group-text 로고 업로드
         .custom-file
-          - if(user.grade == '1')
+          - if(user.grade == '1' || user.grade == '2')
             input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name='logo')
             label.custom-file-label(for='inputGroupFile01')= user.logo
-          - if(user.grade == '2')
+          - if(user.grade == '3')
             input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', disabled, name='logo')
             label.custom-file-label(for='inputGroupFile01') 불가능합니다.
+      p 로고는 1:1 혹은 1:2 사이즈로 여백없는 이미지로 올려주세요.
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text(style="color:red;") *
@@ -63,18 +65,18 @@ block append content
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 대표메일
-        - if(user.grade == '1')
+        - if(user.grade == '1' || user.grade == '2')
           input#assoemail.form-control(type="email", name="assoemail", value=user.assoemail,placeholder="연락받을 대표 메일", autocomplete="off")
-        - if(user.grade == '2')
+        - if(user.grade == '3')
           input#assoemail.form-control(type="email", disabled, value=user.assoemail,placeholder="연락받을 대표 메일", autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
-          span.input-group-text 대표 전화번호
-        - if(user.grade == '1')
+          span.input-group-text 학생회 대표번호
+        - if(user.grade == '1' || user.grade == '2')
           input.form-control(type='tel', name="phone1", value=user.phone[0], autocomplete="off",  maxlength="3")
           input.form-control(type='tel', name="phone2", value=user.phone[1], autocomplete="off", maxlength="4")
           input.form-control(type='tel', name="phone3", value=user.phone[2], autocomplete="off", maxlength="4")
-        - if(user.grade == '2')
+        - if(user.grade == '3')
           input.form-control(type='tel', name="phone1", value=user.phone[0], autocomplete="off",  maxlength="3", disabled)
           input.form-control(type='tel', name="phone2", value=user.phone[1], autocomplete="off", maxlength="4", disabled)
           input.form-control(type='tel', name="phone3", value=user.phone[2], autocomplete="off", maxlength="4", disabled)

@@ -1,0 +1,41 @@
+extends commuLayout.pug
+block append scripts
+  script(src="/js/autosize.min.js")
+  script(src="/js/commu/petitionanswer.js")
+block append css
+  link(href="/css/commu/petitionwrite.css", rel="stylesheet")
+  link(href="/css/commu/petitionanswer.css", rel="stylesheet")
+  link(rel='stylesheet', href='/css/commu/petition.css')
+block append content
+  script(src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js")
+  script(src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/translations/ko.js")
+  #article
+    - if(topic.answerState == 0)
+      p [청원진행중]
+    - else
+      p [청원종료]
+    h1#title= topic.title
+    p.lik 참여인원 [
+      span= topic.lik
+      | 명]
+    #contentinfo.alert.alert-secondary(role='alert')
+      ul.petitionsView_info_list
+        li
+          span 청원시작
+          | #{topic.onTime}
+        li
+          span 청원인
+          | #{topic.name}
+    #topiccontent !{topic.content}
+  hr.line
+  #answerarea
+    h2 답변하기
+    form#frm(name="frm" action='/commu/petition/answer', method='post')
+      - if(answer)
+        textarea#editor1(name='content', rows='5') !{answer.content}
+      - else
+        textarea#editor1(name='content', rows='5')
+      input(type='hidden', name="petitionId", value=topic.pid)
+    p
+      input.btn.btn-success.form-control(type='button' value="답변하기" onclick='submitwrite();')
+

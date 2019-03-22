@@ -5,6 +5,14 @@ html{
     height: 100%;
 }
 
+#container {
+    clear: both;
+    width: 100%;
+    padding : 3%;
+    margin: 3% auto;
+  }
+  
+
 #buttons{
     margin: 0 auto;
     padding : 0.3rem;
@@ -30,4 +38,40 @@ hr{
 
 hr.two{
     border-top: 8px double #000;
+}
+
+#info{
+    width: 100%;
+    text-align: center;
+    margin:0 auto;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.card{
+    display: inline-flex;
+    margin : 2rem 1rem;
+}
+img.card-img-top{
+    width:100%;
+    height: 100%;
+    border-bottom: 2px solid rgb(119, 119, 119);
+}
+
+@media screen and (max-width:766px) {
+    .step{
+        display: block;
+        text-align: center;
+        width: 100%;
+        margin : 0 auto;
+    }
+
+    .card{
+        margin : 1rem auto;
+    }
+
+    #info{
+        display: block;
+    }
 }

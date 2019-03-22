@@ -20,10 +20,11 @@ function gradeChange() {
     selectAsso.classList.add('hiddens');
     phone.classList.add('hiddens');
   } else {
-
     selectCollege.classList.remove('hiddens');
     selectAsso.classList.remove('hiddens');
     phone.classList.remove('hiddens');
+
+
     fetch("/auth/register/assolist", {
       method: "POST",
       headers: {
@@ -54,7 +55,7 @@ function gradeChange() {
                     `
           phone.innerHTML = `
           <div class="input-group mb-3">
-            <div class="input-group-prepend"><span class="input-group-text">대표 전화번호</span></div>
+            <div class="input-group-prepend"><span class="input-group-text">학생회 대표번호</span></div>
             <input class="form-control" type="tel" name="phone1" placeholder="010" autocomplete="off" value="010" maxlength="3" />
             <input class="form-control" type="tel" name="phone2" autocomplete="off" maxlength="4" />
             <input class="form-control" type="tel" name="phone3" autocomplete="off" maxlength="4" />
@@ -72,7 +73,7 @@ function gradeChange() {
           }
 
 
-        } else if (grade == '2') {
+        } else if (grade == '3') {
           if (data.status == false) {
             alert("현재 등록된 학생회가 없습니다.");
             selectCollege.innerHTML = ''
@@ -116,6 +117,7 @@ function gradeChange() {
 function passwordE() {
   var password = $("#password").val();
   var passwordCheck = $("#passwordCheck").val();
+
   if (!chkPwd2($.trim(password))) {
     $("#passcheck").text('비밀번호 조건에 맞지 않습니다.')
     $("#passcheck").css("color", "#dc3545")

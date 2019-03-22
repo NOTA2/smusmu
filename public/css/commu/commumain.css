@@ -22,7 +22,6 @@ a:focus {
 
 .navbar {
     padding: 15px 10px;
-    background: #000;
     border: none;
     border-radius: 0;
     margin-bottom: 40px;
@@ -42,6 +41,10 @@ a:focus {
     margin: 40px 0;
 }
 
+.table{
+    border-bottom: 1px solid #ddd;
+}
+
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
@@ -52,11 +55,11 @@ a:focus {
     align-items: stretch;
 }
 
-#sidebarCollapse{
+#sidebarCollapse {
     display: none;
 }
 
-#dismiss{
+#dismiss {
     display: none;
 }
 
@@ -66,6 +69,13 @@ a:focus {
     background: #FFC943;
     color: #000;
     transition: all 0.3s;
+
+    /* height: 100vmax; */
+    z-index: 999;
+    overflow-y: scroll;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    /* position: fixed;
+    -webkit-backface-visibility: hidden; */
 }
 
 #sidebar.active {
@@ -75,17 +85,18 @@ a:focus {
 #sidebar .sidebar-header {
     padding: 20px;
     background: #F4B020;
-    
+
 }
 
-.sidebar-header h3{
+.sidebar-header h3 {
     font-size: 2.2rem;
 }
-.sidebar-header img{
+
+.sidebar-header img {
     width: 5rem;
     height: 5rem;
     border-radius: 50%;
-    margin-bottom : 1rem;
+    margin-bottom: 1rem;
     box-shadow: 1px 1px 5px #9B5526;
 }
 
@@ -97,7 +108,7 @@ a:focus {
 #sidebar ul p {
     color: #000;
     padding: 10px;
-    margin:0;
+    margin: 0;
     text-align: center;
 }
 
@@ -158,8 +169,9 @@ a.article:hover {
     background: #F4B020 !important;
     color: #000 !important;
 }
-#minititle{
-    font-size : 2rem;
+
+#minititle {
+    font-size: 2rem;
 }
 
 /* ---------------------------------------------------
@@ -172,33 +184,37 @@ a.article:hover {
     min-height: 100vh;
     transition: all 0.3s;
 }
-
+#formargin{
+    display: none;
+}
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
 
 @media (max-width: 768px) {
-    h1{
-        font-size : 2rem;
+    h1 {
+        font-size: 2rem;
     }
-    #sidebarCollapse{
+
+    #sidebarCollapse {
         display: inline-block;
     }
+
     #sidebar {
         width: 250px;
         top: 0;
         left: -250px;
-        height: 100vmax;
+        height: 100vh;
         z-index: 999;
         background: #FFC943;
         color: #000;
         transition: all 0.3s;
         overflow-y: scroll;
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-        position: fixed;
-        -webkit-backface-visibility: hidden;
+        position: fixed !important;
+        /* -webkit-backface-visibility: hidden; */
     }
-    
+
     #sidebar.active {
         position: fixed;
         -webkit-backface-visibility: hidden;
@@ -221,12 +237,12 @@ a.article:hover {
         -o-transition: all 0.3s;
         transition: all 0.3s;
     }
-    
+
     #dismiss:hover {
         background: #000;
         color: #FFC943;
     }
-    
+
     .overlay {
         display: none;
         position: fixed;
@@ -237,12 +253,14 @@ a.article:hover {
         opacity: 0;
         transition: all 0.5s ease-in-out;
     }
+
     .overlay.active {
         display: block;
         opacity: 1;
     }
+
     #content {
-        width: 100%;
+        width: 100vw;
         padding: 0;
         min-height: 100vh;
         transition: all 0.3s;
@@ -251,20 +269,34 @@ a.article:hover {
         right: 0;
     }
 
-    #minititle{
+    #minititle {
         font-size: 1.7rem;
         text-align: center;
-        margin : 0 auto;
+        margin: 0 auto;
     }
-    .container-fluid{
+
+    .container-fluid {
         vertical-align: -webkit-baseline-middle;
     }
 
     .navbar {
         padding: 8px 10px;
         margin-bottom: 20px;
+        transform: translate3d(0, 0, 0);
+        position: fixed;
+        width: 100%;
+        z-index: 997;
+    }
+    #formargin{
+        display: block;
+        margin-bottom: 80px;
+    }
+    .navbar--fixed {
+        top: 0;
+        position: fixed;
     }
 }
+
 /* #header {
     position: fixed;
     top: 0;

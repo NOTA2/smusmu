@@ -107,8 +107,13 @@ form {
 .hiddens{
     display : none;
 }
-/*스마트폰에 적용*/
 
+#passcheck{
+    transition: all 0.4s;
+}
+
+
+/*스마트폰에 적용*/
 @media screen and (max-width:766px) {
     body {
         background: #FFC943;

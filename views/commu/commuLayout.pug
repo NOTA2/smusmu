@@ -49,28 +49,44 @@ html(lang='ko')
             p 
               strong [관리자 계정]
           li
-            a.dropdown-toggle(href='#homeSubmenu', data-toggle='collapse', aria-expanded='false') 홈
+            a.dropdown-toggle(href='#homeSubmenu', data-toggle='collapse', aria-expanded='false')
+              i.fas.fa-home
+              |  홈
             ul#homeSubmenu.collapse.list-unstyled
               - if(user.grade)
                 li
-                  a(href='/asso/myinfo') 내정보
+                  a(href='/asso/myinfo') 
+                    i.fas.fa-user
+                    |  내정보
               - if(user.kakaoId)
                 li
-                  a(href='/commu/myinfo') 내정보
+                  a(href='/commu/myinfo')
+                    i.fas.fa-user
+                    |  내정보
               li
-                a(href='/auth/logout') 로그아웃
+                a(href='/auth/logout')
+                  i.fas.fa-sign-out-alt
+                  |  로그아웃
           - if(user.grade)
             li
-              a(href='/asso') 관리자 페이지
+              a(href='/asso')
+                i.fas.fa-briefcase
+                |   관리자 페이지
+          //- li
+          //-   a(href='/commu/free') 익명 자유게시판
           li
-            a(href='/commu/free') 익명 자유게시판
-          li
-            a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false') 학생 청원 제도
+            a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false')
+              i.fas.fa-vote-yea
+              |  학생 청원 제도
             ul#pageSubmenu.collapse.list-unstyled
               li
-                a(href='/commu/petition') 진행중인 청원
+                a(href='/commu/petition')
+                  i.fas.fa-question-circle
+                  |  진행중인 청원
               li
-                a(href='/commu/petitionanswer') 답변 완료된 청원
+                a(href='/commu/petitionanswer')
+                  i.fas.fa-check-circle
+                  |  답변 완료된 청원
         //- ul.list-unstyled.CTAs
         //-   li
         //-     a.download(href='https://bootstrapious.com/tutorial/files/sidebar.zip') Download source
@@ -81,7 +97,8 @@ html(lang='ko')
           .container-fluid
             button#sidebarCollapse.btn.btn-warning(type='button')
               i.fas.fa-bars
-            span#minititle= info.title
+            span#minititle
+              a(href=info.titlehref)= info.title
             button.btn.btn-danger.d-inline-block.d-lg-none(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
               i.fas.fa-angle-double-down
             #navbarSupportedContent.collapse.navbar-collapse
@@ -101,6 +118,7 @@ html(lang='ko')
                     a.btn.nav-link(href='/commu/myinfo') 내정보
                 li.nav-item
                   a.btn.nav-link(href='/auth/logout') 로그아웃
+        #formargin
         block content
       .overlay
     block scripts

@@ -1,0 +1,41 @@
+extends commuLayout.pug
+block append scripts
+  script(src="/js/commu/petitionwrite.js")
+block append css
+  link(href="/css/commu/petitionwrite.css", rel="stylesheet")
+block append content
+  script(src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js")
+  script(src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/translations/ko.js")
+  .article
+    #condition
+      h3 학생청원제도 요건
+      ul
+        li 욕설 및 비속어를 사용한 청원은 관리자에 의해 삭제 될 수 있습니다.
+        li 폭력적이고 선정적인 내용을 담은 청원은 관리자에 의해 삭제 될 수 있습니다.
+        li 학생들에게 유해한 내용을 담은 청원은 관리자에 의해 삭제 될 수 있습니다.
+        li 한번 작성된 청원은 수정 및 삭제가 불가능합니다. 최초 청원취지와 다른 내용으로 변경되는 것을 방지하여 청원참여자 의견을 보호하기 위한 조치이니 신중하게 작성하여 주시기 바랍니다.
+        li 허위 사실이나 타인의 명예를 훼손하는 내용이 포함된 청원은 관리자에 의해 삭제될 수 있습니다.
+    form#frm(name="frm" action='/commu/petition/write', method='post')
+      .input-group.mb-3
+        input#title.form-control(type='text', name="title", placeholder='제목을 입력해주세요.', autocomplete="off", maxlength="100")
+        .input-group-prepend
+          sapn.input-group-text 공개여부
+          .btn-group.btn-group-toggle(data-toggle='buttons')
+            label.btn.btn-outline-warning.active
+              input#option1(type='radio', name='mode', value='1' autocomplete='off', checked='checked')
+              |  전체 공개
+            label.btn.btn-outline-warning
+              input#option2(type='radio', name='mode', value='2' autocomplete='off')
+              |  관리자 공개
+            label.btn.btn-outline-warning
+              input#option3(type='radio', name='mode', value='3' autocomplete='off')
+              |  전체 비공개
+      textarea#editor(name='content', rows='5')
+        ul
+          li 학생청원제도 요건을 꼭 확인해 주세요!
+          li 해당 사안의 원활한 해결 및 소통을 위해 청원시 [내정보]에서 핸드폰 번호를 제대로 입력하였는지 확인해주세요.
+      p
+        input.btn.btn-success.form-control(type='button' value="글 작성하기" onclick='submitwrite();')
+
+
+

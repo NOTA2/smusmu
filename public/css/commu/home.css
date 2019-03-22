@@ -6,10 +6,33 @@
 
 .hometable {
     display: inline-block;
-    width: 40%;
+    width: 90%;
     /* padding : 0 2%; */
     margin: 0 2%;
     text-align: left;
+}
+
+
+th.title {
+    width: 60%;
+}
+
+td.title {
+    width: 60%;
+    padding: 0 !important;
+    word-break: break-all;
+}
+
+td.title a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: .75rem;
+}
+
+tr:hover {
+    background: #F4B020 !important;
+    color: #000 !important;
 }
 
 @media (max-width: 768px) {
@@ -37,7 +60,7 @@
     }
 
     #free td:nth-child(2),
-    #free thead  {
+    #free thead {
         display: none;
     }
 

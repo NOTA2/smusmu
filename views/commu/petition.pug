@@ -1,31 +1,7 @@
 extends commuLayout.pug
 block append scripts
 block append css
+  link(rel='stylesheet', href='/css/commu/petitionList.css')
 block append content
-  table.table.table-striped
-    thead.thead-light
-      tr
-        th(scope="col") 번호
-        th(scope="col2") 제목
-        th(scope="col") 청원인
-        th(scope="col") 청원일
-        th(scope="col") 참여인원
-    tbody
-      tr
-        td 1
-        td 오이무침 맛있다.
-        td 컴과13김동현
-        td 2019-03-22
-        td 22
-      tr
-        td 1
-        td 오이무침 맛있다.
-        td 컴과13김동현
-        td 2019-03-22
-        td 22
-      tr
-        td 1
-        td 오이무침 맛있다.
-        td 컴과13김동현
-        td 2019-03-22
-        td 22
+  #petitionList
+    include petitionList.pug

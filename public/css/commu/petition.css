@@ -1,0 +1,223 @@
+#article {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ol,
+ul,
+li {
+  list-style: none;
+} */
+
+#condition ul,
+#condition li {
+  list-style: inside;
+}
+
+#contentinfo {
+  margin: 0 auto;
+  max-width: 100%
+}
+
+.petitionsView_info_list {
+  margin: 0;
+}
+
+.petitionsView_info_list li {
+  display: inline-block;
+  font-size: 16px;
+  margin-right: 54px;
+  margin-bottom: 0;
+  padding: 0;
+  height: 2rem;
+}
+
+.petitionsView_info_list li span {
+  font-weight: 600;
+  margin-right: 8px;
+  margin-bottom: 0;
+}
+
+.gradeinfo{
+  display: inline-block;
+  padding-left : 10px;
+}
+
+.petitionsView_info_list li:before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.Reply_area_write {
+  width: 100%;
+  text-align: left;
+  background-color: #f3f3f3;
+  border: 1px solid #dedede;
+  margin-bottom: 40px;
+}
+
+.Reply_area_write_pg {
+  width: 100%;
+  height: 100%;
+  padding: 1%;
+  overflow: hidden;
+  margin: 0;
+}
+
+.petitionsReply_write {
+  float: left;
+  width: 80%;
+  border: 0;
+  height: 100px;
+  padding: 8px;
+  margin: 0px;
+}
+
+.submit {
+  float: right;
+  width: 16%;
+  height: 64px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+#topiccontent {
+  margin: 3rem 4rem;
+  text-align: left;
+  word-break: break-all;
+}
+
+#answercontent {
+  text-align: left
+}
+
+#answercontent .content {
+  margin: 3rem 4rem;
+}
+
+#likebuttonarea {
+  margin: 3rem auto;
+}
+
+#answerbuttonarea {
+  margin: 3rem auto;
+}
+
+#answerbuttonarea .btn {
+  margin: 0 2rem;
+}
+
+textarea {
+  resize: none;
+  overflow: hidden;
+  overflow-wrap: break-word;
+}
+
+.lik span {
+  font-weight: 800;
+  color: #2A3C78;
+}
+
+#title {
+  margin: 0;
+  word-break: break-all;
+}
+
+.comment {
+  margin: 5px 5px;
+}
+
+.commentid {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  background-color: #e8e8e8;
+  border-radius: 4px;
+}
+
+.commentid.my {
+  background-color: #bfbadd;
+}
+
+.commentid.mas {
+  background-color: #caffc8;
+}
+
+
+.commentidh {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.commentidh h6 {
+  margin-bottom: 0 !important;
+  vertical-align: middle;
+}
+
+.commentcontent {
+  text-align: left;
+  color: #000;
+  padding: 3px;
+  word-break: break-all;
+}
+.commentcontent p{
+  color:rgb(128, 125, 125);
+  margin-bottom:0px
+}
+.commentetc {
+  text-align: right;
+  margin: 8px 10px;
+}
+
+.commentetc span.cbtn {
+  display: inline-block;
+  font-weight: 400;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: color .15s ease-in-out,
+    background-color .15s ease-in-out,
+    border-color .15s ease-in-out, 
+    box-shadow .15s ease-in-out;
+}
+
+.reco {
+  margin-left: 35px;
+}
+
+@media (max-width: 768px) {
+  #topiccontent {
+    margin: 1rem 1rem;
+    text-align: left;
+
+  }
+  #topiccontent p{
+    font-size:.9rem;
+  }
+
+  #article {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  #answerbuttonarea .btn {
+    margin: 0 0.5rem;
+  }
+
+  .gradeinfo{
+    display :block;
+  }
+}

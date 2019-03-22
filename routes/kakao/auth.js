@@ -40,7 +40,6 @@ route.post('', function (req, res) {
       return res.json(message);
     }
     if (rows.length > 0) {
-      console.log(rows);
       
       if(rows[0].token != 'true'){
         message.template.outputs[0] = {

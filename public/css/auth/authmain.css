@@ -1,13 +1,13 @@
 #wrap {
   clear: both;
-  max-width: 68rem;
+  max-width: 80rem;
   height : 50rem;
   margin: 0 auto;
 }
 
 #container {
   clear: both;
-  width: 70%;
+  width: 85%;
   height : 90%;
   padding : 3%;
   margin: 3% auto;
@@ -63,6 +63,10 @@ img.avatar {
   border-radius: 50%;
 }
 
+.err{
+  margin-bottom: 3rem;
+}
+
 #fail{
   width : 70%;
   margin : 1.2rem auto 0;
@@ -73,6 +77,56 @@ img.avatar {
 .alert.alert-danger{
   text-align: center;
 }
+.mail{
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.mailinfo{
+  width: 100%;
+  margin-bottom: 40px;
+  box-shadow: 1.2px 1.2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  background:#fff;
+}
+
+.mailinfo:after{
+  clear:both;
+  content:"";
+  display:block;
+  visibility:hidden;
+
+}
+.mail:after{
+  clear:both;
+  content:"";
+  display:block;
+  visibility:hidden;
+
+}
+
+.info{
+  width: 100%;
+  text-align: center;
+  margin:0 auto;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.card{
+  display: inline-flex;
+  margin : 2rem 1rem;
+  width: 18rem;
+}
+img.card-img-top{
+  width:100%;
+  height: 100%;
+  border-bottom: 2px solid rgb(119, 119, 119);
+}
+
+
+
 
 /*스마트폰에 적용*/
 
@@ -119,6 +173,22 @@ img.avatar {
     h2{
       font-size:1.6rem;
     }
+
+    .step{
+      display: block;
+      text-align: center;
+      width: 100%;
+      margin : 0 auto;
+  }
+
+  .card{
+      margin : 1rem auto;
+      width : 18rem;
+  }
+
+  .info{
+      display: block;
+  }
 
 
 }

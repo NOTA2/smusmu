@@ -4,17 +4,46 @@ block append scripts
 block append css
   link(rel='stylesheet', href='/css/auth/authmain.css')
 block content
-  h2 인증 메일이 발송되었습니다.<br>
-    a(href="https://outlook.office.com/owa/?realm=sangmyung.kr&exsvurl=1&ll-cc=1042&modurl=0" target='_blank')
-      | Office 365
-    | 로 들어가서 인증 메일을 확인하세요!<br>
-    | ※ Office 365의 계정은 학교 통합계정과 동일합니다.
-  if kakaoId != undefined
-    h3(style="text-align : center;") 메일이 발송되지 않았다면 
-      | <br>1. 스팸 메일함(Junk Email)을 확인
-      | <br>2. 메일을 찾을 수 없다면 아래 버튼을 눌러주세요
+  .mail
+    h2 인증 메일이 발송되었습니다.<br>
+      a(href="https://outlook.office.com/owa/?realm=sangmyung.kr&exsvurl=1&ll-cc=1042&modurl=0" target='_blank')
+        | Office 365
+      | 로 들어가서 인증 메일을 확인하세요!<br>
+      | ※ Office 365의 계정은 학교 통합계정과 동일합니다.
+  - if(kakaoId != undefined)
+    .mailinfo
+      h3(style="text-align : center; color:red;") 메일이 발송되지 않았다면 
+        | <br>1. 스팸 메일함(Junk Email)을 확인 (아래 참고)
+        | <br>2. 메일을 찾을 수 없다면 [메일 다시 보내기] 버튼을 눌러주세요
     form#frm(name="frm" action='/auth/register/commu/email', method='post')
       input(type='hidden', name="kakaoId", value=kakaoId)
       a.btn.btn-primary.form-control(href="https://outlook.office.com/owa/?realm=sangmyung.kr&exsvurl=1&ll-cc=1042&modurl=0" target='_blank' role="button") Office 365로 이동
       input.btn.btn-success.form-control(type='button' value="메일 다시 보내기" onclick='mail()')
       a.btn.btn-danger.form-control(href='/auth/logout' role="button") 로그아웃
+    .info
+      .card
+        img.card-img-top(src='/registerinfo/mail1.png')
+        .card-body
+          p.card-text
+            | 1. Office 365로 들어가세요. 학교 통합 로그인 계정과 동일한 아이디/비밀번호 입니다.
+      .card
+        img.card-img-top(src='/registerinfo/mail2.png')
+        .card-body
+          p.card-text
+            | 2. [Inbox]에 메일이 없다면 [기타]로 들어가 주세요.
+      .card
+        img.card-img-top(src='/registerinfo/mail3.png')
+        .card-body
+          p.card-text
+            | 3. 메뉴에서 [Junk Email]을 눌러주세요!
+    .info
+      .card
+        img.card-img-top(src='/registerinfo/mail4.png')
+        .card-body
+          p.card-text
+            | 4. smusmudd@gmail.com에서 인증 메일이 왔는지 확인해 주세요!
+      .card
+        img.card-img-top(src='/registerinfo/mail5.png')
+        .card-body
+          p.card-text
+            | 5. 스뮤스뮤 가입 인증하기 링크를 눌러서 인증을 완료해 주세요!

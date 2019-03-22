@@ -1,0 +1,108 @@
+#condition
+  h3 학생청원제도 요건
+  ul
+    li 욕설 및 비속어를 사용한 청원은 관리자에 의해 삭제 될 수 있습니다.
+    li 폭력적이고 선정적인 내용을 담은 청원은 관리자에 의해 삭제 될 수 있습니다.
+    li 학생들에게 유해한 내용을 담은 청원은 관리자에 의해 삭제 될 수 있습니다.
+    li 한번 작성된 청원은 수정 및 삭제가 불가능합니다. 최초 청원취지와 다른 내용으로 변경되는 것을 방지하여 청원참여자 의견을 보호하기 위한 조치이니 신중하게 작성하여 주시기 바랍니다.
+    li 허위 사실이나 타인의 명예를 훼손하는 내용이 포함된 청원은 관리자에 의해 삭제될 수 있습니다.
+- if(info.title=='진행 중인 청원' && !topic)
+  #most
+    h4 최다 추천 청원
+    - for(var i=0;i<top.length;i++)
+      a(href="/commu/petition/content?id="+top[i].id+'&mode='+mode+'&page=1')
+        #mostcontent
+          h4.mosttitle
+            - if(topics[i].answerId)
+              span.badge.badge-primary 답변진행
+            - else if(top[i].lik >= 200)
+              span.badge.badge-warning 답변대기
+            |  #{top[i].title}
+          p !{top[i].content}
+          ul
+            - if(top[i].mode == 1 || (top[i].mode ==2 && user.college == '총학생회'))
+              li 
+                strong 청원인 
+                span= top[i].name
+            - else
+              li
+                strong 청원인 
+                span 익명
+            li
+                strong 참여인원 
+                span #{top[i].lik} 명
+            li
+                strong 청원일 
+                span= top[i].date
+          
+#boardmode
+  - if(info.title != '답변 완료된 청원')
+    .btn-group
+      - if(mode=='latest')
+        a#option1.btn.btn-outline-dark.active(href="/commu/petition?mode=latest&page="+page) 최신순
+        a#option2.btn.btn-outline-dark(href="/commu/petition?mode=recom&page="+page) 추천순
+      - else
+        a#option1.btn.btn-outline-dark(href="/commu/petition?mode=latest&page="+page) 최신순
+        a#option2.btn.btn-outline-dark.active(href="/commu/petition?mode=recom&page="+page) 추천순
+table.table.table-striped
+  thead.thead-light
+    tr
+      th(scope="col").id 번호
+      th(scope="col").title 제목
+      th(scope="col").auth 청원인
+      th(scope="col").date 청원일
+      th(scope="col").like 참여인원
+  tbody
+    - for(var i=0;i<topics.length;i++)
+      tr(class=(topic && (topic.pid == topics[i].id))? 'active':'')
+        - if(topics[i].answerState == 1)    //
+          td.id
+            #id 
+              span.badge.badge-success 답변완료
+        - else if(topics[i].answerId)
+          td.id
+            #id 
+              span.badge.badge-primary 답변진행
+        - else if(topics[i].lik >= 200)
+          td.id
+            #id
+              span.badge.badge-warning 답변대기
+        - else
+          td.id= topics[i].id
+            | #{topics[i].answerId}
+        td.title
+          a(href="/commu/petition/content?id="+topics[i].id+'&mode='+mode+'&page='+page)= topics[i].title
+            span.comment [
+              | #{topics[i].comment}]
+        - if(topics[i].mode == 1 || (topics[i].mode ==2 && user.college == '총학생회'))
+          td.auth= topics[i].name
+        - else
+          td.auth 익명
+        td.date= topics[i].date
+        td.like= topics[i].lik
+-if(user.kakaoId)
+  #write
+    a.btn.btn-primary(href='/commu/petition/write')
+      i.fas.fa-pencil-alt
+      |   글쓰기
+#page
+  nav(aria-label='Page navigation example')
+    ul.pagination
+      - if(startPage > 5)
+        li.page-item
+          a.page-link(href=info.titlehref+'?mode'+mode+'&page='+(startPage-1), aria-label='Back')
+            span(aria-hidden='true') «
+            span.sr-only Back
+      - for(var idx=startPage;idx<=endPage;idx++){
+        - if(idx == page)
+          li.page-item.active
+            a.page-link(href=info.titlehref+'?mode='+mode+'&page='+idx)= idx
+        - else
+          li.page-item
+            a.page-link(href=info.titlehref+'?mode='+mode+'&page='+idx)= idx
+      - }
+      - if(endPage < totalPage)
+        li.page-item
+          a.page-link(href=info.titlehref+'?mode'+mode+'&page='+(endPage+1), aria-label='Next')
+            span(aria-hidden='true') »
+            span.sr-only Next
