@@ -1,0 +1,32 @@
+extends commuLayout.pug
+block append scripts
+  script(src="/js/commu/write.js")
+block append css
+  link(href="/css/commu/petitionwrite.css", rel="stylesheet")
+block append content
+  script(src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js")
+  script(src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/translations/ko.js")
+  .article
+    form#frm(name="frm" action='/commu/write', method='post')
+      .input-group.mb-3
+        input#title.form-control(type='text', name="title", placeholder='제목을 입력해주세요.', autocomplete="off", maxlength="100")
+        .input-group-prepend
+          sapn.input-group-text 공개여부
+          .btn-group.btn-group-toggle(data-toggle='buttons')
+            label.btn.btn-outline-warning.active
+              input#option1(type='radio', name='mode', value='1' autocomplete='off', checked='checked')
+              |  익명
+            label.btn.btn-outline-warning
+              input#option2(type='radio', name='mode', value='2' autocomplete='off')
+              |  닉네임
+            label.btn.btn-outline-warning
+              input#option3(type='radio', name='mode', value='3' autocomplete='off')
+              |  실명
+      p
+        input(type="hidden", name="board", value=board)
+      textarea#editor(name='content', rows='5' placeholder="욕설 등 부적절한 언어 사용 및 의도를 가진 게시글을 삭제될 수 있습니다.")
+      p
+        input.btn.btn-success.form-control(type='button' value="글 작성하기" onclick='submitwrite();')
+
+
+

@@ -21,10 +21,10 @@ function like(pid, uid, tid, targetType, self) {
     var c =true;
 
     if(targetType==1)
-      c = confirm("해당 청원을 추천 하시겠습니까?");
+      c = confirm("게시글을 추천 하시겠습니까?");
 
     if (c) {
-      fetch("/commu/petition/like", {
+      fetch("/commu/like", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -54,42 +54,12 @@ function like(pid, uid, tid, targetType, self) {
   }
 }
 
-function answerok(pid) {
-  var content = $("#answercontent");
-
-  if (content.length == 0) {
-    alert("답변이 작성되지 않았습니다. 답변을 작성하고 진행해주세요.");
-    return false;
-  }
-
-  var c = confirm("답변 완료 게시판으로 옮기시겠습니까?");
-
-  if (c) {
-    fetch("/commu/petition/answerok", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: `pid=${pid}`
-    }).then(function (res) {
-      res.json().then(function (data) {
-        if (data.status) {
-          alert("답변 완료 하였습니다.");
-          location.reload();
-        }
-      })
-    }, function (e) {
-      console.log(e);
-      alert("잠시 문제가 생겼습니다. 다시 시도해주세요");
-    });
-  }
-}
 
 function deletetopic(pid) {
   var c = confirm("게시글을 삭제하시겠습니까?");
   var pc = 1;
   if (c) {
-    fetch("/commu/petition/delete", {
+    fetch("/commu/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -139,7 +109,7 @@ function recomment(self, pid, uid, ruid, rcid) {
     var str = `
     <div id="subcomment" class="Reply_area_write">
   <div class="Reply_area_write_pg">
-    <form id="frm" name="body" action="/commu/petition/comment" method="post">
+    <form id="frm" name="body" action="/commu/comment" method="post">
     <input type="hidden" name="pid" value="${pid}" />
     <input type="hidden" name="uid" value="${uid}" />
     <input type="hidden" name="ruid" value="${ruid}" />
@@ -161,7 +131,7 @@ function deletecomment(pid) {
   var c = confirm("댓글을 삭제하시겠습니까?");
   var pc = 2;
   if (c) {
-    fetch("/commu/petition/delete", {
+    fetch("/commu/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -185,7 +155,7 @@ function deletecomment(pid) {
 
 function len_chk() {
   var frm = document.frm.body;
-  
+
   if (frm.value.length > 200) {
     alert("글자수는 100자로 제한됩니다.!");
     frm.value = frm.value.substring(0, 200);

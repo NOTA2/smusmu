@@ -12,13 +12,19 @@ block content
       | ※ Office 365의 계정은 학교 통합계정과 동일합니다.
   - if(kakaoId != undefined)
     .mailinfo
-      h3(style="text-align : center; color:red;") 메일이 발송되지 않았다면 
-        | <br>1. 스팸 메일함(Junk Email)을 확인 (아래 참고)
-        | <br>2. 메일을 찾을 수 없다면 [메일 다시 보내기] 버튼을 눌러주세요
+      h3(style="text-align : center; color:red;") 메일이 발송되지 않았다면
+        ol
+          li 스팸 메일함(Junk Email)을 확인 (아래 참고)
+          li 메일을 찾을 수 없다면 [메일 다시 보내기] 버튼을 눌러주세요
+          -if(schoolId)
+            li 현재 등록된 학번은 
+              sapn(style="color:blue;") #{schoolId}
+              | 입니다.<br>학번을 잘못 입력했다면 [학번수정] 버튼을 눌러주세요.
     form#frm(name="frm" action='/auth/register/commu/email', method='post')
       input(type='hidden', name="kakaoId", value=kakaoId)
       a.btn.btn-primary.form-control(href="https://outlook.office.com/owa/?realm=sangmyung.kr&exsvurl=1&ll-cc=1042&modurl=0" target='_blank' role="button") Office 365로 이동
       input.btn.btn-success.form-control(type='button' value="메일 다시 보내기" onclick='mail()')
+      a.btn.btn-secondary.form-control(href='/auth/register/commu/reschoolId?kakaoId='+kakaoId role="button") 학번수정
       a.btn.btn-danger.form-control(href='/auth/logout' role="button") 로그아웃
     .info
       .card

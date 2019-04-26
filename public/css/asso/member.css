@@ -1,0 +1,67 @@
+tbody{
+  transition : all 1s;
+}
+th{
+  text-align: center;
+}
+
+td{
+  vertical-align: middle;
+}
+
+@media screen and (max-width:768px){
+
+  th{
+    font-size:0.8rem;
+  }
+
+  
+  /* .table td, .table th {
+    padding:0.2rem;
+  } */
+
+	/* Force table to not be like tables anymore */
+	table,thead,tbody, th,td,tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	tr { border: 1px solid #ccc; }
+	
+	.table td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+    padding-left: 30%; 
+    height: 3rem;
+    margin-bottom: 0;
+		word-break:break-all;
+	}
+	
+	td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	.table td.pass, .table td.del{
+		padding : 0  0 0 40%;
+  }
+	/*
+	Label the data
+	*/
+	td:nth-of-type(1):before { content: "아이디"; }
+	td:nth-of-type(2):before { content: "메일"; }
+	td:nth-of-type(3):before { content: "등급"; }
+}

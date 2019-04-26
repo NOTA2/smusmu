@@ -1,0 +1,233 @@
+tbody{
+  transition : all 1s;
+}
+th{
+  text-align: center;
+}
+
+.now{
+  text-align: center;
+}
+
+.nowtable{
+  width : 80%;
+  margin : 2rem auto;
+  text-align: center;
+}
+
+#rentstatus{
+  width:100%;
+}
+
+.name{
+  width:40%;
+}
+.now{
+  width:15%;
+}
+.all{
+  width:15%;
+}
+.date{
+  width:15%;
+}
+td.minus{
+  width:15%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.thing{
+  width:20%;
+}
+
+.minus i{
+  font-size : calc(1.5em + .75rem + 2px);
+}
+
+
+.minus i.fa-minus-square{
+  color:rgb(55, 28, 206);
+} 
+
+
+#pbt, #com{
+ display: inline-block;
+ height:calc(1.5em + .75rem + 2px);
+}
+
+
+.rentfrom{
+  margin: 2rem 0;
+}
+
+.line{
+  margin: 1.5rem 0;
+}
+
+#rentstatus td{
+  vertical-align: middle;
+}
+
+
+#page {
+  margin: 1rem 2rem 7rem;
+  text-align: center;
+}
+
+#page nav {
+  display: inline-block;
+}
+
+#rentstatus .over{
+	background-color : #FF5733;
+	border: none;
+}
+
+.today{
+	background-color : #FFC300;
+	border: none;
+}
+
+.plusrow{
+	font-size : 0.8rem;
+}
+
+@media screen and (max-width:768px){
+  .line{
+    margin : .5rem 0;
+  }
+
+  th{
+    font-size:0.8rem;
+  }
+  .name{
+    width:30%;
+  }
+  .now{
+    width:20%;
+  }
+  .all{
+    width:20%;
+  }
+  .date{
+    width:20%;
+  }
+
+  
+  .table td, .table th {
+    padding:0.2rem;
+  }
+
+  .nowtable{
+    width : 100%;
+    margin : 2rem auto;
+  }
+
+	/* Force table to not be like tables anymore */
+	#fromtable table,#fromtable thead,#fromtable tbody, #fromtable th,#fromtable td,#fromtable tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#fromtable thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	#fromtable tr { border: 1px solid #ccc; }
+	
+	#fromtable td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+    padding-left: 50%; 
+    height: 3rem;
+    margin-bottom: 0;
+	}
+	
+	#fromtable td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	#pbt{
+    display: block;
+    margin:1rem 0;
+  }
+	/*
+	Label the data
+	*/
+	#fromtable td:nth-of-type(1):before { content: "물품"; }
+	#fromtable td:nth-of-type(2):before { content: "이름"; }
+	#fromtable td:nth-of-type(3):before { content: "학번"; }
+	#fromtable td:nth-of-type(4):before { content: "학과"; }
+	#fromtable td:nth-of-type(5):before { content: "전화번호"; }
+	#fromtable td:nth-of-type(6):before { content: "비고"; }
+  
+	/* Force table to not be like tables anymore */
+	#rentstatus table,#rentstatus thead,#rentstatus tbody, #rentstatus th,#rentstatus td,#rentstatus tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#rentstatus thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	#rentstatus tr { border: 1px solid #ccc; }
+	
+	#rentstatus td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+    padding-left: 50%; 
+    height: 1.8rem;
+	}
+	
+	#rentstatus td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	.thing{
+    width:100%;
+  }
+
+  #rentstatus td.com{
+    height: 3rem;
+    text-align: center;
+    padding-left: 0;
+  }
+
+  td.com .btn{
+    width: 100%;
+  }
+	/*
+	Label the data
+	*/
+	#rentstatus td:nth-of-type(1):before { content: "물품"; }
+	#rentstatus td:nth-of-type(2):before { content: "이름"; }
+	#rentstatus td:nth-of-type(3):before { content: "학번"; }
+	#rentstatus td:nth-of-type(4):before { content: "학과"; }
+	#rentstatus td:nth-of-type(5):before { content: "전화번호"; }
+	#rentstatus td:nth-of-type(6):before { content: "비고"; }
+	#rentstatus td:nth-of-type(7):before { content: "대여기간"; }
+	#rentstatus td:nth-of-type(8):before { content: "반납기일"; }
+	/* #rentstatus td:nth-of-type(9):before { content: "반납"; vertical-align: middle; height: 3rem;} */
+}

@@ -3,6 +3,13 @@ block append scripts
 block append css
   link(rel='stylesheet', href='/css/commu/home.css')
 block append content
+  #article
+    h1 이달의 행사
+    hr.line
+    h3 [뚱디를 찾아라!]
+    img.avatar(src='/img/logo.png', alt='logo')
+    p 학교에 뿌려져있는 뚱디를 찾아서 사진을 찍어주세요!<br>찾은 뚱디를 자유게시판에 올리시면 추첨을 통해서 10명에게 상품을 드립니다!
+  
   #tables
     //- #free.hometable
     //-   .tableHeader
@@ -15,26 +22,26 @@ block append content
     //-         th(scope="col2") 제목
     //-         th(scope="col") 작성일
     //-     tbody
-    #petition.hometable
-      .tableHeader
-        h1 
-          a(href='/commu/petition') 학생 청원 제도
-        hr
-      table.table.table-striped
-        thead.thead-light
-          tr
-            th(scope="col") 제목
-            th(scope="col") 청원일
-            th(scope="col") 참여인원
-        tbody
-          - for(var i=0;i<topics.length;i++)
-            tr
-              td.title
-                - if(topics[i].lik >= 200)
-                  span.badge.badge-warning 답변대기
-                a(href="/commu/petition/content?id="+topics[i].id)= topics[i].title
-                  span.comment [
-                    | #{topics[i].comment}]
-              td.date= topics[i].date
-              td.like= topics[i].lik
+    //- #petition.hometable
+    //-   .tableHeader
+    //-     h1 
+    //-       a(href='/commu/petition') 학생 청원 제도
+    //-     hr
+    //-   table.table.table-striped
+    //-     thead.thead-light
+    //-       tr
+    //-         th(scope="col") 제목
+    //-         th(scope="col") 청원일
+    //-         th(scope="col") 참여인원
+    //-     tbody
+    //-       - for(var i=0;i<topics.length;i++)
+    //-         tr
+    //-           td.title
+    //-             - if(topics[i].lik >= 200)
+    //-               span.badge.badge-warning 답변대기
+    //-             a(href="/commu/petition/content?id="+topics[i].id)= topics[i].title
+    //-               span.comment [
+    //-                 | #{topics[i].comment}]
+    //-           td.date= topics[i].date
+    //-           td.like= topics[i].lik
 

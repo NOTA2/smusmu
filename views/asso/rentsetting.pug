@@ -1,7 +1,55 @@
 extends assoLayout.pug
 block append scripts
+  script(src="/js/asso/rentsetting.js")
 block append css
   link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/rent.css")
 block append content
-  #article
-
+  .article
+    h2 대여물품 관리
+    hr.line
+    - if(user.grade==3)
+      table.nowtable.table.table-striped
+        thead.thead-light
+          tr
+            th(scope="col").name 물품
+            th(scope="col").now 현재 수량
+            th(scope="col").all 전체 수량
+            th(scope="col").date 대여 일수
+        tbody
+          - for(i=0;i<rent.length;i++)
+            tr.now
+              td.name= rent[i].name
+              td.now= rent[i].nowcount
+              td.all= rent[i].allcount
+              td.date= rent[i].day
+                | 일
+    - else
+      form#frm(action="/asso/rent/setting", method="post")
+        table.table.table-striped
+          thead.thead-light
+            tr
+              th(scope="col").name 물품
+              th(scope="col").now 현재 수량
+              th(scope="col").all 전체 수량
+              th(scope="col").date 대여 일수
+              th(scope="col").minus 삭제
+          tbody
+            - for(i=0;i<rent.length;i++)
+              tr.plusrow
+                td.name
+                  input.form-control(type="text" value=rent[i].name name="name" autocomplete="off" maxlength="20")
+                td.now
+                  input.form-control(type="number" value=rent[i].nowcount name="nowcount" autocomplete="off" )
+                td.all
+                  input.form-control(type="number" value=rent[i].allcount name="allcount" autocomplete="off")
+                td.date
+                  input.form-control(type="number", value=rent[i].day name="day" autocomplete="off")
+                  input.code.form-control(type="hidden" name="code" value=rent[i].code)
+                td.minus
+                  i.fas.fa-minus-square(onclick="deleteitem(this)")
+          input#assoId.form-control(type="hidden" name="assoId" value=user.assoId)
+        #pbt.btn.btn-primary(onclick="formplus();")
+          i#fromplus.fas.fa-plus
+        #pbt
+          input#com.form-control(type='button' value="완료" onclick='complete();')

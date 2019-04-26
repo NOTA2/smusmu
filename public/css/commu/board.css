@@ -1,0 +1,142 @@
+
+#list td.title a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: .75rem;
+}
+
+#list tr:hover {
+  background: #F4B020 !important;
+  color: #000 !important;
+}
+
+#list th.id {
+  text-align: center;
+}
+
+#list td.id {
+  width: 5%;
+  text-align: center;
+}
+
+#list td.like, #list th.like, #list td.auth, #list th.auth, #list td.date, #list th.date {
+  text-align: center;
+}
+
+#list th.title {
+  width: 60%;
+}
+
+#list td.title {
+  width: 60%;
+  padding: 0 !important;
+  word-break:break-all;
+}
+
+#list .auth {
+  width: 12%;
+}
+
+#list .date {
+  width: 12%;
+}
+
+#list .like {
+  width: 8%;
+}
+
+#list #write {
+  text-align: right;
+}
+
+#list #write a {
+  margin-right: 2rem;
+  width: 6rem;
+}
+
+#list .btn-group {
+  margin-right: 2rem;
+}
+
+#list #page {
+  margin: 1rem 2rem 7rem;
+  text-align: center;
+}
+
+#list #page nav {
+  display: inline-block;
+}
+
+#list #boardmode {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+#list .comment{
+  margin-left: 5px;
+  color : rgb(49, 49, 165);
+  font-size : 80%;
+}
+
+#list tr.active{
+  background:#FFC943;
+}
+
+
+#id{
+  text-align: center;
+  width:100%;
+}
+
+
+@media (max-width: 768px) {
+
+  #list .table {
+    font-size: 0.7rem;
+  }
+
+  #list .table td:nth-child(1),
+  #list .table td:nth-child(3),
+  #list .table thead {
+    display: none;
+  }
+
+  #list .title {
+    width: 60%;
+    word-break:break-all;
+  }
+
+  #list .date {
+    width: 30%;
+  }
+
+  #list .like {
+    width: 10%;
+  }
+
+  #list .btn-group {
+    margin-right: .5rem;
+    height: 1.9rem;
+    /* width: 8rem; */
+  }
+
+  #list #write a {
+    margin-right: .5rem;
+    height: 1.9rem;
+  }
+
+  #list #write a,
+  #list #boardmode a {
+    width: 5rem;
+    font-size: 0.8rem;
+  }
+
+  td.id{
+    display: block !important;
+  }
+
+
+  #list td.id {
+    width: 100%;
+  }
+}

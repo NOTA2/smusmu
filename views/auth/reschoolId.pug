@@ -1,0 +1,27 @@
+extends authLayout.pug
+block append scripts
+  script(type='text/javascript', src='/js/auth/reschoolId.js')
+block append css
+  link(rel='stylesheet', href='/css/auth/register.css')
+block content
+  h1#mtitle 학번수정
+    - if(fail != undefined)
+      .alert.alert-danger(role='alert') 아이디 또는 비밀번호를 다시 확인해주세요.
+  #agree
+    form#frm(name="frm" action='/auth/register/commu/reschoolId', method='post')
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text 학번
+        input#schoolId.form-control(type="number", value=schoolId, pattern="\d*", name="schoolId", placeholder="학번 (입력예. 201399392)", maxlength="9",autocomplete="off", onchange="schoolchange()")
+        .input-group-append
+          .btn.btn-outline-dark#idbutton(onclick="schoolIdAjax();") 중복확인
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text 비밀번호
+        input#password.form-control(type='password', name="password", placeholder="비밀번호",maxlength="20", style="color:black; font-family: 'Malgun Gothic';")
+      p 본인 확인을 위해 비밀번호를 입력해주세요.
+      p
+        input(type='hidden', name="id", value=id)
+        input(type='hidden', name="kakaoId", value=kakaoId)
+      p
+        input.btn.btn-success.form-control(type='button' value="수정하기" onclick='updateschoolId()')

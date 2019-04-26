@@ -70,7 +70,7 @@ function collegeChange() {
         <option value="스포츠건강관리학과">스포츠건강관리학과</option>
         <option value="무용예술학과">무용예술학과</option>
         <option value="조형예술학과">조형예술학과</option>
-        <option value="	생활예술학과">생활예술학과</option>
+        <option value="생활예술학과">생활예술학과</option>
         <option value="음악학부">음악학부</option>
         `
     }
@@ -79,6 +79,8 @@ function collegeChange() {
 function passwordE() {
     var password = $("#password").val();
     var passwordCheck = $("#passwordCheck").val();
+    
+
     if (!chkPwd2($.trim(password))) {
         $("#passcheck").text('비밀번호 조건에 맞지 않습니다.')
         $("#passcheck").css("color", "#dc3545")

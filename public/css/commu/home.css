@@ -1,3 +1,14 @@
+#article{
+    text-align: center;
+    width : 60%;
+    margin:0 auto;
+}
+img.avatar {
+    width: 20%;
+    border-radius: 50%;
+    margin:2rem;
+  }
+
 #tables {
     width: 95%;
     margin: 5rem auto;
@@ -70,5 +81,13 @@ tr:hover {
     #petition thead {
         display: none;
     }
+    img.avatar {
+        width: 60%;
+      }
 
+      #article{
+        text-align: center;
+        width : 75%;
+        margin:0 auto;
+    }
 }

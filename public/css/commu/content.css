@@ -4,6 +4,7 @@
   text-align: center;
 }
 
+
 /* ol,
 ul,
 li {
@@ -88,7 +89,6 @@ li {
   margin: 3rem 4rem;
   text-align: left;
   word-break: break-all;
-  overflow:auto;
 }
 
 #answercontent {
@@ -125,6 +125,13 @@ textarea {
 #title {
   margin: 0;
   word-break: break-all;
+  text-align: left;
+}
+
+
+h5 span{
+  margin-left : 2rem;
+  font-size:1rem;
 }
 
 .comment {
@@ -204,7 +211,7 @@ textarea {
 }
 .image.image-style-side{
   max-width : 50%;
-  text-align: center;
+  text-align: right;
   float: right;
   display: inline;
   margin-left: .4rem;
@@ -243,4 +250,10 @@ textarea {
   .gradeinfo{
     display :block;
   }
+
+  #title h1, #title h5{
+    margin-left : 1rem;
+  }
+
+  
 }

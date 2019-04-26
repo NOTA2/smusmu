@@ -2,6 +2,53 @@ extends assoLayout.pug
 block append scripts
 block append css
   link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/rent.css")
 block append content
-  #article
+  .article
+    h2 물품 대여 기록
+    hr.line
+    table#rentstatus.nowtable.table.table-striped
+      thead.thead-light
+        tr
+          th(scope="col").thing 물품
+          th(scope="col").username 이름
+          th(scope="col").schoolId 학번
+          th(scope="col").department 학과
+          th(scope="col").phone 전화번호
+          th(scope="col").etc 비고
+          th(scope="col").date1 대여시간
+          th(scope="col").date2 반납시간
+      tbody
+        - for(i=0;i<srent.length;i++)
+          tr.plusrow
+            td.thing= srent[i].rentname
+            td.username= srent[i].uname
+            td.schoolId= srent[i].schoolId
+            td.department= srent[i].department
+            td.phone= srent[i].phone
+            td.etc= srent[i].etc
+            td.date1= srent[i].rentdate
+            td.date2= srent[i].returndate1
+  #page
+    nav(aria-label='Page navigation example')
+      ul.pagination
+        - if(startPage > 5)
+          li.page-item
+            a.page-link(href=info.titlehref+'?page='+(startPage-1), aria-label='Back')
+              span(aria-hidden='true') «
+              span.sr-only Back
+        - for(var idx=startPage;idx<=endPage;idx++){
+          - if(idx == page)
+            li.page-item.active
+              a.page-link(href=info.titlehref+'?page='+idx)= idx
+          - else
+            li.page-item
+              a.page-link(href=info.titlehref+'?page='+idx)= idx
+        - }
+        - if(endPage < totalPage)
+          li.page-item
+            a.page-link(href=info.titlehref+'?page='+(endPage+1), aria-label='Next')
+              span(aria-hidden='true') »
+              span.sr-only Next
+
 

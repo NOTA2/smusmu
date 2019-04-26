@@ -138,15 +138,21 @@ route.post('/result', (req, res) => {
           idx++;
         }
         message.template.outputs[idx] = {
-          "basicCard": {
-            "title": result.str,
-            "buttons": [{
-              "action": "webLink",
-              "label": "홈페이지에서 확인",
-              "webLinkUrl": url
-            }]
+          "simpleText": {
+              "text": result.str
           }
-        };
+      }
+
+        // message.template.outputs[idx] = {
+        //   "basicCard": {
+        //     "title": result.str,
+        //     "buttons": [{
+        //       "action": "webLink",
+        //       "label": "홈페이지에서 확인",
+        //       "webLinkUrl": url
+        //     }]
+        //   }
+        // };
       }
       res.json(message);
     });

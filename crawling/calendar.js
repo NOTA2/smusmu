@@ -63,10 +63,10 @@ exports.crawling = function () {
             td = td.split(' ~ ')[0];
           params[idx] = new Array();
           params[idx][0] = month;
-          params[idx][1] = td;
+          params[idx][1] = td;    //date 추가
         } else { //행사명인경우
           td = $(this).find('a').text().trim();
-          params[idx][2] = td;
+          params[idx][2] = td;      //content 추가
           idx++;
         }
       });

@@ -113,7 +113,6 @@
 }
 
 #mostcontent p{
-  white-space: nowrap;
   overflow: hidden; 
   text-overflow: ellipsis; 
   
@@ -178,10 +177,6 @@
 
   #petitionList .title {
     width: 60%;
-    /* table-layout:fixed;
-    text-overflow:ellipsis;
-    overflow:hidden;
-    white-space: nowrap; */
     word-break:break-all;
   }
 

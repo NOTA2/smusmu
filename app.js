@@ -13,8 +13,9 @@ var seoulAssemblyKakaoRouter = require('./routes/kakao/seoulAssembly');
 var calendarKakaoRouter = require('./routes/kakao/calendar');
 var foodMenuKakaoRouter = require('./routes/kakao/foodMenu');
 var schoolInfoKakaoRouter = require('./routes/kakao/schoolInfo');
-var quizKakaoRouter = require('./routes/kakao/quiz');
+// var quizKakaoRouter = require('./routes/kakao/quiz');
 var authKakaoRouter = require('./routes/kakao/auth')
+var festivalKakaoRouter = require('./routes/kakao/festival')
 
 app.use('/kakao/eat', eatKakaoRouter);
 app.use('/kakao/notice', noticeKakaoRouter);
@@ -23,8 +24,9 @@ app.use('/kakao/seoulAssembly', seoulAssemblyKakaoRouter);
 app.use('/kakao/calendar', calendarKakaoRouter);
 app.use('/kakao/foodMenu', foodMenuKakaoRouter);
 app.use('/kakao/schoolInfo', schoolInfoKakaoRouter);
-app.use('/kakao/quiz', quizKakaoRouter);
+// app.use('/kakao/quiz', quizKakaoRouter);
 app.use('/kakao/auth', authKakaoRouter);
+app.use('/kakao/festival', festivalKakaoRouter);
 
 
 var index = require('./routes/index');

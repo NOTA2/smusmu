@@ -56,8 +56,13 @@ route.post('', function (req, res) {
       }
       else{
         message.template.outputs[0] = {
-          "simpleText": {
-            "text": '이미 등록되어 있스뮤!'
+          "basicCard": {
+            "title": '이미 등록되어 있스뮤!!',
+            "buttons": [{
+              "label": "스뮤스뮤 커뮤니티 바로가기",
+              "action": "webLink",
+              "webLinkUrl": 'https://smusmu.co.kr'
+            }]
           }
         };
       }

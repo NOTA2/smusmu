@@ -8,7 +8,8 @@
     li 허위 사실이나 타인의 명예를 훼손하는 내용이 포함된 청원은 관리자에 의해 삭제될 수 있습니다.
 - if(info.title=='진행 중인 청원' && !topic)
   #most
-    h4 최다 추천 청원
+    - if(top.length > 0)
+      h4 최다 추천 청원
     - for(var i=0;i<top.length;i++)
       a(href="/commu/petition/content?id="+top[i].id+'&mode='+mode+'&page=1')
         #mostcontent

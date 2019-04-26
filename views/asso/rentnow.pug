@@ -1,7 +1,116 @@
 extends assoLayout.pug
 block append scripts
+  script(src="/js/asso/rentnow.js")
 block append css
   link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/rent.css")
 block append content
-  #article
+  .article
+    h2 대여물품 현황
+    hr.line
+    table.nowtable.table.table-striped
+      thead.thead-light
+        tr
+          th(scope="col").name 물품
+          th(scope="col").now 현재 수량
+          th(scope="col").all 전체 수량
+          th(scope="col").date 대여 일수
+      tbody
+        - for(i=0;i<rent.length;i++)
+          tr.now
+            td.name= rent[i].name
+            td.now= rent[i].nowcount
+            td.all= rent[i].allcount
+            td.date= rent[i].day
+              | 일
+  .article
+    h2 물품 대여하기
+    hr.line
+    .rentfrom
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text 학번 검색
+        input#schoolIds.form-control(type='text', name="schoolIds", autocomplete="off" )
+        .input-group-append
+          .btn.btn-outline-dark#idbutton(onclick="serchschoolId();") 검색
+      p(style="color : red;") ※ 학번 검색은 스뮤스뮤 회원만 가능합니다.
+      form#frm(action="/asso/rent/now", method="post")
+        table#fromtable.table.table-striped
+          thead.thead-light
+            tr
+              th(scope="col").thing 물품
+              th(scope="col").username 이름
+              th(scope="col").schoolId 학번
+              th(scope="col").department 학과
+              th(scope="col").phone 전화번호
+              th(scope="col").etc 비고
+          tbody
+            tr.plusrow
+              td.thing.form-group
+                select#rentitem.form-control(name="rid")
+                  - for(i=0;i<rent.length;i++)
+                    - if(rent[i].nowcount == 0)
+                      option(disabled)= rent[i].name
+                    - else
+                      option(value=rent[i].id)= rent[i].name
+              td.username
+                input#username.form-control(type="text" name="username" autocomplete="off" maxlength="20")
+              td.schoolId
+                input#schoolId.form-control(type="number" name="schoolId" autocomplete="off" )
+              td.department
+                input#department.form-control(type="text" name="department" autocomplete="off")
+              td.phone
+                input#phone.form-control(type="text", name="phone" autocomplete="off")
+              td.etc
+                input.form-control(type="text", name="etc" autocomplete="off")
+          input#assoId.form-control(type="hidden" name="assoId" value=user.assoId)
+        #pbt
+          input#com.form-control(type='button' value="완료" onclick='complete();')
+  .article
+    h2 물품 대여 현황
+    hr.line
+    table#rentstatus.nowtable.table.table-striped
+      thead.thead-light
+        tr
+          th(scope="col").thing 물품
+          th(scope="col").username 이름
+          th(scope="col").schoolId 학번
+          th(scope="col").department 학과
+          th(scope="col").phone 전화번호
+          th(scope="col").etc 비고
+          th(scope="col").date1 대여시간
+          th(scope="col").date2 반납기일
+          th(scope="col").com 반납
+      -
+        function checkdate(rdate){
+          var d = new Date();
+          var rd = new Date(rdate);
+          if(rd < d) //기간이 지났으면
+            return true;
+          else
+            return false;
+        }
 
+        function checkdate2(rdate){
+          var d = new Date();
+          var rd = new Date(rdate);
+
+
+          if(d.getFullYear() == rd.getFullYear() && d.getMonth()== rd.getMonth() && d.getDate() == rd.getDate())
+            return true;
+          else
+            return false;
+        }
+      tbody
+        - for(i=0;i<srent.length;i++)
+          tr(class=checkdate(srent[i].returndate)?'plusrow over':checkdate2(srent[i].returndate)?'plusrow today':'plusrow')
+            td.thing= srent[i].rentname
+            td.username= srent[i].uname
+            td.schoolId= srent[i].schoolId
+            td.department= srent[i].department
+            td.phone= srent[i].phone
+            td.etc= srent[i].etc
+            td.date1= srent[i].rentdate
+            td.date2= srent[i].returndate
+            td.com
+              button.btn.btn-success(onclick=`rentreturn(${srent[i].id}, ${srent[i].rid});`) 완료

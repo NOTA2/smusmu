@@ -3,7 +3,7 @@ block append scripts
 block append css
   link(rel="stylesheet" href="/css/asso/home.css")
 block append content
-  #article
+  .article
     - 
       if(!user.location) user.location = '정보가 없습니다.'
       if(!user.description) user.description = '정보가 없습니다.'

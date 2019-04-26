@@ -38,7 +38,9 @@ input {
   font-size: 3rem;
   color : #000;
 }
-
+.btn-secondary{
+  margin-bottom : 1%;
+}
 form{
   margin : 1% auto;
   padding: 0.5% 1%;
@@ -88,6 +90,13 @@ img.avatar {
   box-shadow: 1.2px 1.2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
   background:#fff;
+}
+
+.mailinfo ol{
+  font-size : 1.3rem;
+  text-align : left;
+  width: 70%;
+  margin:0 auto;
 }
 
 .mailinfo:after{
@@ -190,5 +199,8 @@ img.card-img-top{
       display: block;
   }
 
-
+  .mailinfo ol{
+    width: 100%;
+    font-size: 1rem;
+  }
 }

@@ -27,6 +27,8 @@ module.exports = function(){
   
   app.use(session({
     secret : '##@)^#*#^(#^#*^#^%$###@#@!@#$%rlaehdgusdmsanjsrkfmfgkfwnfdksmsshadlesdk)',
+    // cookie : {maxAge:1728000},
+    // rolling: true,
     resave : false,
     saveUninitialized : true,
     store : new MySQLSessionStore({

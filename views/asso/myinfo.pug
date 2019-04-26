@@ -5,7 +5,7 @@ block append scripts
 block append css
   link(rel="stylesheet" href="/css/asso/home.css")
 block append content
-  #article
+  .article
     h3 임원계정만 수정 가능 
     hr
     form#frm(name="frm" action='/asso/myinfo', method='post', enctype="multipart/form-data")
@@ -56,6 +56,8 @@ block append content
           - if(user.grade == '3')
             input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', disabled, name='logo')
             label.custom-file-label(for='inputGroupFile01') 불가능합니다.
+          - if(user.logo)
+            input(type="hidden", name="logopath", value=user.logo)
       p 로고는 1:1 혹은 1:2 사이즈로 여백없는 이미지로 올려주세요.
       .input-group.mb-3
         .input-group-prepend

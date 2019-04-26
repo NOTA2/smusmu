@@ -56,7 +56,7 @@ $(document).ready(function () {
     <option value="스포츠건강관리학과">스포츠건강관리학과</option>
     <option value="무용예술학과">무용예술학과</option>
     <option value="조형예술학과">조형예술학과</option>
-    <option value="	생활예술학과">생활예술학과</option>
+    <option value="생활예술학과">생활예술학과</option>
     <option value="음악학부">음악학부</option>
     `
     }
@@ -117,7 +117,7 @@ function collegeChange() {
         <option value="스포츠건강관리학과">스포츠건강관리학과</option>
         <option value="무용예술학과">무용예술학과</option>
         <option value="조형예술학과">조형예술학과</option>
-        <option value="	생활예술학과">생활예술학과</option>
+        <option value="생활예술학과">생활예술학과</option>
         <option value="음악학부">음악학부</option>
         `
     }

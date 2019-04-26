@@ -12,6 +12,10 @@
   min-height: 400px;
 }
 
+
+.ck-placeholder.ck-editor__editable.ck-editor__nested-editable{
+  min-height: 10px;
+}
 #condition {
   padding: 1rem 2rem;
   border: none;
