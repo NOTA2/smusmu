@@ -38,7 +38,7 @@ td.minus{
 }
 
 .thing{
-  width:20%;
+  width:18%;
 }
 
 .minus i{
@@ -90,7 +90,7 @@ td.minus{
 }
 
 .plusrow{
-	font-size : 0.8rem;
+	font-size : 100%;
 }
 
 @media screen and (max-width:768px){
