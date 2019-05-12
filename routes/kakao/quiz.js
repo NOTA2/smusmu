@@ -1,8 +1,8 @@
 var users = new Array();
 var count = 0;
-var route = require('express').Router();
+var router = require('express').Router();
 
-route.post('*', function (req, res) {
+router.post('*', function (req, res) {
 	var message = {
 		"version": "2.0",
 		"template": {
@@ -163,4 +163,4 @@ route.post('*', function (req, res) {
 })
 
 
-module.exports = route;
+module.exports = router;

@@ -1,0 +1,27 @@
+extends authLayout.pug
+block append scripts
+  script(type='text/javascript', src='/js/auth/find.js')
+block append css
+  link(rel='stylesheet', href='/css/auth/register.css')
+block content
+  - if(type=='id')
+    h1#mtitle 아이디 찾기
+    #agree
+      h3 아이디를 학교 메일로 발송했습니다. 학교 메일을 확인해 주세요.
+      a.btn.btn-primary.form-control(href="https://outlook.office.com/owa/?realm=sangmyung.kr&exsvurl=1&ll-cc=1042&modurl=0" target='_blank' role="button") Office 365로 이동
+  - else if(type=='pw')
+    h1#mtitle 비밀번호 찾기
+    #agree
+      h3 학교 메일로 안내 메일이 발송되었습니다. 학교 메일을 확인해 주세요.
+      a.btn.btn-primary.form-control(href="https://outlook.office.com/owa/?realm=sangmyung.kr&exsvurl=1&ll-cc=1042&modurl=0" target='_blank' role="button") Office 365로 이동
+  - else if(type=='change')
+    h1#mtitile 비밀번호가 변경되었습니다.
+    #agree
+      h3 변경된 비밀번호로 다시 로그인해 주세요!
+      a.btn.btn-primary(href="https://smusmu.co.kr/" role="button") 스뮤스뮤 로그인
+  - else
+    h1#mtitile 결과를 찾을수 없습니다.
+    #agree
+      h3 개인정보를 다시 확인한 후 입력해주세요.
+      a.btn.btn-primary(href="https://smusmu.co.kr/auth/find" role="button") 아이디/비밀번호 찾기
+

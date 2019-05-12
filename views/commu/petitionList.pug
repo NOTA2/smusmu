@@ -40,11 +40,11 @@
   - if(info.title != '답변 완료된 청원')
     .btn-group
       - if(mode=='latest')
-        a#option1.btn.btn-outline-dark.active(href="/commu/petition?mode=latest&page="+page) 최신순
-        a#option2.btn.btn-outline-dark(href="/commu/petition?mode=recom&page="+page) 추천순
+        a#option1.btn.btn-outline-dark.active(href="/commu/petition/list?mode=latest&page="+page) 최신순
+        a#option2.btn.btn-outline-dark(href="/commu/petition/list?mode=recom&page="+page) 추천순
       - else
-        a#option1.btn.btn-outline-dark(href="/commu/petition?mode=latest&page="+page) 최신순
-        a#option2.btn.btn-outline-dark.active(href="/commu/petition?mode=recom&page="+page) 추천순
+        a#option1.btn.btn-outline-dark(href="/commu/petition/list?mode=latest&page="+page) 최신순
+        a#option2.btn.btn-outline-dark.active(href="/commu/petition/list?mode=recom&page="+page) 추천순
 table.table.table-striped
   thead.thead-light
     tr

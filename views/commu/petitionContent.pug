@@ -34,7 +34,7 @@ block append content
         - if((topic.mode ==1 && user.college == '총학생회') || (topic.mode ==2 && user.college == '총학생회'))
           li
             span 소속
-            | #{topic.college}대학 #{topic.department}
+            | #{topic.college} #{topic.major}
           li 
             span 전화번호
             | #{topic.phone}
@@ -51,7 +51,7 @@ block append content
           | <br>추천
     - if(user.grade == 1)
       #answerbuttonarea
-        a.btn.btn-danger(href='/commu/petition/answerwrite?id='+topic.pid)
+        a.btn.btn-danger(href='/commu/petition/answer/write?id='+topic.pid)
           i.fas.fa-pen-alt
           - if(topic.answerId)
             | <br>답변 수정

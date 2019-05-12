@@ -1,9 +1,9 @@
 var defaultObj = require('../../config/defaultVariable');
-var route = require('express').Router();
+var router = require('express').Router();
 var cNoticeContents = require('../../crawling/crawling_Notice_Contents');
 var cNotice = require('../../crawling/crawling_Notice');
 
-route.post('', function (req, res) {
+router.post('', function (req, res) {
   var message = {
     "version": "2.0",
     "template": {
@@ -96,7 +96,7 @@ route.post('', function (req, res) {
     });
 });
 
-route.post('/result', (req, res) => {
+router.post('/result', (req, res) => {
   var message = {
     "version": "2.0",
     "template": {
@@ -158,4 +158,4 @@ route.post('/result', (req, res) => {
     });
 });
 
-module.exports = route;
+module.exports = router;

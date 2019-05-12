@@ -4,6 +4,17 @@
 //     $('#description').val(str);
 // })
 
+$('#frm').submit(function() {
+    var pass = true;
+
+    if(pass == false){
+        return false;
+    }
+    $("#spinner").show();
+
+    return true;
+});
+
 function update() {
     var name = $("#name").val();
 
@@ -18,11 +29,9 @@ function update() {
 
     if (!name) {
         alert('이름을 입력하세요');
-    } else if (!email) {
-        alert('개인 이메일을 입력하세요');
-    } else if (!emailRule.test(email)) {
-        alert('개인 이메일을 제대로 입력해주세요.')
-    } else if (assoemail.length>0 && !emailRule.test(assoemail)) {
+    } if(!assoemail){
+        alert('대표 이메일을 입력해주세요.')
+    }else if (assoemail.length>0 && !emailRule.test(assoemail)) {
         alert('대표 이메일을 제대로 입력해주세요.')
     } else {
         alert("정보를 수정하였습니다.");

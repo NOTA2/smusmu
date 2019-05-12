@@ -1,0 +1,51 @@
+extends authLayout.pug
+block append scripts
+  script(type='text/javascript', src='/js/auth/find.js')
+block append css
+  link(rel='stylesheet', href='/css/auth/register.css')
+block content
+  h1#mtitle 아이디 찾기
+  #agree
+    form#frmid(name="frmid" action='/auth/find/id', method='post')
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text 학번
+        input#schoolId1.form-control(type="number", value=schoolId, pattern="\d*", name="schoolId", placeholder="학번 (입력예. 201399392)", maxlength="9",autocomplete="off", onchange="schoolchange()")
+      .input-group.mb-3
+        .input-group-prepend
+          label.input-group-text(for="college") 단과 대학
+        select.custom-select#college(name="college" onchange="collegeChange();")
+          option(value="인문사회과학대학") 인문사회과학대학
+          option(value="사범대학") 사범대학
+          option(value="경영경제대학") 경영경제대학
+          option(value="융합공과대학") 융합공과대학
+          option(value="문화예술대학") 문화예술대학
+      .input-group.mb-3
+        .input-group-prepend
+          label.input-group-text(for="major") 소속 학과
+        select.custom-select#major(name="major")
+          option(value="역사콘텐츠학과") 역사콘텐츠학과
+          option(value="지적재산권학과") 지적재산권학과
+          option(value="문헌정보학과") 문헌정보학과
+          option(value="한일문화콘텐츠학과") 한일문화콘텐츠학과
+          option(value="공간환경학부") 공간환경학부
+          option(value="공공인재학부") 공공인재학부
+          option(value="가족복지학과") 가족복지학과
+          option(value="국가안보학과") 국가안보학과
+      p
+        input.btn.btn-success.form-control(type='button' value="아이디 찾기" onclick='findid()')
+    hr
+    h1#mtitle 비밀번호 찾기
+    form#frmpw(name="frmpw" action='/auth/find/pw', method='post')
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text 아이디
+        input#username.form-control(type='text', name="username", placeholder="아이디", maxlength="20", aria-describedby="basic-addon1",autocomplete="off", onchange="idchange()")
+      .input-group.mb-3
+        .input-group-prepend
+          span.input-group-text 학번
+        input#schoolId2.form-control(type="number", value=schoolId, pattern="\d*", name="schoolId", placeholder="학번 (입력예. 201399392)", maxlength="9",autocomplete="off", onchange="schoolchange()")
+
+      p
+        input.btn.btn-success.form-control(type='button' value="비밀번호 찾기" onclick='findpw()')
+

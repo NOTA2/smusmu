@@ -8,7 +8,7 @@ block append content
       if(!user.location) user.location = '정보가 없습니다.'
       if(!user.description) user.description = '정보가 없습니다.'
       if(!user.assoemail) user.assoemail = '정보가 없습니다.'
-    h1 #{college}학생회 [#{user.name}] 관리자 페이지
+    h1 #{college}학생회 [#{user.assoname}] 관리자 페이지
     .info
       h2 로고
         hr
@@ -31,4 +31,4 @@ block append content
         h3 대표 이메일
           h5 #{user.assoemail}
         h3 대표 번호
-          h5 #{user.phone}
+          h5 #{user.assophone}

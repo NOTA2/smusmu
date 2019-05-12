@@ -30,7 +30,7 @@ block append content
   hr.line
   #answerarea
     h2 답변하기
-    form#frm(name="frm" action='/commu/petition/answer', method='post')
+    form#frm(name="frm" action='/commu/petition/answer/write', method='post')
       - if(answer)
         textarea#editor1(name='content', rows='5') !{answer.content}
       - else

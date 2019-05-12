@@ -1,8 +1,8 @@
 var defaultObj = require('../../config/defaultVariable');
-var route = require('express').Router();
+var router = require('express').Router();
 const conn = require('../../config/db')();
 
-route.post('', function (req, res) {
+router.post('', function (req, res) {
   var d = new Date();
   var date = d.toFormat("YYYY-MM-DD");
   var message = {
@@ -54,4 +54,4 @@ route.post('', function (req, res) {
 
 });
 
-module.exports = route;
+module.exports = router;

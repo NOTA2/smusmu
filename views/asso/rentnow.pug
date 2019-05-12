@@ -41,7 +41,7 @@ block append content
               th(scope="col").thing 물품
               th(scope="col").username 이름
               th(scope="col").schoolId 학번
-              th(scope="col").department 학과
+              th(scope="col").major 학과
               th(scope="col").phone 전화번호
               th(scope="col").etc 비고
           tbody
@@ -57,8 +57,8 @@ block append content
                 input#username.form-control(type="text" name="username" autocomplete="off" maxlength="20")
               td.schoolId
                 input#schoolId.form-control(type="number" name="schoolId" autocomplete="off" )
-              td.department
-                input#department.form-control(type="text" name="department" autocomplete="off")
+              td.major
+                input#major.form-control(type="text" name="major" autocomplete="off")
               td.phone
                 input#phone.form-control(type="text", name="phone" autocomplete="off")
               td.etc
@@ -75,7 +75,7 @@ block append content
           th(scope="col").thingr 물 품
           th(scope="col").username 이 름
           th(scope="col").schoolId 학 번
-          th(scope="col").department 학  과
+          th(scope="col").major 학  과
           th(scope="col").phone 전화번호
           th(scope="col").etc 비고
           th(scope="col").date1 대여시간
@@ -107,7 +107,7 @@ block append content
             td.thing= srent[i].rentname
             td.username= srent[i].uname
             td.schoolId= srent[i].schoolId
-            td.department= srent[i].department
+            td.major= srent[i].major
             td.phone= srent[i].phone
             td.etc= srent[i].etc
             td.date1= srent[i].rentdate

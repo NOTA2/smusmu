@@ -1,8 +1,8 @@
 var conn = require('../../config/db')();
 var defaultObj = require('../../config/defaultVariable');
-var route = require('express').Router();
+var router = require('express').Router();
 
-route.post('', function (req, res) {
+router.post('', function (req, res) {
   var content = req.body.action.detailParams;
 
   var message = {
@@ -52,7 +52,7 @@ route.post('', function (req, res) {
   }
 });
 
-module.exports = route;
+module.exports = router;
 
 function getmessage(rows) {
   var calresultstr = '';

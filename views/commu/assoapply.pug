@@ -1,0 +1,47 @@
+extends commuLayout.pug
+block append scripts
+  script(type='text/javascript').
+    var asso = '!{JSON.stringify(asso)}';
+    asso = JSON.parse(asso)
+    var asso2 = new Object();
+    for(var i=0;i<asso.length;i++)
+      asso2[asso[i].college] = [asso[i].assoname, asso[i].aid];
+
+  script(type='text/javascript', src='/js/commu/assoapply.js')
+block append css
+  link(rel="stylesheet" href="/css/commu/myinfo.css")
+block append content
+  #article
+    h2 학생회 부원계정 신청 
+    hr
+    - if(user.assoId != null && user.grade != null)
+      h3 이미 학생회 부원 소속입니다.
+      form#frm(name="frm" action='/commu/home/assoapply/del' , method='post')
+        input(type='hidden', name="uid", value=user.id)
+        p
+          input.btn.btn-danger.form-control(type='button' value="탈퇴하기" onclick='del()')
+
+    - else if(user.assoId != null)
+      h3 학생회 부원 소속신청을 하였습니다. 학생회 담당자에게 문의해주세요
+      form#frm(name="frm" action='/commu/home/assoapply/del', method='post')
+        input(type='hidden', name="uid", value=user.id)
+        p
+          input.btn.btn-danger.form-control(type='button' value="철회하기" onclick='del()')
+
+    - else
+      form#frm(name="frm" action='/commu/home/assoapply', method='post')
+        #selectcollege.input-group.mb-3
+          .input-group-prepend
+            label.input-group-text(for='college') 학생회 소속
+          select#college.custom-select(name='college' onchange="gradeCollege();")
+            option(value="none" selected="selected") 선택하세요.
+            - for(var i=0;i<asso.length;i++)
+              option(value=asso[i].college)= asso[i].college
+        #selectasso.input-group.mb-3
+          .input-group-prepend
+            span.input-group-text 학생회 이름
+          input#name.form-control(type='text', placeholder='학생회 이름', autocomplete='off', disabled)
+        input#assoId(type='hidden', name='assoId')
+        input(type='hidden', name="uid", value=user.id)
+        p
+          input.btn.btn-success.form-control(type='button' value="신청하기" onclick='apply()')

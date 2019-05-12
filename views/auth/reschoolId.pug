@@ -5,8 +5,6 @@ block append css
   link(rel='stylesheet', href='/css/auth/register.css')
 block content
   h1#mtitle 학번수정
-    - if(fail != undefined)
-      .alert.alert-danger(role='alert') 아이디 또는 비밀번호를 다시 확인해주세요.
   #agree
     form#frm(name="frm" action='/auth/register/commu/reschoolId', method='post')
       .input-group.mb-3

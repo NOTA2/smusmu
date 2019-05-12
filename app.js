@@ -32,15 +32,14 @@ app.use('/kakao/festival', festivalKakaoRouter);
 
 
 var index = require('./routes/index');
-var auth = require('./routes/auth')(passport);
-var commu = require('./routes/commu');
-var asso = require('./routes/asso');
+var auth = require('./routes/auth/auth_index')(passport);
+var commu = require('./routes/commu/commu_index');
+var asso = require('./routes/asso/asso_index');
 
 app.use('/', index);
 app.use('/auth', auth);
 app.use('/commu', commu);
-app.use('/asso', asso);
-
+app.use('/asso', asso); 
 
 app.use(function(req, res, next) {
   res.status(404).render('404');

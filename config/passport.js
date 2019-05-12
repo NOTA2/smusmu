@@ -59,7 +59,12 @@ module.exports = function (app) {
 
   passport.deserializeUser((username, done) => {
     console.log('deserializeUser');
-    var sql = 'SELECT * fROM users WHERE username=?'
+    var sql = `SELECT users.id as id, username, kakaoId, token, email, major.college, major.major, schoolId, name, nickname,
+    assoname, phone, grade, assoId, asso.college as assocollege, location, logo, description, assoemail, assophone
+    fROM users
+    LEFT JOIN asso ON users.assoId=asso.id
+    LEFT JOIN major ON users.majorId=major.id
+    WHERE username=?`
 
     conn.query(sql, [username], (err, results) => {
       if (err) {
@@ -68,13 +73,13 @@ module.exports = function (app) {
       } else {
         if (results.length > 0) {
           var user = results[0];
-          delete user.password;
-          delete user.salt;
           return done(null, user)
         } else {
           sql = `
-          SELECT assoUser.id as id, username, token,email,grade,assoId,college,name,location,logo,description,phone,assoemail
-          from assoUser LEFT OUTER JOIN asso ON assoUser.assoId=asso.id WHERE username=?`
+          SELECT assoUser.id as id, username, token,grade,assoId,college,assoname,location,logo,description,assophone,assoemail
+          from assoUser 
+          LEFT JOIN asso ON assoUser.assoId=asso.id 
+          WHERE username=?`
 
           conn.query(sql, [username], (err, results) => {
             if (err) {

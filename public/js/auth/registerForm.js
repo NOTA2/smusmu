@@ -17,13 +17,23 @@ function nickchange() {
 }
 
 
+$('#frm').submit(function() {
+    var pass = true;
+
+    if(pass == false){
+        return false;
+    }
+    $("#spinner").show();
+
+    return true;
+});
 
 function collegeChange() {
     var selectBox = document.getElementById("college");
-    var department = document.getElementById("department");
+    var major = document.getElementById("major");
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-    if (selectedValue == '인문사회과학') {
-        department.innerHTML = `
+    if (selectedValue == '인문사회과학대학') {
+        major.innerHTML = `
         <option value="역사콘텐츠학과">역사콘텐츠학과</option>
         <option value="지적재산권학과">지적재산권학과</option>
         <option value="문헌정보학과">문헌정보학과</option>
@@ -33,8 +43,8 @@ function collegeChange() {
         <option value="가족복지학과">가족복지학과</option>
         <option value="국가안보학과">국가안보학과</option>
         `
-    } else if (selectedValue == '사범') {
-        department.innerHTML = `
+    } else if (selectedValue == '사범대학') {
+        major.innerHTML = `
         <option value="국어교육과">국어교육과</option>
         <option value="영어교육과">영어교육과</option>
         <option value="교육학과">교육학과</option>
@@ -42,15 +52,15 @@ function collegeChange() {
         <option value="불어교육과">불어교육과</option>
         <option value="	일어교육과">일어교육과</option>
         `
-    } else if (selectedValue == '경영경제') {
-        department.innerHTML = `
+    } else if (selectedValue == '경영경제대학') {
+        major.innerHTML = `
         <option value="경제금융학부">경제금융학부</option>
         <option value="경영학부">경영학부</option>
         <option value="글로벌경영학과">글로벌경영학과</option>
         <option value="융합경영학과">융합경영학과</option>
         `
-    } else if (selectedValue == '융합공과') {
-        department.innerHTML = `
+    } else if (selectedValue == '융합공과대학') {
+        major.innerHTML = `
         <option value="휴먼지능정보공학과">휴먼지능정보공학과</option>
         <option value="전기공학과">전기공학과</option>
         <option value="융합전자공학과">융합전자공학과</option>
@@ -63,8 +73,8 @@ function collegeChange() {
         <option value="화학과">화학과</option>
         <option value="소비자주거학과">소비자주거학과</option>
         `
-    } else if (selectedValue == '문화예술') {
-        department.innerHTML = `
+    } else if (selectedValue == '문화예술대학') {
+        major.innerHTML = `
         <option value="식품영양학과">식품영양학과</option>
         <option value="의류학과">의류학과</option>
         <option value="스포츠건강관리학과">스포츠건강관리학과</option>
@@ -138,7 +148,6 @@ function register() {
         alert('닉네임 중복체크를 해주세요');
         return false;
     } else {
-        alert("회원가입을 축하합니다. 학교메일을 통해서 인증받으세요.");
         $("#frm").submit();
     }
 }

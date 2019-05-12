@@ -1,8 +1,8 @@
 const defaultObj = require('../../config/defaultVariable');
-const route = require('express').Router();
+const router = require('express').Router();
 const conn = require('../../config/db')();
 
-route.post('', function (req, res) {
+router.post('', function (req, res) {
 
   console.log(req.body.action.detailParams.smyouth);
 
@@ -26,4 +26,4 @@ route.post('', function (req, res) {
   return res.json(message);
 });
 
-module.exports = route;
+module.exports = router;

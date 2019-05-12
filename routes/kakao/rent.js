@@ -1,8 +1,8 @@
 const conn = require('../../config/db')();
-const route = require('express').Router();
+const router = require('express').Router();
 const defaultObj = require('../../config/defaultVariable');
 
-route.post('/', (req, res) => {
+router.post('/', (req, res) => {
   var kakaoId = req.body.userRequest.user.id;
   var message = {
     "version": "2.0",
@@ -16,9 +16,9 @@ route.post('/', (req, res) => {
     }
   };
 
-  var sql = `SELECT users.name, asso.college, asso.id as assoid, asso.name as assoname, asso.location, asso.logo, asso.description, asso.phone as assophone
+  var sql = `SELECT users.name, asso.college, asso.id as assoId, assoname, asso.location, asso.logo, asso.description, assophone
               FROM asso
-              LEFT JOIN users ON asso.college = users.college
+              LEFT JOIN users ON asso.college = (select college from major where id=users.majorId)
               WHERE users.kakaoId=? OR asso.college='총학생회'
               ORDER BY users.name DESC`;
 
@@ -36,13 +36,8 @@ route.post('/', (req, res) => {
       };
 
       rows.forEach(el => {
-        var college = el.college + '대학'
-        var title = `${el.assoname} (${el.college}대학)`
-
-        if (el.college == '총학생회') {
-          college = el.college
-          title = `${el.assoname} (${el.college})`
-        }
+        var college = el.college
+        var title = `${el.assoname} (${el.college})`
 
         message.template.outputs[0].carousel.items.push({
           "title": title,
@@ -58,7 +53,7 @@ route.post('/', (req, res) => {
               "action": "block",
               "messageText": `${college} 대여 물품 확인`,
               "extra": {
-                "id": el.assoid
+                "id": el.assoId
               },
               "blockId": "5cc6fb6c384c5508fceee675"
             },
@@ -67,7 +62,7 @@ route.post('/', (req, res) => {
               "action": "block",
               "messageText": `${college} 대여 현황`,
               "extra": {
-                "id": el.assoid
+                "id": el.assoId
               },
               "blockId": "5cc6fb73384c5508fceee677"
             }
@@ -88,7 +83,7 @@ route.post('/', (req, res) => {
   })
 })
 
-route.post('/thing', (req, res) => {
+router.post('/thing', (req, res) => {
 
   var message = {
     "version": "2.0",
@@ -108,7 +103,7 @@ route.post('/thing', (req, res) => {
   };
   var assoId = req.body.action.clientExtra.id;
   
-  var sql = `SELECT rent.name, rent.day, rent.allcount, rent.nowcount, asso.name as assoname, asso.college, asso.location
+  var sql = `SELECT rent.name, rent.day, rent.allcount, rent.nowcount, assoname as assoname, asso.college, asso.location
   FROM rent, asso 
   WHERE rent.assoId = asso.id AND rent.assoId = ?`;
 
@@ -119,10 +114,8 @@ route.post('/thing', (req, res) => {
 
     if (rows.length > 0) {
 
-      var str = `${rows[0].assoname} (${rows[0].college}대학)`;
+      var str = `${rows[0].assoname} (${rows[0].college})`;
 
-      if (rows[0].college == '총학생회') 
-        str = `${rows[0].assoname} (${rows[0].college})`
 
       str += `은 ${rows[0].location}에 있어요!\n\n`;
 
@@ -134,14 +127,14 @@ route.post('/thing', (req, res) => {
 
       return res.json(message);
     } else {
-      message.template.outputs[0].simpleText = `${rows[0].assoname} (${rows[0].college}대학)은 대여물품 서비스를 제공하지 않아요 😔`;
+      message.template.outputs[0].simpleText = `${rows[0].assoname} (${rows[0].college})은 대여물품 서비스를 제공하지 않아요 😔`;
       return res.json(message);
     }
   })
 })
 
 
-route.post('/now', (req, res) => {
+router.post('/now', (req, res) => {
 
   var message = {
     "version": "2.0",
@@ -161,7 +154,7 @@ route.post('/now', (req, res) => {
   };
   var assoId = req.body.action.clientExtra.id;
   
-  var sql = `SELECT rent.name, rent.day, rent.allcount, rent.nowcount, asso.name as assoname, asso.college, asso.location
+  var sql = `SELECT rent.name, rent.day, rent.allcount, rent.nowcount, assoname as assoname, asso.college, asso.location
   FROM rent, asso 
   WHERE rent.assoId = asso.id AND rent.assoId = ?`;
 
@@ -172,10 +165,7 @@ route.post('/now', (req, res) => {
 
     if (rows.length > 0) {
 
-      var str = `${rows[0].assoname} (${rows[0].college}대학)`;
-
-      if (rows[0].college == '총학생회') 
-        str = `${rows[0].assoname} (${rows[0].college})`
+      var str = `${rows[0].assoname} (${rows[0].college})`;
 
       str += `은 ${rows[0].location}에 있어요!\n\n`;
       rows.forEach(el => {
@@ -186,11 +176,11 @@ route.post('/now', (req, res) => {
 
       return res.json(message);
     } else {
-      message.template.outputs[0].simpleText = `${rows[0].assoname} (${rows[0].college}대학)은 대여물품 서비스를 제공하지 않아요 😔`;
+      message.template.outputs[0].simpleText = `${rows[0].assoname} (${rows[0].college})은 대여물품 서비스를 제공하지 않아요 😔`;
       return res.json(message);
     }
   })
 })
 
 
-module.exports = route;
+module.exports = router;

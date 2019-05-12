@@ -1,10 +1,10 @@
 const conn = require('../../config/db')();
 const dow = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
 const defaultObj = require('../../config/defaultVariable');
-const route = require('express').Router();
+const router = require('express').Router();
 
 //오늘의 학식메뉴
-route.post('/', (req, res) => {
+router.post('/', (req, res) => {
 
   var content = req.body.action.detailParams;
   var d = new Date();
@@ -64,7 +64,7 @@ route.post('/', (req, res) => {
 })
 
 //특정 날의
-route.post('/day', (req, res) => {
+router.post('/day', (req, res) => {
 
   var content = req.body.action.detailParams;
 
@@ -125,7 +125,7 @@ route.post('/day', (req, res) => {
 })
 
 //이번주 학식 메뉴
-route.post('/week', (req, res) => {
+router.post('/week', (req, res) => {
 
   var content = req.body.action.detailParams;
   var location = content.eat_place.value;
@@ -205,4 +205,4 @@ route.post('/week', (req, res) => {
 
 
 
-module.exports = route;
+module.exports = router;

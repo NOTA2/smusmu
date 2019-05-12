@@ -2,9 +2,9 @@ var conn = require('../../config/db')();
 
 
 var defaultObj = require('../../config/defaultVariable');
-var route = require('express').Router();
+var router = require('express').Router();
 
-route.post('/', (req, res) => {
+router.post('/', (req, res) => {
   var message = {
     "version": "2.0",
     "template": {
@@ -121,4 +121,4 @@ route.post('/', (req, res) => {
 });
 
 
-module.exports = route;
+module.exports = router;

@@ -10,32 +10,26 @@ block append content
       thead.thead-light
         tr
           th(scope="col").username 아이디
-          th(scope="col").email 메일
-          th(scope="col").grade 등급
+          th(scope="col").name 이름
+          th(scope="col").major 학과
           th(scope="col").pass 허가
-          th(scope="col").del 삭제
+          th(scope="col").del 탈퇴
       tbody
         - for(i=0;i<assouser.length;i++)
           tr.plusrow
             td.username= assouser[i].username
-            td.email= assouser[i].email
-            td.grade
-              - if(assouser[i].grade == 1 || assouser[i].grade == 2)
-                | 임원 계정
-              - else if(assouser[i].grade == 3)
-                | 부원 계정
+            td.name= assouser[i].name
+            td.major= assouser[i].major
             td.pass
-              - if(assouser[i].token == 'true')
+              - if(assouser[i].grade)
                 | 허가 완료
               - else if(user.grade ==1 || user.grade == 2)
                 button.btn.btn-success(onclick=`pass(${assouser[i].id});`) 허가
               - else
                 | 권한없음
             td.del
-              - if(assouser[i].token == 'true')
-                | 삭제 불가
-              - else if(user.grade ==1 || user.grade == 2)
-                button.btn.btn-danger(onclick=`del(${assouser[i].id});`) 삭제
+              - if(user.grade ==1 || user.grade == 2)
+                button.btn.btn-danger(onclick=`del(${assouser[i].id});`) 탈퇴
               - else
                 | 권한없음
 

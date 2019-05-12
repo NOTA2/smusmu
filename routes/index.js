@@ -1,7 +1,7 @@
 // var conn = require('../config/db')();
-var route = require('express').Router();
+var router = require('express').Router();
 
-route.get('/', (req, res) => {
+router.get('/', (req, res) => {
     if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
         if(req.user.kakaoId)    //일반 학생 계정일 경우
             res.redirect('/commu')
@@ -12,8 +12,8 @@ route.get('/', (req, res) => {
     }
 });
 
-route.get('/ping', (req, res) => {
+router.get('/ping', (req, res) => {
     res.send('s');
 });
 
-module.exports = route;
+module.exports = router;

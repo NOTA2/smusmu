@@ -8,18 +8,22 @@ block append content
   .article
     h3 임원계정만 수정 가능 
     hr
-    form#frm(name="frm" action='/asso/myinfo', method='post', enctype="multipart/form-data")
+    form#frm(name="frm" action='/asso/home/myinfo', method='post', enctype="multipart/form-data")
+      //- .input-group.mb-3
+      //-   .input-group-prepend
+      //-     span.input-group-text 아이디
+      //-   input#username.form-control(name="username" value=user.username, disabled, aria-describedby="basic-addon1",autocomplete="off")
+      //- .input-group.mb-3
+      //-   .input-group-prepend
+      //-     span.input-group-text 직위
+      //-   -
+      //-     if(user.grade == '1' || user.grade == '2') grade='임원';
+      //-     else grade = '부원'
+      //-   input#grade.form-control(type='text', value=grade,disabled, autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 아이디
-        input#username.form-control(name="username" value=user.username, disabled, aria-describedby="basic-addon1",autocomplete="off")
-      .input-group.mb-3
-        .input-group-prepend
-          span.input-group-text 직위
-        -
-          if(user.grade == '1' || user.grade == '2') grade='임원';
-          else grade = '부원'
-        input#grade.form-control(type='text', value=grade,disabled, autocomplete="off")
+        input#username.form-control(name="username" value=user.username, disabled, aria-describedby="basic-addon1",autocomplete="off" )
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text(for="college") 소속 대학
@@ -29,9 +33,9 @@ block append content
           span.input-group-text(style="color:red;") *
           span.input-group-text 이름
         - if(user.grade == '1' || user.grade == '2')
-          input#name.form-control(type='text', name="name",value=user.name, autocomplete="off")
+          input#name.form-control(type='text', name="assoname",value=user.assoname, autocomplete="off")
         - if(user.grade == '3')
-          input#name.form-control(type='text', value=user.name, disabled, autocomplete="off")
+          input#name.form-control(type='text', value=user.assoname, disabled, autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 위치
@@ -61,11 +65,6 @@ block append content
       p 로고는 1:1 혹은 1:2 사이즈로 여백없는 이미지로 올려주세요.
       .input-group.mb-3
         .input-group-prepend
-          span.input-group-text(style="color:red;") *
-          span.input-group-text 개인메일
-        input#email.form-control(type="email", name="email", value=user.email, autocomplete="off")
-      .input-group.mb-3
-        .input-group-prepend
           span.input-group-text 대표메일
         - if(user.grade == '1' || user.grade == '2')
           input#assoemail.form-control(type="email", name="assoemail", value=user.assoemail,placeholder="연락받을 대표 메일", autocomplete="off")
@@ -75,12 +74,13 @@ block append content
         .input-group-prepend
           span.input-group-text 학생회 대표번호
         - if(user.grade == '1' || user.grade == '2')
-          input.form-control(type='tel', name="phone1", value=user.phone[0], autocomplete="off",  maxlength="3")
-          input.form-control(type='tel', name="phone2", value=user.phone[1], autocomplete="off", maxlength="4")
-          input.form-control(type='tel', name="phone3", value=user.phone[2], autocomplete="off", maxlength="4")
+          input.form-control(type='tel', name="phone1", value=user.assophone[0], autocomplete="off",  maxlength="3")
+          input.form-control(type='tel', name="phone2", value=user.assophone[1], autocomplete="off", maxlength="4")
+          input.form-control(type='tel', name="phone3", value=user.assophone[2], autocomplete="off", maxlength="4")
         - if(user.grade == '3')
-          input.form-control(type='tel', name="phone1", value=user.phone[0], autocomplete="off",  maxlength="3", disabled)
-          input.form-control(type='tel', name="phone2", value=user.phone[1], autocomplete="off", maxlength="4", disabled)
-          input.form-control(type='tel', name="phone3", value=user.phone[2], autocomplete="off", maxlength="4", disabled)
-      p
-        input.btn.btn-success.form-control(type='button' value="수정하기" onclick='update()')
+          input.form-control(type='tel', name="phone1", value=user.assophone[0], autocomplete="off",  maxlength="3", disabled)
+          input.form-control(type='tel', name="phone2", value=user.assophone[1], autocomplete="off", maxlength="4", disabled)
+          input.form-control(type='tel', name="phone3", value=user.assophone[2], autocomplete="off", maxlength="4", disabled)
+      - if(user.grade == '1' || user.grade == '2')
+        p
+          input.btn.btn-success.form-control(type='button' value="수정하기" onclick='update()')

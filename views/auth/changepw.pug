@@ -1,0 +1,31 @@
+extends authLayout.pug
+block append scripts
+  script(type='text/javascript', src='/js/auth/changepw.js')
+block append css
+  link(rel='stylesheet', href='/css/auth/register.css')
+block content
+  h1#mtitle 비밀번호 변경
+  - if(state == true)
+    #agree
+      form#frm(name="frm" action='/auth/find/changepw', method='post')
+        .input-group.mb-3
+          .input-group-prepend
+            span.input-group-text(style="color:red;") *
+            span.input-group-text 비밀번호
+          input#password.form-control(type='password', name="password", placeholder="비밀번호",maxlength="20", style="color:black; font-family: 'Malgun Gothic';"  onchange="passwordE();")
+        .input-group.mb-3
+          .input-group-prepend
+            span.input-group-text 비밀번호 확인
+          input#passwordCheck.form-control(type='password', name="passwordCheck", placeholder="비밀번호 확인",maxlength="20" onchange="passwordE();", style="font-family: 'Malgun Gothic'")
+        p 영문,숫자,특수문자 혼합하여 8~20자리 이내
+        p#passcheck
+        p
+          input(type='hidden', name="username", value=username)
+        p
+          input(type='hidden', name="token", value=token)
+        p
+          input.btn.btn-success.form-control(type='button' value="비밀번호 변경" onclick='changepassword()')
+  - else
+    #agree
+      h3 값이 올바르지 않습니다. 메일을 통해 들어와주세요.
+

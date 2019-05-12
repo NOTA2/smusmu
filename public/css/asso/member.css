@@ -1,7 +1,7 @@
 tbody{
   transition : all 1s;
 }
-th{
+th, td{
   text-align: center;
 }
 
@@ -62,6 +62,6 @@ td{
 	Label the data
 	*/
 	td:nth-of-type(1):before { content: "아이디"; }
-	td:nth-of-type(2):before { content: "메일"; }
-	td:nth-of-type(3):before { content: "등급"; }
+	td:nth-of-type(2):before { content: "이름"; }
+	td:nth-of-type(3):before { content: "학과"; }
 }

@@ -6,7 +6,16 @@ $(function () {
     itemid = parseInt($(el).val()) +1;
   })
 });
+$('#frm').submit(function() {
+  var pass = true;
 
+  if(pass == false){
+      return false;
+  }
+  $("#spinner").show();
+
+  return true;
+});
 function formplus() {
   var str = `
   <tr class="plusrow">

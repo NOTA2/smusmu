@@ -24,7 +24,7 @@ function like(pid, uid, tid, targetType, self) {
       c = confirm("게시글을 추천 하시겠습니까?");
 
     if (c) {
-      fetch("/commu/like", {
+      fetch("/commu/board/like", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -70,7 +70,7 @@ function deletetopic(pid) {
 
         if (data.status) {
           alert("게시글을 삭제 하였습니다.");
-          window.location.replace("/commu/petition");
+          window.location.replace("/commu/petition/list");
         }
       })
     }, function (e) {
@@ -109,7 +109,7 @@ function recomment(self, pid, uid, ruid, rcid) {
     var str = `
     <div id="subcomment" class="Reply_area_write">
   <div class="Reply_area_write_pg">
-    <form id="frm" name="body" action="/commu/comment" method="post">
+    <form id="frm" name="body" action="/commu/board/comment" method="post">
     <input type="hidden" name="pid" value="${pid}" />
     <input type="hidden" name="uid" value="${uid}" />
     <input type="hidden" name="ruid" value="${ruid}" />

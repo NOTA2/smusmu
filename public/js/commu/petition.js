@@ -65,7 +65,7 @@ function answerok(pid) {
   var c = confirm("답변 완료 게시판으로 옮기시겠습니까?");
 
   if (c) {
-    fetch("/commu/petition/answerok", {
+    fetch("/commu/petition/answer/ok", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -100,7 +100,7 @@ function deletetopic(pid) {
 
         if (data.status) {
           alert("게시글을 삭제 하였습니다.");
-          window.location.replace("/commu/petition");
+          window.location.replace("/commu/petition/list");
         }
       })
     }, function (e) {

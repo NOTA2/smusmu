@@ -35,7 +35,7 @@ block content
         .input-group-prepend
           span.input-group-text(style="color:red;") *
           span.input-group-text 비밀번호
-        input#password.form-control(type='password', name="password", placeholder="비밀번호",maxlength="20", style="color:black; font-family: 'Malgun Gothic';")
+        input#password.form-control(type='password', name="password", placeholder="비밀번호",maxlength="20", style="color:black; font-family: 'Malgun Gothic';"  onchange="passwordE();")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 비밀번호 확인
@@ -60,16 +60,16 @@ block content
           span.input-group-text(style="color:red;") *
           label.input-group-text(for="college") 단과 대학
         select.custom-select#college(name="college" onchange="collegeChange();")
-          option(value="인문사회과학") 인문사회과학대학
-          option(value="사범") 사범대학
-          option(value="경영경제") 경영경제대학
-          option(value="융합공과") 융합공과대학
-          option(value="문화예술") 문화예술대학
+          option(value="인문사회과학대학") 인문사회과학대학
+          option(value="사범대학") 사범대학
+          option(value="경영경제대학") 경영경제대학
+          option(value="융합공과대학") 융합공과대학
+          option(value="문화예술대학") 문화예술대학
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text(style="color:red;") *
-          label.input-group-text(for="department") 소속 학과
-        select.custom-select#department(name="department")
+          label.input-group-text(for="major") 소속 학과
+        select.custom-select#major(name="major")
           option(value="역사콘텐츠학과") 역사콘텐츠학과
           option(value="지적재산권학과") 지적재산권학과
           option(value="문헌정보학과") 문헌정보학과

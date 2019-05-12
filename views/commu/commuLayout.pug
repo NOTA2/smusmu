@@ -31,6 +31,9 @@ html(lang='ko')
       link(rel='stylesheet', href='/css/base.css')
       link(rel='stylesheet', href='/css/commu/commumain.css')
   body
+    #spinner(style='display: none;')
+      .spinner-border(role='status' )
+        span.sr-only Loading...
     .wrapper
       nav#sidebar(data-position="fixed")
         #dismiss
@@ -41,28 +44,49 @@ html(lang='ko')
             h3 스뮤스뮤<br>커뮤니티
         ul.list-unstyled.components
           - 
+            var grade = '임원', college=user.college;
+            if(user.grade==3) grade = '부원'
+            if(user.college == '총학생회')
+              college = '총'
+            else
+              college = user.college
             var nickname;
             if(user.nickname) nickname = user.nickname;
-            else nickname=user.name;
+            else nickname=user.assoname;
           p #{nickname}님 반갑스뮤!
-          - if(user.grade == '1')
-            p 
-              strong [관리자 계정]
+            - if(user.grade)
+              | <br>[#{college} 학생회 
+              - if(user.grade!=1)
+                <br>
+              - if(user.grade==3)
+                i.fas.fa-chess-pawn
+              - else
+                i.fas.fa-chess-queen
+              |  #{grade}계정]
           li
             a.dropdown-toggle(href='#homeSubmenu', data-toggle='collapse', aria-expanded='false')
               i.fas.fa-home
               |  홈
             ul#homeSubmenu.collapse.list-unstyled
-              - if(user.grade)
+              - if(user.grade == '1' || user.grade == '2')
                 li
-                  a(href='/asso/myinfo') 
+                  a(href='/asso/home/myinfo') 
                     i.fas.fa-user
-                    |  내정보
+                    |  학생회 정보
               - if(user.kakaoId)
                 li
-                  a(href='/commu/myinfo')
+                  a(href='/commu/home/myinfo')
                     i.fas.fa-user
                     |  내정보
+              li
+                a(href='/auth/password')
+                  i.fas.fa-key
+                  |  비밀번호 변경
+              - if(user.kakaoId)
+                li
+                  a(href='/commu/home/assoapply')
+                    i.fas.fa-chess-pawn
+                    |  학생회 부원계정 신청
               li
                 a(href='/auth/logout')
                   i.fas.fa-sign-out-alt
@@ -73,22 +97,43 @@ html(lang='ko')
                 i.fas.fa-briefcase
                 |   관리자 페이지
           li
-            a(href='/commu/board?board=free') 
+            a(href='/commu/board/list?board=free') 
               i.fas.fa-mask
               |  익명 자유게시판
           li
-            a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false')
+            a.dropdown-toggle(href='#petitionSubmenu', data-toggle='collapse', aria-expanded='false')
               i.fas.fa-vote-yea
               |  학생 청원 제도
-            ul#pageSubmenu.collapse.list-unstyled
+            ul#petitionSubmenu.collapse.list-unstyled
               li
-                a(href='/commu/petition')
+                a(href='/commu/petition/list')
                   i.fas.fa-question-circle
                   |  진행중인 청원
               li
-                a(href='/commu/petitionanswer')
+                a(href='/commu/petition/answer/list')
                   i.fas.fa-check-circle
                   |  답변 완료된 청원
+          li
+            a.dropdown-toggle(href='#festivalSubmenu', data-toggle='collapse', aria-expanded='false')
+              i.fas.fa-qrcode
+              |  록록록
+            ul#festivalSubmenu.collapse.list-unstyled
+              li
+                a(href='/commu/festival/description')
+                  i.fas.fa-exclamation-circle
+                  |  록록록 설명
+              li
+                a(href='/commu/festival/myinfo')
+                  i.fas.fa-running
+                  |  록록록 내 정보
+              li
+                a(href='/commu/festival/now')
+                  i.fas.fa-medal
+                  |  록록록 현황
+              li
+                a(href='/commu/festival/today')
+                  i.far.fa-calendar-check
+                  |  오늘의 행사 확인
         ul.list-unstyled.CTAs
           //- li
           //-   a.download(href='https://bootstrapious.com/tutorial/files/sidebar.zip') Download source
@@ -114,12 +159,12 @@ html(lang='ko')
                       - var href=item.href, title=item.title
                         li.nav-item 
                             a.btn.nav-link(href=href)= title
-                - if(user.grade)
+                - if(user.grade == '1' || user.grade=='2')
                   li.nav-item
-                    a.btn.nav-link(href='/asso/myinfo') 내정보
+                    a.btn.nav-link(href='/asso/home/myinfo') 학생회 정보
                 - if(user.kakaoId)
                   li.nav-item
-                    a.btn.nav-link(href='/commu/myinfo') 내정보
+                    a.btn.nav-link(href='/commu/home/myinfo') 내정보
                 li.nav-item
                   a.btn.nav-link(href='/auth/logout') 로그아웃
         #formargin

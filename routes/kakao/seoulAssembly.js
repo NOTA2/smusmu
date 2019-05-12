@@ -1,8 +1,8 @@
 var defaultObj = require('../../config/defaultVariable');
-var route = require('express').Router();
+var router = require('express').Router();
 var conn = require('../../config/db')();
 
-route.post('', function (req, res) {
+router.post('', function (req, res) {
   var dt = new Date();
   var date = dt.toFormat("YYYY-MM-DD");
   var time = parseInt(dt.toFormat("HH24"));
@@ -184,4 +184,4 @@ route.post('', function (req, res) {
   });
 });
 
-module.exports = route;
+module.exports = router;

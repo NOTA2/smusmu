@@ -1,8 +1,8 @@
 const defaultObj = require('../../config/defaultVariable');
-const route = require('express').Router();
+const router = require('express').Router();
 const conn = require('../../config/db')();
 
-route.post('', function (req, res) {
+router.post('', function (req, res) {
   var kakaoId = req.body.userRequest.user.id;
   var url = `https://smusmu.co.kr/auth/register/commu?kakaoId=${kakaoId}`
   if (defaultObj.ipadd == '54.180.122.96')
@@ -73,4 +73,4 @@ route.post('', function (req, res) {
   })
 });
 
-module.exports = route;
+module.exports = router;

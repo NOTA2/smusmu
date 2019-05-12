@@ -15,3 +15,28 @@ body {
   font-family: 'Jeju Gothic', sans-serif;
   color : #2A3C78;
 }
+
+
+
+#spinner {
+  position: fixed;
+  top: 0; right: 0;
+  bottom: 0; left: 0;
+  background: #BBB;
+  z-index: 999;
+  opacity: 0.8;
+}
+.spinner-border {
+  left: 50%;
+  margin-left: -4em;
+  opacity: 1;
+}
+.spinner-border, .spinner-border:after {
+  border-radius: 50%;
+  width: 8em;
+  height: 8em;
+  display: block;
+  position: absolute;
+  top: 50%;
+  margin-top: -4.05em;
+}

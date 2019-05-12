@@ -31,6 +31,9 @@ html(lang='ko')
       link(rel='stylesheet', href='/css/base.css')
       link(rel='stylesheet', href='/css/asso/assomain.css')
   body
+    #spinner(style='display: none;')
+      .spinner-border(role='status' )
+        span.sr-only Loading...
     .wrapper
       nav#sidebar(data-position="fixed")
         #dismiss
@@ -46,25 +49,31 @@ html(lang='ko')
             if(user.college == '총학생회')
               college = '총'
             else
-              college = user.college+'대학 '
-          p #{user.name}님 반갑스뮤!<br>[#{college}학생회 
+              college = user.college
+          - if(user.name) name=user.name
+          - else  name=user.assoname
+          p #{name}님 반갑스뮤!<br>[#{college} 학생회 
             - if(user.grade!=1)
               <br>
             - if(user.grade==3)
               i.fas.fa-chess-pawn
             - else
               i.fas.fa-chess-queen
-
-            | #{grade}계정]
+            |  #{grade}계정]
           li
             a.dropdown-toggle(href='#homeSubmenu', data-toggle='collapse', aria-expanded='false')
               i.fas.fa-home
               |  홈
             ul#homeSubmenu.collapse.list-unstyled
               li
-                a(href='/asso/myinfo')
+                a(href='/asso/home/myinfo')
                   i.fas.fa-user
-                  |  내정보
+                  |  학생회 정보
+              - if(user.grade == '1' || user.grade == '2')
+                li
+                  a(href='/auth/password')
+                    i.fas.fa-key
+                    |  비밀번호 변경
               li
                 a(href='/auth/logout')
                   i.fas.fa-sign-out-alt
@@ -74,7 +83,7 @@ html(lang='ko')
               i.fas.fa-users
               |  스뮤스뮤 커뮤니티
           li
-            a(href='/asso/member')
+            a(href='/asso/home/member')
               i.fas.fa-user-check
               |  부원 계정 관리하기
           li
@@ -118,7 +127,7 @@ html(lang='ko')
                         li.nav-item 
                             a.btn.nav-link(href=href)= title
                 li.nav-item
-                    a.btn.nav-link(href='/asso/myinfo') 정보 수정
+                    a.btn.nav-link(href='/asso/home/myinfo') 정보 수정
                 li.nav-item
                   a.btn.nav-link(href='/auth/logout') 로그아웃
         block content

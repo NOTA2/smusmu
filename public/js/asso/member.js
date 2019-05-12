@@ -2,7 +2,7 @@ function pass(id){
   var c = confirm(`허가 하시겠습니까?`);
 
   if (c) {
-    fetch("/asso/member/passdel", {
+    fetch("/asso/home/member/passdel", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -26,7 +26,7 @@ function del(id){
   var c = confirm(`삭제 하시겠습니까?`);
 
   if (c) {
-    fetch("/asso/member/passdel", {
+    fetch("/asso/home/member/passdel", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"

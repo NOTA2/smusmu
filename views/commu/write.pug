@@ -7,7 +7,7 @@ block append content
   script(src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/ckeditor.js")
   script(src="https://cdn.ckeditor.com/ckeditor5/12.0.0/classic/translations/ko.js")
   .article
-    form#frm(name="frm" action='/commu/write', method='post')
+    form#frm(name="frm" action='/commu/board/write', method='post')
       .input-group.mb-3
         input#title.form-control(type='text', name="title", placeholder='제목을 입력해주세요.', autocomplete="off", maxlength="100")
         .input-group-prepend

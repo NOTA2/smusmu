@@ -1,7 +1,7 @@
 extends commuLayout.pug
 block append scripts
 	script(type='text/javascript').
-		var depart = "#{user.department}";
+		var depart = "#{user.major}";
 	script(type='text/javascript', src='/js/commu/myinfo.js')
 block append css
 	link(rel="stylesheet" href="/css/commu/myinfo.css")
@@ -9,7 +9,8 @@ block append content
 	#article
 		h2 정보수정 
 		hr
-		form#frm(name="frm" action='/commu/myinfo', method='post')
+		- console.log(user)
+		form#frm(name="frm" action='/commu/home/myinfo', method='post')
 			.input-group.mb-3
 				.input-group-prepend
 					span.input-group-text 아이디
@@ -28,16 +29,16 @@ block append content
 					span.input-group-text(style="color:red;") *
 					label.input-group-text(for="college") 단과 대학
 				select.custom-select#college(name="college" onchange="collegeChange();")
-					option(value="인문사회과학" selected= user.college=="인문사회과학") 인문사회과학대학
-					option(value="사범" selected= user.college=="사범") 사범대학
-					option(value="경영경제" selected= user.college=="경영경제") 경영경제대학
-					option(value="융합공과" selected= user.college=="융합공과") 융합공과대학
-					option(value="문화예술" selected= user.college=="문화예술") 문화예술대학
+					option(value="인문사회과학대학" selected= user.college=="인문사회과학대학") 인문사회과학대학
+					option(value="사범대학" selected= user.college=="사범대학") 사범대학
+					option(value="경영경제대학" selected= user.college=="경영경제대학") 경영경제대학
+					option(value="융합공과대학" selected= user.college=="융합공과대학") 융합공과대학
+					option(value="문화예술대학" selected= user.college=="문화예술대학") 문화예술대학
 			.input-group.mb-3
 				.input-group-prepend
 					span.input-group-text(style="color:red;") *
-					label.input-group-text(for="department") 소속 학과
-				select.custom-select#department(name="department")
+					label.input-group-text(for="major") 소속 학과
+				select.custom-select#major(name="major")
 					option(value="역사콘텐츠학과") 역사콘텐츠학과
 					option(value="지적재산권학과") 지적재산권학과
 					option(value="문헌정보학과") 문헌정보학과

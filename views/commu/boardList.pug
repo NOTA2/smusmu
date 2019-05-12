@@ -28,7 +28,7 @@
         tr
           td.id= topics[i].id
           td.title
-            a(href=`/commu/content?board=${board}&id=${topics[i].id}&page=${page}`)= topics[i].title
+            a(href=`/commu/board/content?board=${board}&id=${topics[i].id}&page=${page}`)= topics[i].title
               span.comment [
                 | #{topics[i].comment}]
           - if(topics[i].mode == 1)
@@ -41,7 +41,7 @@
           td.like= topics[i].lik
   -if(user.kakaoId)
     #write
-      a.btn.btn-primary(href=`/commu/write?board=${board}`)
+      a.btn.btn-primary(href=`/commu/board/write?board=${board}`)
         i.fas.fa-pencil-alt
         |   글쓰기
   #page
@@ -49,19 +49,19 @@
       ul.pagination
         - if(startPage > 5)
           li.page-item
-            a.page-link(href=`/commu/board?board=${bid}&page=${(startPage-1)}`, aria-label='Back')
+            a.page-link(href=`/commu/board/list?board=${bid}&page=${(startPage-1)}`, aria-label='Back')
               span(aria-hidden='true') «
               span.sr-only Back
         - for(var idx=startPage;idx<=endPage;idx++){
           - if(idx == page)
             li.page-item.active
-              a.page-link(href=`/commu/board?board=${bid}&page=${idx}`)= idx
+              a.page-link(href=`/commu/board/list?board=${bid}&page=${idx}`)= idx
           - else
             li.page-item
-              a.page-link(href=`/commu/board?board=${bid}&page=${idx}`)= idx
+              a.page-link(href=`/commu/board/list?board=${bid}&page=${idx}`)= idx
         - }
         - if(endPage < totalPage)
           li.page-item
-            a.page-link(href=`/commu/board?board=${bid}&page=${(endPage+1)}`, aria-label='Next')
+            a.page-link(href=`/commu/board/list?board=${bid}&page=${(endPage+1)}`, aria-label='Next')
               span(aria-hidden='true') »
               span.sr-only Next

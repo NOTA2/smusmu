@@ -14,7 +14,7 @@ function serchschoolId() {
 
         $("#username").val(data.user.name);
         $("#schoolId").val(data.user.schoolId);
-        $("#department").val(data.user.department);
+        $("#major").val(data.user.major);
         $("#phone").val(data.user.phone);
       } else {
         alert('검색결과가 없습니다. 학번을 확인해주세요.')
@@ -31,7 +31,7 @@ function complete() {
   var rentitem = $("#rentitem").val();
   var username = $("#username").val();
   var schoolId = $("#schoolId").val();
-  var department = $("#department").val();
+  var major = $("#major").val();
   var phone = $("#phone").val();
 
   if(!rentitem){
@@ -46,7 +46,7 @@ function complete() {
   } else if (schoolId.length != 9) {
     alert('학번을 제대로 입력해주세요.')
     return false;
-  } else if (!department) {
+  } else if (!major) {
     alert('학과를 입력해주세요');
     return false;
   } else if (!phone) {
