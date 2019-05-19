@@ -1,0 +1,23 @@
+extends layout.pug
+block append scripts
+block append css
+block append content
+  #article
+    h1 록록록 현황
+    - if(status)
+      #rank
+        - for(var i=0;i<rank.length;i++)
+          p
+            |  #{i+1}등 #{rank[i].name}(#{rank[i].major}) #{rank[i].sumPoint}점
+          hr
+      #now
+        - for(var i=0;i<now.length;i++)
+          - if(now[i].location)
+            p
+              |  [#{now[i].onTime}] #{now[i].name}(#{now[i].major})님이 #{now[i].location}에서 #{now[i].host} - #{now[i].eventName}행사에 참가하여 #{now[i].point}점을 획득!
+          - else
+            p
+              |  [#{now[i].onTime}] #{now[i].name}(#{now[i].major})님이 #{now[i].host} - #{now[i].eventName}행사에 참가하여 #{now[i].point}점을 획득!
+          hr
+    - else
+      h3#statusfail 축제날 확인해주세요!

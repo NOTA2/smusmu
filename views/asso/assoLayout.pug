@@ -44,18 +44,20 @@ html(lang='ko')
             h3 스뮤스뮤<br>관리자 페이지
         ul.list-unstyled.components
           - 
-            var grade = '임원', college=user.college;
-            if(user.grade==3) grade = '부원'
-            if(user.college == '총학생회')
-              college = '총'
-            else
-              college = user.college
+            var grade = '임원', assocollege=user.assocollege;
+            if(user.grade==4){
+              grade = '부원'
+
+            }
+            if(user.assocollege == '총학생회')
+              assocollege = '총'
+            
           - if(user.name) name=user.name
           - else  name=user.assoname
-          p #{name}님 반갑스뮤!<br>[#{college} 학생회 
-            - if(user.grade!=1)
+          p #{name}님 반갑스뮤!<br>[#{assocollege} 학생회 
+            - if(user.grade!=2)
               <br>
-            - if(user.grade==3)
+            - if(user.grade==4)
               i.fas.fa-chess-pawn
             - else
               i.fas.fa-chess-queen
@@ -69,7 +71,7 @@ html(lang='ko')
                 a(href='/asso/home/myinfo')
                   i.fas.fa-user
                   |  학생회 정보
-              - if(user.grade == '1' || user.grade == '2')
+              - if(user.grade == '2' || user.grade == '3')
                 li
                   a(href='/auth/password')
                     i.fas.fa-key

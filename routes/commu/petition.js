@@ -14,16 +14,11 @@ var upload = multer({
 })
 
 var answer = require('./petition_answer');
-
 router.use('/answer', answer);
 
-router.get('/list', (req, res, next) => {
-  if (req.user) {
-    if (req.user.token == 'true') next();
-    else res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`)
-  } else
-    res.redirect('/auth/login');
-}, (req, res) => {
+
+
+router.get('/list', (req, res) => {
   var page;
   if (req.query.page)
     page = req.query.page;
@@ -103,24 +98,17 @@ router.get('/list', (req, res, next) => {
           startPage: startPage,
           endPage: endPage,
           topics: results,
-          top: top
+          top: top,
+          menu : req.menu
         });
       })
     })
-
-
   })
 });
 
 
 
-router.get('/content', (req, res, next) => {
-  if (req.user) {
-    if (req.user.token == 'true') next();
-    else res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`)
-  } else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/content', (req, res) => {
   var id = req.query.id;
   var page;
   if (req.query.page) page = req.query.page;
@@ -130,9 +118,12 @@ router.get('/content', (req, res, next) => {
   else mode = 'latest';
 
 
-  var sql = `select *, petition.id AS pid
-  FROM petition LEFT JOIN users ON petition.authId=users.id
+  var sql = `select *, petition.id AS pid, major.college, major.major
+  FROM petition
+  LEFT JOIN users ON petition.authId=users.id
+  LEFT JOIN major ON major.id=users.majorId
   WHERE petition.id=?`;
+
   conn.query(sql, [id], (err, results) => {
     if (err || results.length == 0) {
       console.log(err);
@@ -227,7 +218,8 @@ router.get('/content', (req, res, next) => {
             endPage: endPage,
             topic: topic,
             topics: topics,
-            comments: comments
+            comments: comments,
+            menu : req.menu
           }
 
 
@@ -248,13 +240,7 @@ router.get('/content', (req, res, next) => {
   })
 });
 
-router.get('/write', (req, res, next) => {
-  if (req.user) {
-    if (req.user.token == 'true') next();
-    else res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`)
-  } else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/write',(req, res) => {
   res.render('commu/petitionWrite', {
     user: req.user,
     info: {
@@ -267,11 +253,11 @@ router.get('/write', (req, res, next) => {
         title: '답변 완료된 청원',
         href: '/commu/petition/answer/list'
       }]
-    }
+    },
+    menu : req.menu
   });
-});
-
-router.post('/write', (req, res) => {
+})
+.post('/write', (req, res) => {
 
   var sql = `
   INSERT INTO petition (title, content, onTime, authId, mode)

@@ -21,7 +21,7 @@
             |  #{top[i].title}
           p !{top[i].content}
           ul
-            - if(top[i].mode == 1 || (top[i].mode ==2 && user.college == '총학생회'))
+            - if(top[i].mode == 1 || (top[i].mode ==2 && user.assocollege == '총학생회'))
               li 
                 strong 청원인 
                 span= top[i].name
@@ -75,7 +75,7 @@ table.table.table-striped
           a(href="/commu/petition/content?id="+topics[i].id+'&mode='+mode+'&page='+page)= topics[i].title
             span.comment [
               | #{topics[i].comment}]
-        - if(topics[i].mode == 1 || (topics[i].mode ==2 && user.college == '총학생회'))
+        - if(topics[i].mode == 1 || (topics[i].mode ==2 && user.assocollege == '총학생회'))
           td.auth= topics[i].name
         - else
           td.auth 익명

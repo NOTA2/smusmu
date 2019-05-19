@@ -164,8 +164,8 @@ a.download {
     color: #FFC943;
 }
 
-a.article,
-a.article:hover {
+a.liarticle,
+a.liarticle:hover {
     background: #F4B020 !important;
     color: #000 !important;
 }

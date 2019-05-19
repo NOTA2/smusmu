@@ -13,13 +13,7 @@ var upload = multer({
   storage: storage
 })
 
-router.get('/list', (req, res, next) => {
-  if (req.user) {
-    if (req.user.token == 'true') next();
-    else res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`)
-  } else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/list', (req, res) => {
   var page;
   if (req.query.page) page = req.query.page;
   else page = 1;
@@ -92,7 +86,8 @@ router.get('/list', (req, res, next) => {
         totalPage: totalPage,
         startPage: startPage,
         endPage: endPage,
-        topics: results
+        topics: results,
+        menu : req.menu
       });
     })
   })
@@ -100,13 +95,7 @@ router.get('/list', (req, res, next) => {
 
 
 
-router.get('/write', (req, res, next) => {
-  if (req.user.grade == 1) {
-    if (req.user.token == 'true') next();
-    else res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`)
-  } else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/write', (req, res) => {
   var id = req.query.id;
 
   var sql = `select *, petition.id AS pid
@@ -152,7 +141,8 @@ router.get('/write', (req, res, next) => {
             href: '/commu/petition/answer/list'
           }]
         },
-        topic: topic
+        topic: topic,
+        menu : req.menu
       });
     }
   })

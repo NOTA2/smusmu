@@ -134,7 +134,7 @@ router.post('/member/passdel', (req, res) => {
   if (req.body.del)
     sql = `UPDATE users SET grade=null, assoId=null WHERE id=?`
   else if (req.body.pass)
-    sql = `UPDATE users SET grade=3 WHERE id=?`
+    sql = `UPDATE users SET grade=4 WHERE id=?`
 
   conn.query(sql, [req.body.id], (err, row) => {
     if (err)

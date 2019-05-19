@@ -16,8 +16,6 @@ block append content
         rt = parseInt(c.dtime/60) + "분 전";
       } else if(c.dtime >= 3600 && c.dtime < 86400) {
         rt = parseInt(c.dtime/3600)+"시간 전";
-      } else if(c.dtime >= 86400 && c.dtime < 2419200) {
-        rt = parseInt(c.dtime/86400)+"일 전";
       } else {
         rt = c.date
       } 
@@ -27,7 +25,12 @@ block append content
     #title
       h1= topic.title
       hr
-      - if(topic.mode == 1)
+      - if(user.grade==1 || user.grade==2 || user.grade==3)
+        h5= user.assoname
+          span
+            i.far.fa-clock
+            |  #{passing_time(topic)}
+      - else if(topic.mode == 1)
         h5 익명
           span
             i.far.fa-clock
@@ -49,7 +52,7 @@ block append content
           i.far.fa-thumbs-up
           | <br>추천
           | <br>#{topic.lik}
-    - if(user.grade == 0)
+    - if(user.grade == 1)
       #answerbuttonarea
         button.btn.btn-secondary(onclick='deletetopic("'+topic.pid+'")')
           i.far.fa-trash-alt
@@ -84,12 +87,12 @@ block append content
                 span.cbtn(onclick='recomment(this, "'+topic.pid+'", "'+user.id+'", "'+comments[i].authId+'", "'+comments[i].id+'")')
                   i.far.fa-comments
                   |  답글
-          - else if(user.grade==0)
+          - else if(user.grade==1)
             .commentetc
               span.btn
                 i.far.fa-thumbs-up
                 |   #{comments[i].lik}
-              - if(user.grade==1)
+              - if(user.grade==2)
                 span.cbtn(onclick="deletecomment('"+comments[i].id+"')")
                   i.far.fa-trash-alt
                   |  삭제
@@ -101,6 +104,8 @@ block append content
           form#frm(name="frm" action='/commu/board/comment', method='post')
             input(type='hidden', name='uid', value=user.id)
             input(type='hidden', name='pid', value=topic.pid)
+            input(type='hidden', name='boardKey', value=board.boardKey)
+            input(type='hidden', name='page', value=page)
             textarea#tw_contents.petitionsReply_write.form-control(name='body', required='', placeholder='최대 100자까지 적을 수 있습니다.', onkeyup="len_chk()")
             input.submit.btn.btn-warning.form-control(type='button' value="등록" onclick='comment()')
   hr.line

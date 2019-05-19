@@ -26,7 +26,16 @@ function serchschoolId() {
 
 }
 
+$('#frm').submit(function() {
+  var pass = true;
 
+  if(pass == false){
+      return false;
+  }
+  $("#spinner").show();
+
+  return true;
+});
 function complete() {
   var rentitem = $("#rentitem").val();
   var username = $("#username").val();

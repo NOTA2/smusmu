@@ -67,8 +67,7 @@ router.get('/now', (req, res, next) => {
 
 
 router.post('/now', (req, res) => {
-  console.log(req.body);
-  
+
   var sql = `INSERT INTO rentStatus 
   (rid, assoId, uname, schoolId, major, phone, etc, rentdate)
   VALUES (?, ?, ?, ?, ?, ?, ?, now())`

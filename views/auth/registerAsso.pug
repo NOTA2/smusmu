@@ -32,20 +32,12 @@ block content
           span.input-group-text(style="color:red;") *
           span.input-group-text 이메일
         input#assoemail.form-control(type="text", name="assoemail", placeholder="", autocomplete="off")
-      //- .input-group.mb-3
-      //-   .input-group-prepend
-      //-     span.input-group-text(style="color:red;") *
-      //-     label.input-group-text(for="grade") 직위
-      //-   select.custom-select#grade(name="grade" onchange="gradeChange();")
-      //-     option(value="99" selected="selected") 선택하세요.
-      //-     option(value="1") 임원
-      //-     option(value="3") 일반 부원
       p 학생회 계정은 단과대학마다 하나만 만들 수 있습니다.
       #selectcollege.input-group.mb-3
         .input-group-prepend
           span.input-group-text(style='color:red;') *
           label.input-group-text(for='college') 학생회 소속
-        select#college.custom-select(name='college')
+        select#college.custom-select(name='assocollege')
           option(value="none" selected="selected") 선택하세요.
           - for(var i=0;i<college.length;i++){
           -   if(exist && exist.indexOf(college[i]) != -1)
@@ -58,7 +50,7 @@ block content
         .input-group-prepend
           span.input-group-text(style='color:red;') *
           span.input-group-text 학생회 이름
-        input#name.form-control(type='text', name='name', placeholder='학생회 이름', autocomplete='off')
+        input#name.form-control(type='text', name='assoname', placeholder='학생회 이름', autocomplete='off')
 
       #phone.input-group.mb-3
         .input-group.mb-3

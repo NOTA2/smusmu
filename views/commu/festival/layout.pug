@@ -30,6 +30,8 @@ html(lang='ko')
       link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css')
       link(rel='stylesheet', href='/css/base.css')
       link(rel='stylesheet', href='/css/commu/commumain.css')
+      link(rel='stylesheet', href='/css/commu/home.css')
+      link(rel='stylesheet', href='/css/commu/festival.css')
   body
     #spinner(style='display: none;')
       .spinner-border(role='status' )
@@ -38,93 +40,31 @@ html(lang='ko')
       nav#sidebar(data-position="fixed")
         #dismiss
           i.fas.fa-arrow-left
-        a(href="/commu")
+        a(href="/commu/festival")
           .sidebar-header
             img(src="/img/logo.png", alt="logo")
-            h3 스뮤스뮤<br>커뮤니티
+            h3 록록록<br>특별 페이지
         ul.list-unstyled.components
-          - 
-            var grade = '임원', assocollege=user.assocollege;
-            if(user.grade==4) grade = '부원'
-            if(user.assocollege == '총학생회')
-              assocollege = '총'
-
-            var nickname;
-            if(user.nickname) nickname = user.nickname;
-            else nickname=user.assoname;
-          p #{nickname}님 반갑스뮤!
-            - if(user.grade)
-              | <br>[#{assocollege} 학생회 
-              - if(user.grade!=2)
-                <br>
-              - if(user.grade==4)
-                i.fas.fa-chess-pawn
-              - else
-                i.fas.fa-chess-queen
-              |  #{grade}계정]
           li
-            a.dropdown-toggle(href='#homeSubmenu', data-toggle='collapse', aria-expanded='false')
+            a(href='/')
               i.fas.fa-home
-              |  홈
-            ul#homeSubmenu.collapse.list-unstyled
-              - if(user.grade == '2' || user.grade == '3')
-                li
-                  a(href='/asso/home/myinfo') 
-                    i.fas.fa-user
-                    |  학생회 정보
-              - if(user.kakaoId)
-                li
-                  a(href='/commu/home/myinfo')
-                    i.fas.fa-user
-                    |  내정보
-              li
-                a(href='/auth/password')
-                  i.fas.fa-key
-                  |  비밀번호 변경
-              - if(user.kakaoId)
-                li
-                  a(href='/commu/home/assoapply')
-                    i.fas.fa-chess-pawn
-                    |  학생회 부원계정 신청
-              li
-                a(href='/auth/logout')
-                  i.fas.fa-sign-out-alt
-                  |  로그아웃
-          - if(user.grade)
-            li
-              a(href='/asso')
-                i.fas.fa-briefcase
-                |   관리자 페이지
-          - for(i=0;i<menu.length;i++)
-            li
-              a(href='/commu/board/list?board='+menu[i].boardKey) 
-                i(class=menu[i].boardIcon)
-                |  #{menu[i].boardName}
+              |  스뮤스뮤 홈으로 이동
           li
-            a.dropdown-toggle(href='#petitionSubmenu', data-toggle='collapse', aria-expanded='false')
-              i.fas.fa-vote-yea
-              |  학생 청원 제도
-            ul#petitionSubmenu.collapse.list-unstyled
-              li
-                a(href='/commu/petition/list')
-                  i.fas.fa-question-circle
-                  |  진행중인 청원
-              li
-                a(href='/commu/petition/answer/list')
-                  i.fas.fa-check-circle
-                  |  답변 완료된 청원
-          if(user.kakaoId)
-            li
-              a(href='/commu/festival')
-                i.fas.fa-exclamation-circle
-                |  록록록 특별 페이지
-        ul.list-unstyled.CTAs
-          //- li
-          //-   a.download(href='https://bootstrapious.com/tutorial/files/sidebar.zip') Download source
+            a(href='/commu/festival/info')
+              i.fas.fa-exclamation-circle
+              |  록록록 설명
           li
-            a.liarticle(href='https://apple.sjv.io/7Q4QY' target="_blank")
-              i.fab.fa-apple
-              |  AOC(Apple On Campus)
+            a(href='/commu/festival/myinfo')
+              i.fas.fa-running
+              |  록록록 내 정보
+          li
+            a(href='/commu/festival/now')
+              i.fas.fa-medal
+              |  록록록 현황
+          li
+            a(href='/commu/festival/today')
+              i.far.fa-calendar-check
+              |  오늘의 행사 확인
       #content
         nav.navbar.navbar-expand-lg.navbar-light.bg-light
           .container-fluid
@@ -138,21 +78,11 @@ html(lang='ko')
               ul.nav.navbar-nav.ml-auto
                 li.nav-item
                     a.btn.nav-link(href='/commu') HOME
-                - if(info.headbar.length>0)
-                    each item in info.headbar
-                      - var href=item.href, title=item.title
-                        li.nav-item 
-                            a.btn.nav-link(href=href)= title
-                - if(user.grade == '2' || user.grade=='3')
-                  li.nav-item
-                    a.btn.nav-link(href='/asso/home/myinfo') 학생회 정보
-                - if(user.kakaoId)
-                  li.nav-item
-                    a.btn.nav-link(href='/commu/home/myinfo') 내정보
                 li.nav-item
                   a.btn.nav-link(href='/auth/logout') 로그아웃
         #formargin
-        block content
+        #article
+          block content
       .overlay
     block scripts
       script(type='text/javascript', src='/js/prefixfree.min.js')
@@ -163,4 +93,3 @@ html(lang='ko')
       script(src="https://cdn.jsdelivr.net/npm/promise-polyfill@8.1/dist/polyfill.min.js")
       script(src="https://cdn.jsdelivr.net/npm/whatwg-fetch@3.0/dist/fetch.umd.min.js")
       script(type="text/javascript", src="/js/commu/commu.js")
-

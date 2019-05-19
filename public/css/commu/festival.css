@@ -1,0 +1,51 @@
+#article{
+  width : 90%;
+}
+
+#statusfail{
+  margin: 2rem;
+}
+
+.fimg{
+  width : 500px;
+  margin : 1rem;
+}
+
+#info span{
+  color : red;
+}
+
+#base h3{
+  font-size: 1.3rem;
+  color : #000;
+}
+
+#base h3.num{
+  font-size: 2em;
+  margin-top: 1rem;
+}
+
+#info hr{
+  margin : 2.5rem 0;
+}
+
+#award ul li{
+  list-style: none;
+}
+
+#award h2{
+  margin: 0 0 2rem;
+}
+#award h4{
+  margin: 1.9rem 0 .7rem;
+}
+
+@media (max-width: 768px) {
+  #article{
+    width : 93%;
+  }
+  .fimg{
+    width : 100%;
+    margin : 1rem 0;
+  }
+}

@@ -32,9 +32,10 @@ router.get('/', (req, res, next) => {
     var college = rows.map(x => x.college);
     college.unshift('총학생회');
 
-    sql = `select token, college
-    FROM assoUser LEFT JOIN asso ON assoUser.id=asso.assoUserId
-    WHERE grade=1 OR grade=2`;
+    sql = `select token, assocollege
+    FROM assoUser
+    LEFT JOIN asso ON assoUser.id=asso.assoUserId
+    WHERE grade=2 OR grade=3`;
 
     conn.query(sql, (err, rows) => {
       if (err) {
@@ -43,7 +44,7 @@ router.get('/', (req, res, next) => {
       }
 
       if (rows.length > 0) { //정보가 있을 경우 중복
-        var exist = rows.filter(x => x.token == 'true').map(x => x.college);
+        var exist = rows.filter(x => x.token == 'true').map(x => x.assocollege);
 
         return res.render('auth/registerAsso', {
           college: college,
@@ -71,18 +72,18 @@ router.post('/', (req, res) => {
         password: hash,
         salt: salt,
         token: token,
-        grade: '1'
+        grade: '2'
       }
 
       var asso = {
-        college: req.body.college,
-        name: req.body.name,
+        assocollege: req.body.assocollege,
+        assoname: req.body.assoname,
         assoemail: req.body.assoemail,
         assophone: req.body.phone1 + '-' + req.body.phone2 + '-' + req.body.phone3
       }
 
       if (asso.college != '총학생회')
-        user.grade = '2';
+        user.grade = '3';
 
 
       var sql = "INSERT INTO asso SET ?"

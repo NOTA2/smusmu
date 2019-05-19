@@ -16,8 +16,6 @@
           rt = parseInt(c.dtime/60) + "분 전";
         } else if(c.dtime >= 3600 && c.dtime < 86400) {
           rt = parseInt(c.dtime/3600)+"시간 전";
-        } else if(c.dtime >= 86400 && c.dtime < 2419200) {
-          rt = parseInt(c.dtime/86400)+"일 전";
         } else {
           rt = c.date
         } 
@@ -28,10 +26,12 @@
         tr
           td.id= topics[i].id
           td.title
-            a(href=`/commu/board/content?board=${board}&id=${topics[i].id}&page=${page}`)= topics[i].title
+            a(href=`/commu/board/content?board=${board.boardKey}&id=${topics[i].id}&page=${page}`)= topics[i].title
               span.comment [
                 | #{topics[i].comment}]
-          - if(topics[i].mode == 1)
+          - if(user.grade==1 || user.grade==2 || user.grade==3)
+            td.auth= user.assoname
+          - else if(topics[i].mode == 1)
             td.auth 익명
           - else if(topics[i].mode == 2)
             td.auth= topics[i].nickname
@@ -39,9 +39,9 @@
             td.auth= topics[i].name
           td.date= passing_time(topics[i])
           td.like= topics[i].lik
-  -if(user.kakaoId)
+  -if((board.boardGrade==null && (user.grade == null || user.grade == 4)) || (board.boardGrade && user.grade && board.boardGrade >= user.grade))
     #write
-      a.btn.btn-primary(href=`/commu/board/write?board=${board}`)
+      a.btn.btn-primary(href=`/commu/board/write?board=${board.boardKey}`)
         i.fas.fa-pencil-alt
         |   글쓰기
   #page
@@ -49,19 +49,19 @@
       ul.pagination
         - if(startPage > 5)
           li.page-item
-            a.page-link(href=`/commu/board/list?board=${bid}&page=${(startPage-1)}`, aria-label='Back')
+            a.page-link(href=`/commu/board/list?board=${board.bid}&page=${(startPage-1)}`, aria-label='Back')
               span(aria-hidden='true') «
               span.sr-only Back
         - for(var idx=startPage;idx<=endPage;idx++){
           - if(idx == page)
             li.page-item.active
-              a.page-link(href=`/commu/board/list?board=${bid}&page=${idx}`)= idx
+              a.page-link(href=`/commu/board/list?board=${board.bid}&page=${idx}`)= idx
           - else
             li.page-item
-              a.page-link(href=`/commu/board/list?board=${bid}&page=${idx}`)= idx
+              a.page-link(href=`/commu/board/list?board=${board.bid}&page=${idx}`)= idx
         - }
         - if(endPage < totalPage)
           li.page-item
-            a.page-link(href=`/commu/board/list?board=${bid}&page=${(endPage+1)}`, aria-label='Next')
+            a.page-link(href=`/commu/board/list?board=${board.bid}&page=${(endPage+1)}`, aria-label='Next')
               span(aria-hidden='true') »
               span.sr-only Next

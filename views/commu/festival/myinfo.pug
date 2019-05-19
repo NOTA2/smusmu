@@ -1,0 +1,10 @@
+extends layout.pug
+block append scripts
+block append css
+block append content
+  #article
+    h1 록록록 내 상황
+    - if(status)
+      h3 어쩌구
+    - else
+      h3#statusfail 축제날 확인해주세요!

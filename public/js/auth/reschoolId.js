@@ -3,7 +3,16 @@ var scck = 0;
 function schoolchange() {
   scck = 0;
 }
+$('#frm').submit(function() {
+  var pass = true;
 
+  if(pass == false){
+      return false;
+  }
+  $("#spinner").show();
+
+  return true;
+});
 function schoolIdAjax() {
   scck = 0;
   var schoolId = $("#schoolId").val();

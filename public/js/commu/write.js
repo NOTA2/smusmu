@@ -11,7 +11,16 @@ ClassicEditor
   console.error( error );
 } );
 
+$('#frm').submit(function() {
+  var pass = true;
 
+  if(pass == false){
+      return false;
+  }
+  $("#spinner").show();
+
+  return true;
+});
 // function autolink(id) {
 // }
 // autolink('.ck-editor__editable')

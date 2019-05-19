@@ -17,7 +17,7 @@ block append content
       //-   .input-group-prepend
       //-     span.input-group-text 직위
       //-   -
-      //-     if(user.grade == '1' || user.grade == '2') grade='임원';
+      //-     if(user.grade < 4) grade='임원';
       //-     else grade = '부원'
       //-   input#grade.form-control(type='text', value=grade,disabled, autocomplete="off")
       .input-group.mb-3
@@ -27,37 +27,37 @@ block append content
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text(for="college") 소속 대학
-        input#college.form-control(type='tex', value=user.college,disabled, autocomplete="off")
+        input#college.form-control(type='tex', value=user.assocollege,disabled, autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text(style="color:red;") *
           span.input-group-text 이름
-        - if(user.grade == '1' || user.grade == '2')
+        - if(user.grade < 4)
           input#name.form-control(type='text', name="assoname",value=user.assoname, autocomplete="off")
-        - if(user.grade == '3')
+        - if(user.grade == '4')
           input#name.form-control(type='text', value=user.assoname, disabled, autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 위치
-        - if(user.grade == '1' || user.grade == '2')
+        - if(user.grade < 4)
           input#location.form-control(type='text', name="location",value=user.location, placeholder="예) 학생회관 326호(H236)", autocomplete="off")
-        - if(user.grade == '3')
+        - if(user.grade == '4')
           input#location.form-control(type='text', value=user.location, disabled, autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 설명
-        - if(user.grade == '1' || user.grade == '2')
+        - if(user.grade < 4)
           textarea#description.form-control(type='text', name="description",rows="3", autocomplete="off")= user.description
-        - if(user.grade == '3')
+        - if(user.grade == '4')
           textarea#description.form-control(type='text', disabled, rows="3", autocomplete="off")= user.description
       .input-group.mb-3
         .input-group-prepend
           span#inputGroupFileAddon01.input-group-text 로고 업로드
         .custom-file
-          - if(user.grade == '1' || user.grade == '2')
+          - if(user.grade < 4)
             input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name='logo')
             label.custom-file-label(for='inputGroupFile01')= user.logo
-          - if(user.grade == '3')
+          - if(user.grade == '4')
             input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', disabled, name='logo')
             label.custom-file-label(for='inputGroupFile01') 불가능합니다.
           - if(user.logo)
@@ -66,21 +66,21 @@ block append content
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 대표메일
-        - if(user.grade == '1' || user.grade == '2')
+        - if(user.grade < 4)
           input#assoemail.form-control(type="email", name="assoemail", value=user.assoemail,placeholder="연락받을 대표 메일", autocomplete="off")
-        - if(user.grade == '3')
+        - if(user.grade == '4')
           input#assoemail.form-control(type="email", disabled, value=user.assoemail,placeholder="연락받을 대표 메일", autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text 학생회 대표번호
-        - if(user.grade == '1' || user.grade == '2')
+        - if(user.grade < 4)
           input.form-control(type='tel', name="phone1", value=user.assophone[0], autocomplete="off",  maxlength="3")
           input.form-control(type='tel', name="phone2", value=user.assophone[1], autocomplete="off", maxlength="4")
           input.form-control(type='tel', name="phone3", value=user.assophone[2], autocomplete="off", maxlength="4")
-        - if(user.grade == '3')
+        - if(user.grade == '4')
           input.form-control(type='tel', name="phone1", value=user.assophone[0], autocomplete="off",  maxlength="3", disabled)
           input.form-control(type='tel', name="phone2", value=user.assophone[1], autocomplete="off", maxlength="4", disabled)
           input.form-control(type='tel', name="phone3", value=user.assophone[2], autocomplete="off", maxlength="4", disabled)
-      - if(user.grade == '1' || user.grade == '2')
+      - if(user.grade < 4)
         p
           input.btn.btn-success.form-control(type='button' value="수정하기" onclick='update()')

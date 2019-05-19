@@ -23,12 +23,12 @@ block append content
             td.pass
               - if(assouser[i].grade)
                 | 허가 완료
-              - else if(user.grade ==1 || user.grade == 2)
+              - else if(user.grade ==2 || user.grade == 3)
                 button.btn.btn-success(onclick=`pass(${assouser[i].id});`) 허가
               - else
                 | 권한없음
             td.del
-              - if(user.grade ==1 || user.grade == 2)
+              - if(user.grade ==2 || user.grade == 3)
                 button.btn.btn-danger(onclick=`del(${assouser[i].id});`) 탈퇴
               - else
                 | 권한없음

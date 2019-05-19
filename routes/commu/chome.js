@@ -2,13 +2,7 @@ var conn = require('../../config/db')();
 var router = require('express').Router();
 
 
-router.get('/myinfo', (req, res, next) => {
-  if (req.user) {
-    if (req.user.token == 'true') next();
-    else res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`)
-  } else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/myinfo', (req, res) => {
   req.user.phone = req.user.phone.split('-');
 
   res.render('commu/myinfo', {
@@ -17,7 +11,8 @@ router.get('/myinfo', (req, res, next) => {
       title: '내 정보',
       titlehref: '/commu/home/myinfo',
       headbar: []
-    }
+    },
+    menu : req.menu
   });
 });
 
@@ -51,23 +46,18 @@ router.post('/myinfo', (req, res) => {
           title: '내 정보',
           titlehref: '/commu/home/myinfo',
           headbar: []
-        }
+        },
+        menu : req.menu
       });
     }
   })
 });
 
-router.get('/assoapply', (req, res, next) => {
-  if (req.user) {
-    if (req.user.token == 'true') next();
-    else res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`)
-  } else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/assoapply', (req, res) => {
 
-  var sql = `select token, college, assoname, asso.id as aid
+  var sql = `select token, assocollege, assoname, asso.id as aid
   FROM assoUser LEFT JOIN asso ON assoUser.id=asso.assoUserId
-  WHERE grade=1 OR grade=2`;
+  WHERE grade=2 OR grade=3`;
 
   conn.query(sql, (err, rows) => {
     if (err) {
@@ -86,7 +76,8 @@ router.get('/assoapply', (req, res, next) => {
         titlehref: '/commu/home/assoapply',
         headbar: []
       },
-      asso: asso
+      asso: asso,
+      menu : req.menu
     });
   })
 });

@@ -69,8 +69,8 @@ router.post('/', (req, res) => {
           salt: salt,
           kakaoId: req.body.kakaoId,
           token: token,
+          schoolId: req.body.schoolId,
           email: req.body.schoolId + '@sangmyung.kr',
-          college: req.body.college,
           majorId: rows[0].id,
           name: req.body.name,
           nickname: req.body.nickname,
@@ -105,7 +105,7 @@ router.post('/', (req, res) => {
     
     <p>아이디 : ${user.username}</p>
     <p>이름 : ${user.name}</p>
-    <p>학과 : ${user.major}</p>
+    <p>학과 : ${req.body.major}</p>
     <p>학번 : ${user.schoolId}</p>
   
     <p>위의 정보가 본인이 맞다면 아래의 URL로 접속하여 계정 인증을 마쳐주세요.</p>
@@ -188,7 +188,13 @@ router.get('/email', (req, res, next) => {
 
 router.post('/email', (req, res) => {
   var kakaoId = req.body.kakaoId;
-  var sql = 'SELECT * FROM users WHERE kakaoId=?';
+
+  var sql = `SELECT users.id as id, username, kakaoId, token, email, major.college, major.major, schoolId, name, nickname,
+    phone, grade
+    fROM users
+    LEFT JOIN major ON users.majorId=major.id
+    WHERE kakaoId=?`
+    
   conn.query(sql, [kakaoId], (err, results) => {
     if (err) {
       console.log(err);
@@ -288,8 +294,12 @@ router.get('/reschoolId', (req, res, next) => {
 });
 
 router.post('/reschoolId', (req, res) => {
+  var sql = `SELECT users.id as id, username, kakaoId, token, email, major.college, major.major, schoolId, name, nickname,
+    phone, grade
+    fROM users
+    LEFT JOIN major ON users.majorId=major.id
+    WHERE id=?`
 
-  var sql = 'SELECT * FROM users WHERE id=?';
   conn.query(sql, [req.body.id], (err, results) => {
     if (err)
       throw err;

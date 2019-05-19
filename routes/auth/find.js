@@ -31,7 +31,9 @@ const gmailKey = fs.readFileSync('key/gmailKey', 'utf-8');
 
   router.post('/id', (req, res) => {
     var sql = `SELECT username, email FROM users 
-    WHERE schoolId=? AND college=? AND major=?`
+    WHERE schoolId=? AND majorId=(
+      SELECT id FROM major where college=? AND major=?
+    )`
 
     conn.query(sql, [req.body.schoolId, req.body.college, req.body.major], (err, rows) => {
       if (err)

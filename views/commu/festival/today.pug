@@ -1,0 +1,20 @@
+extends layout.pug
+block append scripts
+block append css
+block append content
+  #article
+    h1 록록록 오늘의 행사
+    - if(status)
+      #today
+        - for(var i=0;i<festival.length;i++)
+          ul
+            li= festival[i].host
+            li= festival[i].eventName
+            - if(festival[i].location)
+              li= festival[i].location
+            - if(festival[i].description)
+              li= festival[i].description
+            li #{festival[i].startTime} ~ #{festival[i].endTime}
+          hr
+    - else
+      h3#statusfail 축제날 확인해주세요!

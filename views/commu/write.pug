@@ -23,7 +23,8 @@ block append content
               input#option3(type='radio', name='mode', value='3' autocomplete='off')
               |  실명
       p
-        input(type="hidden", name="board", value=board)
+        input(type="hidden", name="boardKey", value=board.boardKey)
+        input(type="hidden", name="bid", value=board.id)
       textarea#editor(name='content', rows='5' placeholder="욕설 등 부적절한 언어 사용 및 의도를 가진 게시글을 삭제될 수 있습니다.")
       p
         input.btn.btn-success.form-control(type='button' value="글 작성하기" onclick='submitwrite();')

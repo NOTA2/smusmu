@@ -15,11 +15,13 @@ router.post('/', (req, res) => {
       "quickReplies": defaultObj.Qu
     }
   };
+  console.log(kakaoId);
+  
 
-  var sql = `SELECT users.name, asso.college, asso.id as assoId, assoname, asso.location, asso.logo, asso.description, assophone
+  var sql = `SELECT users.name, assocollege, asso.id as assoId, assoname, asso.location, asso.logo, asso.description, assophone
               FROM asso
-              LEFT JOIN users ON asso.college = (select college from major where id=users.majorId)
-              WHERE users.kakaoId=? OR asso.college='총학생회'
+              LEFT JOIN users ON assocollege = (select college from major where id=users.majorId)
+              WHERE users.kakaoId=? OR assocollege='총학생회'
               ORDER BY users.name DESC`;
 
   conn.query(sql, [kakaoId], (err, rows) => {
@@ -36,8 +38,8 @@ router.post('/', (req, res) => {
       };
 
       rows.forEach(el => {
-        var college = el.college
-        var title = `${el.assoname} (${el.college})`
+        var assocollege = el.assocollege
+        var title = `${el.assoname} (${el.assocollege})`
 
         message.template.outputs[0].carousel.items.push({
           "title": title,
@@ -51,7 +53,7 @@ router.post('/', (req, res) => {
           "buttons": [{
               "label": '물품 확인',
               "action": "block",
-              "messageText": `${college} 대여 물품 확인`,
+              "messageText": `${assocollege} 대여 물품 확인`,
               "extra": {
                 "id": el.assoId
               },
@@ -60,7 +62,7 @@ router.post('/', (req, res) => {
             {
               "label": '현황 확인',
               "action": "block",
-              "messageText": `${college} 대여 현황`,
+              "messageText": `${assocollege} 대여 현황`,
               "extra": {
                 "id": el.assoId
               },
@@ -103,7 +105,7 @@ router.post('/thing', (req, res) => {
   };
   var assoId = req.body.action.clientExtra.id;
   
-  var sql = `SELECT rent.name, rent.day, rent.allcount, rent.nowcount, assoname as assoname, asso.college, asso.location
+  var sql = `SELECT rent.name, rent.day, rent.allcount, rent.nowcount, assoname as assoname, assocollege, asso.location
   FROM rent, asso 
   WHERE rent.assoId = asso.id AND rent.assoId = ?`;
 
@@ -114,7 +116,7 @@ router.post('/thing', (req, res) => {
 
     if (rows.length > 0) {
 
-      var str = `${rows[0].assoname} (${rows[0].college})`;
+      var str = `${rows[0].assoname} (${rows[0].assocollege})`;
 
 
       str += `은 ${rows[0].location}에 있어요!\n\n`;
@@ -127,7 +129,7 @@ router.post('/thing', (req, res) => {
 
       return res.json(message);
     } else {
-      message.template.outputs[0].simpleText = `${rows[0].assoname} (${rows[0].college})은 대여물품 서비스를 제공하지 않아요 😔`;
+      message.template.outputs[0].simpleText = `${rows[0].assoname} (${rows[0].assocollege})은 대여물품 서비스를 제공하지 않아요 😔`;
       return res.json(message);
     }
   })
@@ -154,7 +156,7 @@ router.post('/now', (req, res) => {
   };
   var assoId = req.body.action.clientExtra.id;
   
-  var sql = `SELECT rent.name, rent.day, rent.allcount, rent.nowcount, assoname as assoname, asso.college, asso.location
+  var sql = `SELECT rent.name, rent.day, rent.allcount, rent.nowcount, assoname as assoname, assocollege, asso.location
   FROM rent, asso 
   WHERE rent.assoId = asso.id AND rent.assoId = ?`;
 
@@ -165,7 +167,7 @@ router.post('/now', (req, res) => {
 
     if (rows.length > 0) {
 
-      var str = `${rows[0].assoname} (${rows[0].college})`;
+      var str = `${rows[0].assoname} (${rows[0].assocollege})`;
 
       str += `은 ${rows[0].location}에 있어요!\n\n`;
       rows.forEach(el => {
@@ -176,7 +178,7 @@ router.post('/now', (req, res) => {
 
       return res.json(message);
     } else {
-      message.template.outputs[0].simpleText = `${rows[0].assoname} (${rows[0].college})은 대여물품 서비스를 제공하지 않아요 😔`;
+      message.template.outputs[0].simpleText = `${rows[0].assoname} (${rows[0].assocollege})은 대여물품 서비스를 제공하지 않아요 😔`;
       return res.json(message);
     }
   })

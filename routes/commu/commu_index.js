@@ -4,38 +4,85 @@ var router = require('express').Router();
 var home = require('./chome')
 var petition = require('./petition')
 var board = require('./board')
+var festival = require('./festival')
+
+router.get(['/festival','/festival/*'], (req, res, next)=>{
+  var sql =`SELECT users.id as id, username, kakaoId, token, email, major.college, major.major, schoolId, name, nickname,
+  assoname, phone, grade, assoId, assocollege, location, logo, description, assoemail, assophone
+  fROM users
+  LEFT JOIN asso ON users.assoId=asso.id
+  LEFT JOIN major ON users.majorId=major.id
+  WHERE kakaoId=?`
+
+  conn.query(sql, [req.query.kakaoId], (err, rows)=>{
+    if(err)
+      throw err;
+
+    if((rows.length>0 && rows[0].token == 'true')){
+      req.user = rows[0];
+      next('route');
+    }
+    else if((req.user && req.user.token == 'true')){
+      if(req.user.kakaoId)
+        next('route');
+      else
+        next();
+    }else{
+      next();
+    }
+  })
+}, (req, res)=>{
+  res.render('commu/festival/index',  {
+    user: req.user,
+    info: {
+      title: '록록록',
+      titlehref: '/commu/festival',
+      headbar: []
+    },
+    menu : req.menu
+  })
+})
+
+router.use('/festival', festival);
+
+router.all('*', (req, res, next)=>{
+
+  if (req.user) {
+    if (req.user.token == 'true'){
+      var sql = `SELECT * FROM board`
+      conn.query(sql, (err, rows)=>{
+        if(err)
+          throw err;
+    
+        req.menu = rows;
+        next();
+      })
+    }
+    else 
+      return res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`)
+  } else
+    return res.redirect('/auth/login');
+})
+
 
 router.use('/home', home);
 router.use('/petition', petition);
 router.use('/board', board);
 
 
-router.get('/', (req, res, next) => {
-  if (req.user) {
-    if (req.user.token == 'true') next();
-    else res.redirect(`/auth/register/commu/email?kakaoId=${req.user.kakaoId}`)
-  } else
-    res.redirect('/auth/login');
-}, (req, res) => {
-  sql = `select petition.id as id, title, DATE_FORMAT(onTime,'%Y-%m-%d') AS date, lik, comment
-  FROM petition LEFT JOIN users ON petition.authId=users.id
-  WHERE answerState=0
-  ORDER BY lik DESC, petition.id DESC
-  LIMIT 10`;
+router.get('/', (req, res) => {
 
-  conn.query(sql, (err, results) => {
-
-    res.render('commu/index', {
-      user: req.user,
-      info: {
-        title: '커뮤니티 홈',
-        titlehref: '/commu/',
-        headbar: []
-      },
-      topics: results
-    });
-  })
+  res.render('commu/index', {
+    user: req.user,
+    info: {
+      title: '커뮤니티 홈',
+      titlehref: '/commu/',
+      headbar: []
+    },
+    menu : req.menu
+  });
 
 });
+
 
 module.exports = router;

@@ -7,9 +7,8 @@ block append css
 	link(rel="stylesheet" href="/css/commu/myinfo.css")
 block append content
 	#article
-		h2 정보수정 
+		h2 정보수정
 		hr
-		- console.log(user)
 		form#frm(name="frm" action='/commu/home/myinfo', method='post')
 			.input-group.mb-3
 				.input-group-prepend

@@ -9,6 +9,10 @@ img.avatar {
     margin:2rem;
   }
 
+img.poster{
+    width : 50%
+}
+
 #tables {
     width: 95%;
     margin: 5rem auto;
@@ -84,6 +88,9 @@ tr:hover {
     img.avatar {
         width: 60%;
       }
+      img.poster{
+        width : 90%
+    }
 
       #article{
         text-align: center;
