@@ -54,12 +54,8 @@ router.post('', function (req, res) {
         if (rows.length > 0) {
           var event = rows[0];
           var d = new Date();
-          //////////////////////////////////////////////////////////
-          ////////////////테스트용
-          if (defaultObj.ipadd == '54.180.122.96') {
-            d = new Date('2019-05-22 14:20:00');
-          }
-          ///////////////////////////////////////////////////// 지워야함
+          var today = d.toFormat("YYYY-MM-DD")
+
           var st = new Date(event.startTime);
           var et = new Date(event.endTime);
 
@@ -68,15 +64,16 @@ router.post('', function (req, res) {
               sql = `SELECT * 
               FROM festivalstatus
               LEFT JOIN festival ON festival.id = festivalstatus.fid
-              WHERE (fid=? AND uid=?) OR (uid =? AND festival.host=? AND festival.type=?)`
+              WHERE (fid=? AND uid=?) OR (uid =? AND festival.host=? AND festival.type=? AND date_format(festival.startTime,'%Y-%m-%d')=date_format(?,'%Y-%m-%d'))`
 
-              conn.query(sql, [event.id, user.id, user.id, event.host, '학생 수익사업'], (err, rows) => {
+              conn.query(sql, [event.id, user.id, user.id, event.host, '학생 수익사업',today], (err, rows) => {
                 if (err) {
                   message.template.outputs[0].simpleText.text = '잠시 문제가 생겼어요. 다시 시도해주세요 😔 (QR코드 인식 버튼을 다시 눌러주세요)'
                   return res.json(message);
                 }
-
-                if (rows.length > 0) { //이미 행사에 참여한 경우
+                console.log(rows);
+                
+                if (rows.length > 0) { //이미 행사에 참여한 경우(검색 결과가 있는 경우)
                   message.template.outputs[0] = {
                     "basicCard": {
                       "title": "이미 참여한 행사에요! 이제 다른 행사에 참여해봐요! 😄",
@@ -88,23 +85,6 @@ router.post('', function (req, res) {
                     }
                   }
 
-                  ///////////////////////////////////// 테스트용. 나중에 지워야함
-                  if (defaultObj.ipadd == '54.180.122.96') {
-                    message.template.outputs[1] = {
-                      "simpleText": {
-                        "text": '스뮤스뮤 등록후에 사용해주세요!'
-                      }
-                    }
-                    message.template.outputs[1].simpleText.text = `주최자 : ${event.host}\n`;
-                    message.template.outputs[1].simpleText.text += `행사명 : ${event.eventName}\n`;
-                    message.template.outputs[1].simpleText.text += `시작시간 : ${event.startTime}\n`;
-                    message.template.outputs[1].simpleText.text += `종료시간 : ${event.endTime}\n`;
-                    message.template.outputs[1].simpleText.text += `장소 : ${event.location}\n`;
-                    message.template.outputs[1].simpleText.text += `행사종류 : ${event.type}\n`;
-                    message.template.outputs[1].simpleText.text += `점수 : ${event.point}\n`;
-                    message.template.outputs[1].simpleText.text += `세부사항 : ${event.description}\n`;
-                  }
-                  /////////////////////////////////////////////////////
                   return res.json(message);
                 } else { ///행사 참여 정상적인 상황
                   sql = `insert INTO festivalstatus(fid, uid, onTime) values(?, ?, now())`
@@ -130,29 +110,14 @@ router.post('', function (req, res) {
                             "action": "webLink",
                             "label": "록록록 현황 확인",
                             "webLinkUrl": `${homepage}/commu/festival/now?kakaoId=${kakaoId}`
+                          },{
+                            "action": "webLink",
+                            "label": "오늘의 행사 확인하기",
+                            "webLinkUrl": `${homepage}/commu/festival/today?kakaoId=${kakaoId}`
                           }
                         ]
                       }
                     }
-
-                    ///////////////////////////////////// 테스트용. 나중에 지워야함
-                    if (defaultObj.ipadd == '54.180.122.96') {
-                      message.template.outputs[2] = {
-                        "simpleText": {
-                          "text": '스뮤스뮤 등록후에 사용해주세요!'
-                        }
-                      }
-                      message.template.outputs[2].simpleText.text = `주최자 : ${event.host}\n`;
-                      message.template.outputs[2].simpleText.text += `행사명 : ${event.eventName}\n`;
-                      message.template.outputs[2].simpleText.text += `시작시간 : ${event.startTime}\n`;
-                      message.template.outputs[2].simpleText.text += `종료시간 : ${event.endTime}\n`;
-                      message.template.outputs[2].simpleText.text += `장소 : ${event.location}\n`;
-                      message.template.outputs[2].simpleText.text += `행사종류 : ${event.type}\n`;
-                      message.template.outputs[2].simpleText.text += `점수 : ${event.point}\n`;
-                      message.template.outputs[2].simpleText.text += `세부사항 : ${event.description}\n`;
-
-                    }
-                    /////////////////////////////////////////////////////
                     return res.json(message);
                   })
                 }
@@ -178,25 +143,6 @@ router.post('', function (req, res) {
                     }
                   }
 
-                  ///////////////////////////////////// 테스트용. 나중에 지워야함
-                  if (defaultObj.ipadd == '54.180.122.96') {
-                    message.template.outputs[1] = {
-                      "simpleText": {
-                        "text": '스뮤스뮤 등록후에 사용해주세요!'
-                      }
-                    }
-                    message.template.outputs[1].simpleText.text = `주최자 : ${event.host}\n`;
-                    message.template.outputs[1].simpleText.text += `행사명 : ${event.eventName}\n`;
-                    message.template.outputs[1].simpleText.text += `시작시간 : ${event.startTime}\n`;
-                    message.template.outputs[1].simpleText.text += `종료시간 : ${event.endTime}\n`;
-                    message.template.outputs[1].simpleText.text += `장소 : ${event.location}\n`;
-                    message.template.outputs[1].simpleText.text += `행사종류 : ${event.type}\n`;
-                    message.template.outputs[1].simpleText.text += `점수 : ${event.point}\n`;
-                    message.template.outputs[1].simpleText.text += `세부사항 : ${event.description}\n`;
-
-                  }
-                  /////////////////////////////////////////////////////
-
                   return res.json(message);
                 } else { ///행사 참여 정상적인 상황
                   sql = `insert INTO festivalstatus(fid, uid, onTime) values(?, ?, now())`
@@ -222,29 +168,14 @@ router.post('', function (req, res) {
                             "action": "webLink",
                             "label": "록록록 현황 확인",
                             "webLinkUrl": `${homepage}/commu/festival/now?kakaoId=${kakaoId}`
+                          },{
+                            "action": "webLink",
+                            "label": "오늘의 행사 확인하기",
+                            "webLinkUrl": `${homepage}/commu/festival/today?kakaoId=${kakaoId}`
                           }
                         ]
                       }
                     }
-
-                    ///////////////////////////////////// 테스트용. 나중에 지워야함
-                    if (defaultObj.ipadd == '54.180.122.96') {
-                      message.template.outputs[2] = {
-                        "simpleText": {
-                          "text": '스뮤스뮤 등록후에 사용해주세요!'
-                        }
-                      }
-                      message.template.outputs[2].simpleText.text = `주최자 : ${event.host}\n`;
-                      message.template.outputs[2].simpleText.text += `행사명 : ${event.eventName}\n`;
-                      message.template.outputs[2].simpleText.text += `시작시간 : ${event.startTime}\n`;
-                      message.template.outputs[2].simpleText.text += `종료시간 : ${event.endTime}\n`;
-                      message.template.outputs[2].simpleText.text += `장소 : ${event.location}\n`;
-                      message.template.outputs[2].simpleText.text += `행사종류 : ${event.type}\n`;
-                      message.template.outputs[2].simpleText.text += `점수 : ${event.point}\n`;
-                      message.template.outputs[2].simpleText.text += `세부사항 : ${event.description}\n`;
-
-                    }
-                    /////////////////////////////////////////////////////
 
                     return res.json(message);
                   })
@@ -259,23 +190,6 @@ router.post('', function (req, res) {
             message.template.outputs[0].simpleText.text = `행사 시간이 아닙니다. 행사시간에 맞춰서 시도해주세요.\n\n`;
             message.template.outputs[0].simpleText.text += `[행사시간]\n${st.getDate()}일 ${stf} ~ ${etf}`
 
-            ///////////////////////////////////// 테스트용. 나중에 지워야함
-            if (defaultObj.ipadd == '54.180.122.96') {
-              message.template.outputs[1] = {
-                "simpleText": {
-                  "text": '스뮤스뮤 등록후에 사용해주세요!'
-                }
-              }
-              message.template.outputs[1].simpleText.text = `주최자 : ${event.host}\n`;
-              message.template.outputs[1].simpleText.text += `행사명 : ${event.eventName}\n`;
-              message.template.outputs[1].simpleText.text += `시작시간 : ${event.startTime}\n`;
-              message.template.outputs[1].simpleText.text += `종료시간 : ${event.endTime}\n`;
-              message.template.outputs[1].simpleText.text += `장소 : ${event.location}\n`;
-              message.template.outputs[1].simpleText.text += `행사종류 : ${event.type}\n`;
-              message.template.outputs[1].simpleText.text += `점수 : ${event.point}\n`;
-              message.template.outputs[1].simpleText.text += `세부사항 : ${event.description}\n`;
-            }
-            /////////////////////////////////////////////////////
             return res.json(message);
           }
         } else { //다른 QR코드

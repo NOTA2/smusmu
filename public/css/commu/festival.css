@@ -15,6 +15,10 @@
   color : red;
 }
 
+h1{
+  margin-bottom: 3rem;
+}
+
 #base h3{
   font-size: 1.3rem;
   color : #000;
@@ -40,10 +44,125 @@
   margin: 1.9rem 0 .7rem;
 }
 
+.card{
+  display: inline-block;
+  margin : 1rem;
+}
+
+#now p span{
+  color: red;
+}
+
+#now p{
+  margin-left : 1rem;
+  font-size : 1rem;
+  text-align: justify;
+}
+
+.first{
+  color : #FFD700;
+}
+.second{
+  color : #D3D3D3;
+}
+.third{
+  color : #cc6633;
+}
+
+.normal{
+  color:black;
+}
+
+#rank h6{
+  font-size : 1.15rem;
+}
+
+h2{
+  margin-bottom: 2rem;
+}
+
+#myinfo h2{
+  margin-bottom: 1rem;
+}
+
+#myinfo h4.rank{
+  color : black;
+  font-size: 6rem;
+}
+
+h4.score{
+  color : black;
+  font-size: 3.5rem;
+}
+
+#myinfo h4 span{
+  color : red;
+}
+
+#majorInfo h4 span, #collegeInfo h4 span, #schoolInfo h4 span{
+  color : red;
+}
+
+.gifttitle{
+  margin : 2rem auto 0;
+}
+.giftsub{
+  margin : 1rem auto 2rem;
+}
+#rank h1{
+  font-size : 3rem;
+  margin-bottom: 2rem;
+}
+
+#rank h3.subtitle{
+  color:red;
+  margin-bottom:4rem;
+}
+
+p.h6{
+  display: inline-block;
+  margin : .3rem;
+  font-size: 0.8rem;
+}
+
+#rank .name{
+  color: black;
+}
+
+#rank .last{
+  margin-bottom: 2rem;
+}
+
+h3.etc{
+  margin-bottom: 3rem;
+}
+
+h3.etc span{
+  color: black;
+}
+
+.college{
+  margin-bottom: 3rem;
+}
+
+hr.line2{
+  margin: 2.5rem 0;
+}
+
+#sidebar ul li.active>a, a[aria-expanded="true"] {
+  color: #2A3C78;
+  background: #FAFAFA;
+}
+
+
 @media (max-width: 768px) {
   #article{
     width : 93%;
   }
+  h1{
+    margin-bottom: 3rem;
+  }
+  
   .fimg{
     width : 100%;
     margin : 1rem 0;

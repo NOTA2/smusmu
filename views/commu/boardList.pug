@@ -49,19 +49,19 @@
       ul.pagination
         - if(startPage > 5)
           li.page-item
-            a.page-link(href=`/commu/board/list?board=${board.bid}&page=${(startPage-1)}`, aria-label='Back')
+            a.page-link(href=`/commu/board/list?board=${board.boardKey}&page=${(startPage-1)}`, aria-label='Back')
               span(aria-hidden='true') «
               span.sr-only Back
         - for(var idx=startPage;idx<=endPage;idx++){
           - if(idx == page)
             li.page-item.active
-              a.page-link(href=`/commu/board/list?board=${board.bid}&page=${idx}`)= idx
+              a.page-link(href=`/commu/board/list?board=${board.boardKey}&page=${idx}`)= idx
           - else
             li.page-item
-              a.page-link(href=`/commu/board/list?board=${board.bid}&page=${idx}`)= idx
+              a.page-link(href=`/commu/board/list?board=${board.boardKey}&page=${idx}`)= idx
         - }
         - if(endPage < totalPage)
           li.page-item
-            a.page-link(href=`/commu/board/list?board=${board.bid}&page=${(endPage+1)}`, aria-label='Next')
+            a.page-link(href=`/commu/board/list?board=${board.boardKey}&page=${(endPage+1)}`, aria-label='Next')
               span(aria-hidden='true') »
               span.sr-only Next

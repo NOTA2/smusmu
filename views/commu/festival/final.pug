@@ -1,0 +1,156 @@
+extends layout.pug
+block append scripts
+block append css
+block append content
+  #article
+    -
+      function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+    h1 
+      i.far.fa-laugh-squint
+      |  록록록 최종 결산
+
+    h3
+      i.fas.fa-medal
+      |   최고 점수 TOP5
+    p 
+      - for(var i =0; i<point.length; i++)
+        | #{point[i].name} : #{numberWithCommas(point[i].sumpoint)}점<br>
+    h3
+      i.fas.fa-running
+      |   참여 행사수 TOP5
+    p
+      - for(var i =0; i<count.length; i++)
+        | #{count[i].name} : #{count[i].eventCount}개<br>
+    hr.line2
+
+    h3.etc
+      i.fas.fa-synagogue
+      |   총 점수<br>
+      span #{numberWithCommas(etc.sumpoint)}점
+    h3.etc
+      i.fas.fa-users
+      |   총 참여자 수<br>
+      span #{etc.cu}명
+    h3.etc
+      i.fas.fa-qrcode
+      |    QR코드 인식 횟수<br>
+      span #{numberWithCommas(etc.sumcount)}번
+    h3.etc
+      i.fas.fa-star
+      |   평균 점수<br>
+      span #{numberWithCommas(etc.avgpoint)}점
+    h3.etc
+      i.fas.fa-child
+      |   1인당 평균 참여 수<br>
+      span #{parseInt(etc.avgcount)}번
+    h3.etc
+      i.fas.fa-person-booth
+      |   행사당 평균 참여 수<br>
+      span #{parseInt(19.4394)}번
+    hr.line2
+
+
+    h3.etc
+      i.fas.fa-store
+      |  참여 행사 TOP5
+    - for(var i =0; i<eventMax.length; i++)
+      p [#{eventMax[i].host}]<br>#{eventMax[i].eventName} : #{eventMax[i].eventu}명
+    hr.line2
+
+    h3.etc
+      i.fas.fa-university
+      |    단과대 통산
+    - for(var i =0; i<college.length; i++)
+      .college
+        h4 #{college[i].college}
+        p #{college[i].uidc}명<br>
+          | 합계 #{numberWithCommas(college[i].collegesp)}점 / 평균 #{numberWithCommas(college[i].collegeavg.toFixed(0))}점<br>
+          | #{college[i].collegeec}번 행사 참가
+    hr.line2
+
+    h3.etc
+      a(href="#major" data-toggle="collapse")
+        i.fas.fa-pen-alt
+        |  학과 통산  
+        i.fas.fa-chevron-down
+    #major.collapse
+      - for(var i =0; i<major.length; i++)
+        .college
+          h4 #{major[i].major}
+          p #{major[i].uidc}명<br>
+            | 합계 #{numberWithCommas(major[i].majorsp)}점 / 평균 #{numberWithCommas(major[i].majoravg.toFixed(0))}점<br>
+            | #{major[i].majorec}번 행사 참가
+
+    hr.line
+    #rank
+      h1 최종 결과 발표
+      h3.subtitle ※ 상품을 받기 위해서는 개인정보에 자신의 전화번호가 입력되어야 합니다.
+        - for(var i=0;i<rank.length;i++)
+          - if(i<1)
+            h2.gifttitle
+              i.fas.fa-trophy.first 
+              |  총장상 (1명)
+            h2.giftsub
+              i.fab.fa-apple
+              |  에어팟 2
+            h2.name.last #{rank[i].name} (#{rank[i].major})
+            hr
+          - else if(i<2)
+            h3.gifttitle
+              i.fas.fa-trophy.second 
+              |  청춘상 (1명)
+            h3.giftsub
+              i.fas.fa-money-bill-wave
+              |  신세계 상품권 10만원
+            h3.name.last #{rank[i].name} (#{rank[i].major})
+            hr
+          - else if(i<3)
+            h4.gifttitle
+              i.fas.fa-trophy.third 
+              |  사슴상 (2명)
+            h4.giftsub
+              i.fas.fa-money-bill-wave-alt
+              |  신세계 상품권 5만원
+            h4.name #{rank[i].name} (#{rank[i].major})
+          - else if(i<4)
+            h4.name.last #{rank[i].name} (#{rank[i].major})
+            hr
+          - else if(i<5)
+            h5.gifttitle
+              i.fas.fa-trophy(style='color:black;')
+              |  기록상 (3명)
+            h5.giftsub
+              i.fas.fa-film
+              |  CGV 영화관람권 1매<br>
+              i.fas.fa-coffee
+              |  그라찌에 상품권 5000원
+            h5.name #{rank[i].name} (#{rank[i].major})
+          - else if(i<6)
+            h5.name #{rank[i].name} (#{rank[i].major})
+          - else if(i<7)
+            h5.name.last #{rank[i].name} (#{rank[i].major})
+            hr
+          - else if(i<8)
+            h6.gifttitle 
+              |  스뮤스뮤상(4명)
+            h6.giftsub
+              i.fas.fa-mug-hot
+              |   그라찌에 상품권 5000원 2매
+            h6.name #{rank[i].name}(#{rank[i].major})
+          - else if(i<10)
+            h6.name  #{rank[i].name}(#{rank[i].major})
+          - else if(i<11)
+            h6.name.last  #{rank[i].name}(#{rank[i].major})
+            hr
+          - else if(i<12)
+            h6.gifttitle 
+              |  스뮤상(89명)
+            h6.giftsub
+              i.fas.fa-coffee
+              |  그라찌에 상품권 5000원
+            p.h6 #{rank[i].name}(#{rank[i].major})
+          - else
+            p.h6  #{rank[i].name}(#{rank[i].major})
+          

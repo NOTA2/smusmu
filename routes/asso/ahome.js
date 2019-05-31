@@ -16,22 +16,7 @@ var upload = multer({
 })
 
 
-router.get('/myinfo', (req, res, next) => {
-  if (req.user && req.user.grade) {
-    if (req.user.token == 'true') next();
-    else res.render('asso/wait', {
-      user: req.user,
-      info: {
-        title: '관리페이지 홈',
-        titlehref: '/asso',
-        headbar: []
-      }
-    })
-  } else if (req.user && req.user.kakaoId)
-    res.redirect('/commu');
-  else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/myinfo', (req, res) => {
   req.user.assophone = req.user.assophone.split('-');
   res.render('asso/myinfo', {
     user: req.user,
@@ -90,22 +75,7 @@ router.post('/myinfo', upload.single('logo'), (req, res) => {
 
 })
 
-router.get('/member', (req, res, next) => {
-  if (req.user && req.user.grade) {
-    if (req.user.token == 'true') next();
-    else res.render('asso/wait', {
-      user: req.user,
-      info: {
-        title: '관리페이지 홈',
-        titlehref: '/asso',
-        headbar: []
-      }
-    })
-  } else if (req.user && req.user.kakaoId)
-    res.redirect('/commu');
-  else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/member',  (req, res) => {
 
   var sql = `
   SELECT users.id, username, name, major, grade

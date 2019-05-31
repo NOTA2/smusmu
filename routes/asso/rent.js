@@ -3,24 +3,7 @@ var async = require('async');
 var router = require('express').Router();
 
 
-router.get('/now', (req, res, next) => {
-  if (req.user && req.user.grade) {
-    if (req.user.token == 'true') next();
-    else res.render('asso/wait', {
-      user: req.user,
-      info: {
-        title: '관리페이지 홈',
-        titlehref: '/asso',
-        headbar: []
-      }
-    })
-  } else if (req.user && req.user.kakaoId)
-    res.redirect('/commu');
-  else
-    res.redirect('/auth/login');
-}, (req, res) => {
-
-
+router.get('/now', (req, res) => {
   var sql = `SELECT * FROM rent WHERE assoId=?`;
 
   conn.query(sql, [req.user.assoId], (err, rows) => {
@@ -38,7 +21,6 @@ router.get('/now', (req, res, next) => {
       WHERE assoId=? AND status=0
       ORDER BY rd ASC, id DESC`
 
-
       conn.query(sql, [req.user.assoId], (err, rows) => {
 
         res.render('asso/rentnow', {
@@ -51,10 +33,10 @@ router.get('/now', (req, res, next) => {
               href: '/asso/rent/now'
             }, {
               title: '물품 등록/관리',
-              href: '/commu/rent/setting'
+              href: '/asso/rent/setting'
             }, {
               title: '대여 기록',
-              href: '/commu/rent/list'
+              href: '/asso/rent/list'
             }]
           },
           rent: rent,
@@ -138,22 +120,7 @@ router.post('/now/return', (req, res) => {
 
 
 
-router.get('/setting', (req, res, next) => {
-  if (req.user && req.user.grade) {
-    if (req.user.token == 'true') next();
-    else res.render('asso/wait', {
-      user: req.user,
-      info: {
-        title: '관리페이지 홈',
-        titlehref: '/asso',
-        headbar: []
-      }
-    })
-  } else if (req.user && req.user.kakaoId)
-    res.redirect('/commu');
-  else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/setting',  (req, res) => {
 
 
   var sql = `SELECT * FROM rent WHERE assoId=?`
@@ -173,10 +140,10 @@ router.get('/setting', (req, res, next) => {
             href: '/asso/rent/now'
           }, {
             title: '물품 등록/관리',
-            href: '/commu/rent/setting'
+            href: '/asso/rent/setting'
           }, {
             title: '대여 기록',
-            href: '/commu/rent/list'
+            href: '/asso/rent/list'
           }]
         },
         rent: rows
@@ -271,22 +238,7 @@ router.post('/setting/delete', (req, res) => {
 });
 
 
-router.get('/list', (req, res, next) => {
-  if (req.user && req.user.grade) {
-    if (req.user.token == 'true') next();
-    else res.render('asso/wait', {
-      user: req.user,
-      info: {
-        title: '관리페이지 홈',
-        titlehref: '/asso',
-        headbar: []
-      }
-    })
-  } else if (req.user && req.user.kakaoId)
-    res.redirect('/commu');
-  else
-    res.redirect('/auth/login');
-}, (req, res) => {
+router.get('/list', (req, res) => {
 
   var page;
   if (req.query.page)
@@ -344,10 +296,10 @@ router.get('/list', (req, res, next) => {
             href: '/asso/rent/now'
           }, {
             title: '물품 등록/관리',
-            href: '/commu/rent/setting'
+            href: '/asso/rent/setting'
           }, {
             title: '대여 기록',
-            href: '/commu/rent/list'
+            href: '/asso/rent/list'
           }]
         },
         srent: rows,

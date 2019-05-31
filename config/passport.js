@@ -59,7 +59,7 @@ module.exports = function (app) {
 
   passport.deserializeUser((username, done) => {
     console.log('deserializeUser');
-    var sql = `SELECT users.id as id, username, kakaoId, token, email, major.college, major.major, schoolId, name, nickname,
+    var sql = `SELECT users.id as id, username, kakaoId, token, email, majorId, major.college, major.major, schoolId, name, nickname,
     assoname, phone, grade, assoId, assocollege, location, logo, description, assoemail, assophone
     fROM users
     LEFT JOIN asso ON users.assoId=asso.id
