@@ -53,15 +53,24 @@ router.get('/list', (req, res) => {
         endPage = totalPage;
       }
 
-      sql = `select topic.id as id, title, DATE_FORMAT(onTime,'%Y-%m-%d') AS date, TIME_TO_SEC(TIMEDIFF(now(), onTime)) as dtime, lik, mode, comment, users.name as name, users.nickname as nickname
-    FROM topic LEFT JOIN users ON topic.authId=users.id
-    WHERE bid=?
-    ORDER BY topic.id DESC
-    LIMIT 10 OFFSET ?`;
+      if(board.boardGrade)
+        sql = `select topic.id as id, title, DATE_FORMAT(onTime,'%Y-%m-%d') AS date, TIME_TO_SEC(TIMEDIFF(now(), onTime)) as dtime, lik, mode, comment, asso.assoname as name, asso.assoname as nickname
+              FROM topic
+              LEFT JOIN assoUser ON topic.authId=assoUser.id
+              LEFT JOIN asso ON assoUser.assoId=asso.id
+              WHERE topic.bid=?
+              ORDER BY topic.id DESC
+              LIMIT 10 OFFSET ?`;
+      else
+        sql = `select topic.id as id, title, DATE_FORMAT(onTime,'%Y-%m-%d') AS date, TIME_TO_SEC(TIMEDIFF(now(), onTime)) as dtime, lik, mode, comment, users.name as name, users.nickname as nickname
+                FROM topic LEFT JOIN users ON topic.authId=users.id
+                WHERE topic.bid=?
+                ORDER BY topic.id DESC
+                LIMIT 10 OFFSET ?`;
 
       conn.query(sql, [board.bid, (page - 1) * listCount], (err, results) => {
 
-        res.render('commu/board', {
+        res.render('commu/board/board', {
           user: req.user,
           info: {
             title: board.boardName,
@@ -93,7 +102,7 @@ router.get('/write', (req, res) => {
     //1. 등급제한이 없는 경우
     //2. 등급제한은 있는 경우, usergrade가 더 같거나 낮은경우
     if((board.boardGrade==null && (req.user.grade == null || req.user.grade == 4)) || (board.boardGrade && req.user.grade && board.boardGrade >= req.user.grade)){
-      res.render('commu/write', {
+      res.render('commu/board/write', {
         user: req.user,
         info: {
           title: board.boardName,
@@ -224,7 +233,7 @@ router.get('/content', (req, res) => {
               board : board
             }
   
-            res.render('commu/content', params);
+            res.render('commu/board/content', params);
           })
         })
       })

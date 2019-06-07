@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
     if (err)
       throw err;
 
-    res.render(`auth/password`, {
+    res.render(`auth/find/password`, {
       user: req.user,
       type: type,
       info: {

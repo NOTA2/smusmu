@@ -22,7 +22,7 @@ router.post('', function (req, res) {
     }
   };
 
-  var sql = "SELECT date,content FROM academicCalendar ";
+  var sql = "SELECT DISTINCT date,content FROM academicCalendar ";
 
   try {
     content = JSON.parse(content.date.value);

@@ -18,7 +18,7 @@ var upload = multer({
 
 router.get('/myinfo', (req, res) => {
   req.user.assophone = req.user.assophone.split('-');
-  res.render('asso/myinfo', {
+  res.render('asso/home/myinfo', {
     user: req.user,
     info: {
       title: '정보 수정',
@@ -63,7 +63,7 @@ router.post('/myinfo', upload.single('logo'), (req, res) => {
     req.user.logo = logo;
     req.user.assophone = [req.body.phone1, req.body.phone2, req.body.phone3]
 
-    return res.render('asso/myinfo', {
+    return res.render('asso/home/myinfo', {
       user: req.user,
       info: {
         title: '정보 수정',
@@ -86,7 +86,7 @@ router.get('/member',  (req, res) => {
     if (err)
       throw err;
 
-    return res.render('asso/member', {
+    return res.render('asso/home/member', {
       user: req.user,
       info: {
         title: '부원 계정관리',

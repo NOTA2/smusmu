@@ -5,7 +5,7 @@ var router = require('express').Router();
 router.get('/myinfo', (req, res) => {
   req.user.phone = req.user.phone.split('-');
 
-  res.render('commu/myinfo', {
+  res.render('commu/home/myinfo', {
     user: req.user,
     info: {
       title: '내 정보',
@@ -40,7 +40,7 @@ router.post('/myinfo', (req, res) => {
       req.user.nickname = req.body.nickname
       req.user.phone = [req.body.phone1, req.body.phone2, req.body.phone3]
 
-      res.render('commu/myinfo', {
+      res.render('commu/home/myinfo', {
         user: req.user,
         info: {
           title: '내 정보',
@@ -69,7 +69,7 @@ router.get('/assoapply', (req, res) => {
     if (rows.length > 0) //정보가 있을 경우 중복
       asso = rows.filter(x => x.token == 'true');
     
-    return res.render('commu/assoapply', {
+    return res.render('commu/home/assoapply', {
       user: req.user,
       info: {
         title: '학생회 부원계정 신청',

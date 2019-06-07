@@ -29,9 +29,7 @@
             a(href=`/commu/board/content?board=${board.boardKey}&id=${topics[i].id}&page=${page}`)= topics[i].title
               span.comment [
                 | #{topics[i].comment}]
-          - if(user.grade==1 || user.grade==2 || user.grade==3)
-            td.auth= user.assoname
-          - else if(topics[i].mode == 1)
+          - if(topics[i].mode == 1)
             td.auth 익명
           - else if(topics[i].mode == 2)
             td.auth= topics[i].nickname

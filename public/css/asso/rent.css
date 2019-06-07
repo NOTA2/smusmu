@@ -5,6 +5,11 @@ th{
   text-align: center;
 }
 
+.table td, .table th {
+	padding: .4rem;
+}
+
+
 .now{
   text-align: center;
 }
@@ -90,7 +95,7 @@ td.minus{
 }
 
 .plusrow{
-	font-size : 100%;
+	font-size : .8rem;
 }
 
 @media screen and (max-width:768px){

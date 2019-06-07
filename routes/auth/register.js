@@ -13,23 +13,8 @@ router.get('/', (req, res) => {
   res.redirect('/auth/login');
 });
 
-router.get('/info', (req, res, next) => {
-  if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
-    //일반 학생 계정일 경우
-    if (req.user.kakaoId) {
-      if (req.user.token == 'true')
-        return res.redirect('/commu')
-      else
-        return res.redirect(`auth/register/commu/email?kakaoId=${req.user.kakaoId}`);
-    }
-    //학생회 계정일경우
-    else
-      return res.redirect('/asso');
-  } else {
-    next();
-  }
-}, (req, res) => {
-  res.render('auth/registerInfo');
+router.get('/info', (req, res) => {
+  res.render('auth/registeretc/registerInfo');
 });
 
 

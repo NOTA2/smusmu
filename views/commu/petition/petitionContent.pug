@@ -1,65 +1,88 @@
-extends commuLayout.pug
+extends ../commuLayout.pug
 block append scripts
   script(src="/js/autosize.min.js")
-  script(src="/js/commu/content.js")
+  script(src="/js/commu/petition.js")
 block append css
-  link(rel='stylesheet', href='/css/commu/board.css')
-  link(rel='stylesheet', href='/css/commu/content.css')
+  link(rel='stylesheet', href='/css/commu/petitionList.css')
+  link(rel='stylesheet', href='/css/commu/petition.css')
 block append content
-  -
-    function passing_time(c) {
-      console.log(c)
-      var rt;
-      if(c.dtime < 60) {
-        rt = "방금";
-      } else if(c.dtime >= 60 && c.dtime < 3600) {
-        rt = parseInt(c.dtime/60) + "분 전";
-      } else if(c.dtime >= 3600 && c.dtime < 86400) {
-        rt = parseInt(c.dtime/3600)+"시간 전";
-      } else {
-        rt = c.date
-      } 
-      return rt;
-    }
   #article
+    - if(topic.answerState == 0)
+      p [청원진행중]
+    - else
+      p [청원종료]
     #title
       h1= topic.title
-      hr
-      - if(user.grade==1 || user.grade==2 || user.grade==3)
-        h5= user.assoname
-          span
-            i.far.fa-clock
-            |  #{passing_time(topic)}
-      - else if(topic.mode == 1)
-        h5 익명
-          span
-            i.far.fa-clock
-            |  #{passing_time(topic)}
-      - else if(topic.mode == 2)
-        h5= topic.nickname
-          span
-            i.far.fa-clock
-            |  #{passing_time(topic)}
-      - else if(topic.mode == 3)
-        h5= topic.name
-          span
-            i.far.fa-clock
-            |  #{passing_time(topic)}
+    p.lik 참여인원 [
+      span= topic.lik
+      | 명]
+    #contentinfo.alert.alert-secondary(role='alert')
+      ul.petitionsView_info_list
+        li
+          span 청원시작
+          | #{topic.onTime}
+        - if(topic.enrollTime)
+          li
+            span 답변완료
+            | #{topic.enrollTime}
+        li
+          span 청원인
+          - if(topic.mode == 1 || (topic.mode ==2 && user.assocollege == '총학생회'))
+            | #{topic.name}
+          - else
+            | 익명
+        - if((topic.mode ==1 && user.assocollege == '총학생회') || (topic.mode ==2 && user.assocollege == '총학생회'))
+          li
+            span 소속
+            | #{topic.college} #{topic.major}
+          li 
+            span 전화번호
+            | #{topic.phone}
     #topiccontent !{topic.content}
+    - if(topic.answerId)
+      #answercontent
+        hr.line
+        h1 답변입니다.
+        .content !{answer.content}
     - if(user.kakaoId)
       #likebuttonarea
         button.btn.btn-primary(onclick='like("'+topic.pid+'", "'+user.id+'", "'+topic.authId+'", 1)')
           i.far.fa-thumbs-up
           | <br>추천
-          | <br>#{topic.lik}
-    - if(user.grade == 1)
+    - if(user.grade == 2)
       #answerbuttonarea
+        a.btn.btn-danger(href='/commu/petition/answer/write?id='+topic.pid)
+          i.fas.fa-pen-alt
+          - if(topic.answerId)
+            | <br>답변 수정
+          - else
+            | <br>답변 달기
+        button.btn.btn-primary(onclick='answerok("'+topic.pid+'")')
+          i.far.fa-check-circle
+          | <br>답변 완료
         button.btn.btn-secondary(onclick='deletetopic("'+topic.pid+'")')
           i.far.fa-trash-alt
           | <br>게시글 삭제
     hr.line
+    -
+      function passing_time(c) {
+        var rt;
+        if(c.dtime < 60) {
+          rt = "방금";
+        } else if(c.dtime >= 60 && c.dtime < 3600) {
+          rt = parseInt(c.dtime/60) + "분 전";
+        } else if(c.dtime >= 3600 && c.dtime < 86400) {
+          rt = parseInt(c.dtime/3600)+"시간 전";
+        } else if(c.dtime >= 86400 && c.dtime < 2419200) {
+          rt = parseInt(c.dtime/86400)+"일 전";
+        } else {
+          rt = c.date
+        } 
+        return rt;
+      }
     #commentlist
       - for(var i=0;i<comments.length;i++)
+        //- - if(comments[i].recommentId)
         div(class=comments[i].recommentId?'comment reco':'comment')
           div(class=comments[i].authId==user.id?'commentid my':comments[i].authId==topic.authId?'commentid mas':'commentid')
             .commentidh
@@ -87,7 +110,10 @@ block append content
                 span.cbtn(onclick='recomment(this, "'+topic.pid+'", "'+user.id+'", "'+comments[i].authId+'", "'+comments[i].id+'")')
                   i.far.fa-comments
                   |  답글
-          - else if(user.grade==1)
+              //- span.cbtn(onclick="update()")
+              //-   i.fas.fa-edit
+              //-   |  수정
+          - else
             .commentetc
               span.btn
                 i.far.fa-thumbs-up
@@ -101,12 +127,11 @@ block append content
     if(user.kakaoId)
       #maincomment.Reply_area_write
         .Reply_area_write_pg
-          form#frm(name="frm" action='/commu/board/comment', method='post')
+          form#frm(name="frm" action='/commu/petition/comment', method='post')
             input(type='hidden', name='uid', value=user.id)
             input(type='hidden', name='pid', value=topic.pid)
-            input(type='hidden', name='boardKey', value=board.boardKey)
-            input(type='hidden', name='page', value=page)
             textarea#tw_contents.petitionsReply_write.form-control(name='body', required='', placeholder='최대 100자까지 적을 수 있습니다.', onkeyup="len_chk()")
             input.submit.btn.btn-warning.form-control(type='button' value="등록" onclick='comment()')
   hr.line
-  include boardList.pug
+  #petitionList
+    include petitionList.pug

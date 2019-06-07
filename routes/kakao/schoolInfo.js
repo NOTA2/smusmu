@@ -59,12 +59,12 @@ router.post('/', (req, res) => {
 
           if (el.img) {
             message.template.outputs[0].carousel.items[idx].thumbnail = {
-              "imageUrl": 'http://' + defaultObj.ipadd + '/mapimg/' + el.img + '2.png'
+              "imageUrl": `http://${defaultObj.ipadd}/img/mapimg/${el.img}2.png`
             };
             message.template.outputs[0].carousel.items[idx].buttons = [{
               "action": "webLink",
               "label": "지도 크게보기",
-              "webLinkUrl": 'http://' + defaultObj.ipadd + '/mapimg/' + el.img + '1.png'
+              "webLinkUrl": `http://${defaultObj.ipadd}/img/mapimg/${el.img}1.png`
             }];
           } else {
             message.template.outputs[0].carousel.items[idx].buttons = []

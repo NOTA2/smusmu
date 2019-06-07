@@ -79,7 +79,7 @@ router.get('/list', (req, res) => {
 
       conn.query(sql, [(page - 1) * listCount], (err, results) => {
 
-        res.render('commu/petition', {
+        res.render('commu/petition/petition', {
           user: req.user,
           info: {
             title: '진행 중인 청원',
@@ -229,10 +229,10 @@ router.get('/content', (req, res) => {
             conn.query(sql, [topic.answerId], (err, results3) => {
               var answer = results3[0];
               params.answer = answer;
-              res.render('commu/petitionContent', params);
+              res.render('commu/petition/petitionContent', params);
             })
           } else {
-            res.render('commu/petitionContent', params);
+            res.render('commu/petition/petitionContent', params);
           }
         })
       })
@@ -241,7 +241,7 @@ router.get('/content', (req, res) => {
 });
 
 router.get('/write',(req, res) => {
-  res.render('commu/petitionWrite', {
+  res.render('commu/petition/petitionWrite', {
     user: req.user,
     info: {
       title: '학생 청원 제도',

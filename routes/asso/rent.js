@@ -23,7 +23,7 @@ router.get('/now', (req, res) => {
 
       conn.query(sql, [req.user.assoId], (err, rows) => {
 
-        res.render('asso/rentnow', {
+        res.render('asso/rent/rentnow', {
           user: req.user,
           info: {
             title: '대여물품 현황',
@@ -130,7 +130,7 @@ router.get('/setting',  (req, res) => {
       console.log(err);
       res.status(500);
     } else {
-      res.render('asso/rentsetting', {
+      res.render('asso/rent/rentsetting', {
         user: req.user,
         info: {
           title: '물품 등록/관리',
@@ -286,7 +286,7 @@ router.get('/list', (req, res) => {
     conn.query(sql, [req.user.assoId, (page - 1) * listCount], (err, rows) => {
 
 
-      res.render('asso/rentlist', {
+      res.render('asso/rent/rentlist', {
         user: req.user,
         info: {
           title: '대여 기록',

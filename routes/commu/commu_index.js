@@ -30,7 +30,7 @@ router.use('/board', board);
 
 router.get('/', (req, res) => {
 
-  res.render('commu/index', {
+  res.render('commu/home/index', {
     user: req.user,
     info: {
       title: '커뮤니티 홈',

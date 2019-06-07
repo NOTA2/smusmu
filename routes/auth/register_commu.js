@@ -10,22 +10,7 @@ const gmailKey = fs.readFileSync('key/gmailKey', 'utf-8');
 
 
 
-router.get('/', (req, res, next) => {
-  if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
-    //일반 학생 계정일 경우
-    if (req.user.kakaoId) {
-      if (req.user.token == 'true')
-        return res.redirect('/commu')
-      else
-        return res.redirect(`auth/register/commu/email?kakaoId=${req.user.kakaoId}`);
-    }
-    //학생회 계정일경우
-    else
-      return res.redirect('/asso');
-  } else {
-    next();
-  }
-}, (req, res) => {
+router.get('/', (req, res) => {
   var kakaoId = req.query.kakaoId;
 
   if (!kakaoId)
@@ -44,7 +29,7 @@ router.get('/', (req, res, next) => {
       else //못 받았다면
         return res.redirect(`/auth/register/commu/email?kakaoId=${results[0].kakaoId}`);
     } else
-      res.render('auth/registerCommu', {
+      res.render('auth/register/registerCommu', {
         kakaoId: kakaoId
       });
   });
@@ -133,30 +118,19 @@ router.post('/', (req, res) => {
 
 
 
-router.get('/email', (req, res, next) => {
-  if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
-    //일반 학생 계정일 경우
-    if (req.user.kakaoId) {
-      if (req.user.token == 'true')
-        return res.redirect('/commu')
-      else
-        next();
-    }
-    //학생회 계정일경우
-    else
-      return res.redirect('/asso');
-  } else {
-    next();
-  }
-}, (req, res) => {
+router.get('/email', (req, res) => {
   var sql;
   var param;
   if (req.query.kakaoId) {
+    console.log('abd');
+    
     sql = 'SELECT * FROM users WHERE kakaoId =?';
     param = req.query.kakaoId;
   } else if (req.query.username) {
     sql = 'SELECT * FROM users WHERE username=?';
     param = req.query.username;
+  }else{
+    return res.redirect(`/auth/register/info`);
   }
   conn.query(sql, [param], (err, results) => {
     if (err) {
@@ -167,18 +141,18 @@ router.get('/email', (req, res, next) => {
         if (results[0].token === req.query.token) { //토큰이 일치하면 성공
           sql = 'UPDATE users SET token=? WHERE username=?';
           conn.query(sql, ['true', req.query.username], (err, results) => {
-            return res.render('auth/registerEmailS')
+            return res.render('auth/registeretc/registerEmailS')
           })
         } else if (results[0].token == 'true') { //이미 성공한 상태
-          return res.render('auth/registerEmailS')
+          return res.render('auth/registeretc/registerEmailS')
         } else {
-          return res.render('auth/registerEmail', {
+          return res.render('auth/registeretc/registerEmail', {
             kakaoId: results[0].kakaoId,
             schoolId: results[0].schoolId
           })
         }
       } else {
-        return res.render('auth/registerEmail', {
+        return res.render('auth/registeretc/registerEmail', {
           kakaoId: req.query.kakaoId
         })
       }
@@ -194,7 +168,7 @@ router.post('/email', (req, res) => {
     fROM users
     LEFT JOIN major ON users.majorId=major.id
     WHERE kakaoId=?`
-    
+
   conn.query(sql, [kakaoId], (err, results) => {
     if (err) {
       console.log(err);
@@ -251,23 +225,7 @@ router.post('/email', (req, res) => {
 })
 
 
-router.get('/reschoolId', (req, res, next) => {
-  if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
-    //일반 학생 계정일 경우
-    if (req.user.kakaoId) {
-      if (req.user.token == 'true')
-        return res.redirect('/commu')
-      else
-        next();
-    }
-    //학생회 계정일경우
-    else
-      return res.redirect('/asso');
-  } else {
-    next();
-  }
-}, (req, res) => {
-
+router.get('/reschoolId', (req, res) => {
 
   if (req.query.kakaoId) {
     var kakaoId = req.query.kakaoId;
@@ -279,7 +237,7 @@ router.get('/reschoolId', (req, res, next) => {
         throw err;
 
       if (rows.length > 0)
-        res.render('auth/reschoolId', {
+        res.render('auth/registeretc/reschoolId', {
           schoolId: rows[0].schoolId,
           kakaoId: rows[0].kakaoId,
           id: rows[0].id,

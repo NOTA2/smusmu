@@ -46,12 +46,12 @@ router.get('/', (req, res, next) => {
       if (rows.length > 0) { //정보가 있을 경우 중복
         var exist = rows.filter(x => x.token == 'true').map(x => x.assocollege);
 
-        return res.render('auth/registerAsso', {
+        return res.render('auth/register/registerAsso', {
           college: college,
           exist: exist
         });
       } else {
-        return res.render('auth/registerAsso', {
+        return res.render('auth/register/registerAsso', {
           college: college
         });
       }

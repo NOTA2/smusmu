@@ -68,7 +68,7 @@ router.get('/list', (req, res) => {
     conn.query(sql, [(page - 1) * listCount], (err, results) => {
 
 
-      res.render('commu/petition', {
+      res.render('commu/petition/petition', {
         user: req.user,
         info: {
           title: '답변 완료된 청원',
@@ -110,7 +110,7 @@ router.get('/write', (req, res) => {
       sql = `SELECT * from petitionAnswer WHERE id =?`;
       conn.query(sql, [topic.answerId], (err, results) => {
         var answer = results[0];
-        res.render('commu/petitionAnswer', {
+        res.render('commu/petition/petitionAnswer', {
           user: req.user,
           info: {
             title: infotitle,
@@ -128,7 +128,7 @@ router.get('/write', (req, res) => {
         });
       })
     } else {
-      res.render('commu/petitionAnswer', {
+      res.render('commu/petition/petitionAnswer', {
         user: req.user,
         info: {
           title: infotitle,

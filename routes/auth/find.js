@@ -25,7 +25,7 @@ const gmailKey = fs.readFileSync('key/gmailKey', 'utf-8');
       next();
     }
   }, (req, res) => {
-    res.render('auth/find')
+    res.render('auth/find/find')
   });
 
 
@@ -67,14 +67,14 @@ const gmailKey = fs.readFileSync('key/gmailKey', 'utf-8');
           } else {
             console.log('Email sent: ' + info.response);
 
-            return res.render(`auth/findResult`, {
+            return res.render(`auth/find/findResult`, {
               type: 'id'
             });
           }
         });
 
       } else {
-        return res.render(`auth/findResult`, {
+        return res.render(`auth/find/findResult`, {
           type: 'none'
         });
       }
@@ -129,13 +129,13 @@ const gmailKey = fs.readFileSync('key/gmailKey', 'utf-8');
               } else {
                 console.log('Email sent: ' + info.response);
 
-                return res.render(`auth/findResult`, {
+                return res.render(`auth/find/findResult`, {
                   type: 'pw'
                 });
               }
             });
           } else {
-            return res.render(`auth/findResult`, {
+            return res.render(`auth/find/findResult`, {
               type: 'none'
             });
           }
@@ -153,13 +153,13 @@ const gmailKey = fs.readFileSync('key/gmailKey', 'utf-8');
         res.status(500).end();
       } else {
         if (rows.length > 0) {
-          return res.render(`auth/changepw`, {
+          return res.render(`auth/find/changepw`, {
             state: true,
             token: req.query.token,
             username: req.query.username
           });
         } else {
-          return res.render(`auth/changepw`, {
+          return res.render(`auth/find/changepw`, {
             state: false
           });
         }
@@ -181,11 +181,11 @@ const gmailKey = fs.readFileSync('key/gmailKey', 'utf-8');
           res.status(500).end();
         } else {
           if (results.affectedRows == 1) {
-            return res.render(`auth/findResult`, {
+            return res.render(`auth/find/findResult`, {
               type: 'change'
             });
           } else {
-            return res.render(`auth/findResult`, {
+            return res.render(`auth/find/findResult`, {
               type: 'none'
             });
           }

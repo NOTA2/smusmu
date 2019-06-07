@@ -42,12 +42,12 @@ router.post('', function (req, res) {
           "title": el.name,
           "description": el.explanation,
           "thumbnail": {
-            "imageUrl": 'http://' + defaultObj.ipadd + el.img
+            "imageUrl": `http://${defaultObj.ipadd}/img${el.img}`
           },
           "buttons": [{
               "action": "webLink",
               "label": "메뉴판 크게보기",
-              "webLinkUrl": 'http://' + defaultObj.ipadd + el.img
+              "webLinkUrl": `http://${defaultObj.ipadd}/img${el.img}`
             },
             {
               "action": "phone",

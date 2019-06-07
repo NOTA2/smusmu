@@ -1,4 +1,4 @@
-extends commuLayout.pug
+extends ../commuLayout.pug
 block append scripts
   script(src="/js/commu/write.js")
 block append css
@@ -14,10 +14,16 @@ block append content
           sapn.input-group-text 공개여부
           .btn-group.btn-group-toggle(data-toggle='buttons')
             label.btn.btn-outline-warning.active
-              input#option1(type='radio', name='mode', value='1' autocomplete='off', checked='checked')
+              - if(user.grade)
+                input#option1(type='radio', name='mode', value='1' autocomplete='off')
+              - else
+                input#option1(type='radio', name='mode', value='1' autocomplete='off', checked='checked')
               |  익명
             label.btn.btn-outline-warning
-              input#option2(type='radio', name='mode', value='2' autocomplete='off')
+              - if(user.grade)
+                input#option2(type='radio', name='mode', value='2' autocomplete='off', checked='checked')
+              - else
+                input#option2(type='radio', name='mode', value='2' autocomplete='off')
               |  닉네임
             label.btn.btn-outline-warning
               input#option3(type='radio', name='mode', value='3' autocomplete='off')

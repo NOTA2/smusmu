@@ -1,4 +1,4 @@
-extends authLayout.pug
+extends ../authLayout.pug
 block append scripts
   script(type='text/javascript', src='/js/auth/email.js')
 block append css
@@ -28,28 +28,28 @@ block content
       a.btn.btn-danger.form-control(href='/auth/logout' role="button") 로그아웃
     .info
       .card
-        img.card-img-top(src='/registerinfo/mail1.png')
+        img.card-img-top(src='/img/registerinfo/mail1.png')
         .card-body
           p.card-text
             | 1. Office 365로 들어가세요. 학교 통합 로그인 계정과 동일한 아이디/비밀번호 입니다.
       .card
-        img.card-img-top(src='/registerinfo/mail2.png')
+        img.card-img-top(src='/img/registerinfo/mail2.png')
         .card-body
           p.card-text
             | 2. [Inbox]에 메일이 없다면 [기타]로 들어가 주세요.
       .card
-        img.card-img-top(src='/registerinfo/mail3.png')
+        img.card-img-top(src='/img/registerinfo/mail3.png')
         .card-body
           p.card-text
             | 3. 메뉴에서 [Junk Email]을 눌러주세요!
     .info
       .card
-        img.card-img-top(src='/registerinfo/mail4.png')
+        img.card-img-top(src='/img/registerinfo/mail4.png')
         .card-body
           p.card-text
             | 4. smusmudd@gmail.com에서 인증 메일이 왔는지 확인해 주세요!
       .card
-        img.card-img-top(src='/registerinfo/mail5.png')
+        img.card-img-top(src='/img/registerinfo/mail5.png')
         .card-body
           p.card-text
             | 5. 스뮤스뮤 가입 인증하기 링크를 눌러서 인증을 완료해 주세요!
