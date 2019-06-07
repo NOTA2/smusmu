@@ -55,8 +55,9 @@ router.post('/myinfo', (req, res) => {
 
 router.get('/assoapply', (req, res) => {
 
-  var sql = `select token, assocollege, assoname, asso.id as aid
-  FROM assoUser LEFT JOIN asso ON assoUser.id=asso.assoUserId
+  var sql = `select DISTINCT token, assocollege, assoname, asso.id as aid
+  FROM assoUser 
+  LEFT JOIN asso ON assoUser.assoId=asso.id
   WHERE grade=2 OR grade=3`;
 
   conn.query(sql, (err, rows) => {
@@ -65,9 +66,9 @@ router.get('/assoapply', (req, res) => {
       return res.status(500);
     }
     var asso = Array()
-
+    
     if (rows.length > 0) //정보가 있을 경우 중복
-      asso = rows.filter(x => x.token == 'true');
+      asso = rows.filter(x => {return x.token == 'true'});
     
     return res.render('commu/home/assoapply', {
       user: req.user,

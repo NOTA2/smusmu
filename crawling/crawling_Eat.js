@@ -25,7 +25,7 @@ exports.search = function () {
 
     //조식이 있다면 잘못 작성된 것이지만 일단 추가
     var eatR;
-    if ($('.menu-list-box tbody').length > 0) {
+    if ($('.menu-list-box td .s-dot').length > 0) {
       eatR = new Array();  
       bcheck = false;
 
@@ -66,7 +66,7 @@ exports.search = function () {
         }
       });
     }
-
+    
     //진짜 중식 추가
     time = 'L'
     urlR = 'https://www.smu.ac.kr/ko/life/restaurantView.do?srMealCategory=' + time + '&srDt=' + urlDate;
@@ -88,6 +88,10 @@ exports.search = function () {
           var date = parseInt(eatDate[2])
 
           eatDate = new Date(year, month - 1, date);
+          
+          if($('.menu-list-box td .s-dot').length > 10)  //다음주에 적어야하는데 이번주에 적은 상황에
+            eatDate.setDate(eatDate.getDate() + 7)
+
           for (var idx = 0; idx < 5; idx++) {
             eatR[idx] = new Array();
             eatR[idx][0] = eatDate.toFormat("YYYY-MM-DD");
@@ -98,7 +102,10 @@ exports.search = function () {
             eatR[idx][2][0] = '=====중식====='
           }
 
-          $('.menu-list-box tr').each(function () {
+          $('.menu-list-box tr').each(function (tridx) {
+            if($('.menu-list-box tr').length>3 && tridx<3)
+              return true;
+
             if ($(this).find('th').text().indexOf('오늘') != -1) { //tr이 오늘의 메뉴라면
               $(this).find('.s-dot').each(function (idx) {
                 eatR[idx][2][0] += '\n\n[오늘의 메뉴]\n'
@@ -155,6 +162,11 @@ exports.search = function () {
         }
         if ($('.menu-list-box td .s-dot').length > 0) {
           $('.menu-list-box td .s-dot').each(function (idx) {
+            if($('.menu-list-box td .s-dot').length > 5 && idx < 5)
+            return true;
+          if($('.menu-list-box td .s-dot').length > 5 && idx >= 5)
+            idx-=5;
+
             eatR[idx][2][1] = '=====석식=====\n'
 
             $(this).find('li').each(function () {
@@ -168,7 +180,7 @@ exports.search = function () {
           });
         }else{
           console.log("R관 석식 학식정보 없음");
-        }
+        }        
 
         if (eatR.length > 0) {
           var date = eatR.map(x => x[0]);
@@ -223,6 +235,10 @@ exports.search = function () {
       var date = parseInt(eatDate[2])
 
       eatDate = new Date(year, month - 1, date);
+      
+      if($('.menu-list-box td .s-dot').length > 5)  //다음주에 적어야하는데 이번주에 적은 상황에
+        eatDate.setDate(eatDate.getDate() + 7)
+      
 
       for (var idx = 0; idx < 5; idx++) {
         eatT[idx] = new Array();
@@ -231,6 +247,11 @@ exports.search = function () {
       }
 
       $('.menu-list-box td .s-dot').each(function (idx) {
+        if($('.menu-list-box td .s-dot').length > 5 && idx < 5)   //다음주에 적어야하는데 이번주에 적은 상황에
+          return true;
+        if($('.menu-list-box td .s-dot').length > 5 && idx >= 5)    //다음주에 적어야하는데 이번주에 적은 상황에
+          idx-=5;
+
         eatT[idx][1] = 'T';
         eatT[idx][2] = new Array();
         eatT[idx][2][0] = '=====중식=====\n'

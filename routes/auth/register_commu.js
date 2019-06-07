@@ -121,9 +121,7 @@ router.post('/', (req, res) => {
 router.get('/email', (req, res) => {
   var sql;
   var param;
-  if (req.query.kakaoId) {
-    console.log('abd');
-    
+  if (req.query.kakaoId) {    
     sql = 'SELECT * FROM users WHERE kakaoId =?';
     param = req.query.kakaoId;
   } else if (req.query.username) {

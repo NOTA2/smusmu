@@ -34,7 +34,7 @@ router.get('/', (req, res, next) => {
 
     sql = `select token, assocollege
     FROM assoUser
-    LEFT JOIN asso ON assoUser.id=asso.assoUserId
+    LEFT JOIN asso ON assoUser.assoId=asso.id
     WHERE grade=2 OR grade=3`;
 
     conn.query(sql, (err, rows) => {
@@ -42,10 +42,9 @@ router.get('/', (req, res, next) => {
         console.log(err);
         return res.status(500);
       }
-
       if (rows.length > 0) { //정보가 있을 경우 중복
-        var exist = rows.filter(x => x.token == 'true').map(x => x.assocollege);
-
+        var exist = rows.filter(x => {return x.token == 'true'}).map(x => x.assocollege);
+        
         return res.render('auth/register/registerAsso', {
           college: college,
           exist: exist
