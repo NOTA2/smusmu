@@ -85,16 +85,16 @@ block append content
         function checkdate(rdate){
           var d = new Date();
           var rd = new Date(rdate);
+
           if(rd < d) //기간이 지났으면
             return true;
           else
             return false;
         }
 
-        function checkdate2(rdate){
+        function checkdatetoday(rdate){
           var d = new Date();
           var rd = new Date(rdate);
-
 
           if(d.getFullYear() == rd.getFullYear() && d.getMonth()== rd.getMonth() && d.getDate() == rd.getDate())
             return true;
@@ -103,7 +103,7 @@ block append content
         }
       tbody
         - for(i=0;i<srent.length;i++)
-          tr(class=checkdate(srent[i].returndate)?'plusrow over':checkdate2(srent[i].returndate)?'plusrow today':'plusrow')
+          tr(class=checkdatetoday(srent[i].returndate)?'plusrow today':checkdate(srent[i].returndate)?'plusrow over':'plusrow')
             td.thing= srent[i].rentname
             td.username= srent[i].uname
             td.schoolId= srent[i].schoolId

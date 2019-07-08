@@ -181,6 +181,14 @@ router.post('/write', (req, res, next) => {
 })
 
 
+router.post('/upload', upload.single('upload'), (req, res) => {
+  res.status(200).json({
+    "uploaded": true,
+    "url": req.file.path.replace('public', '')
+  });
+});
+
+
 router.post('/ok', (req, res) => {
 
   var sql = `

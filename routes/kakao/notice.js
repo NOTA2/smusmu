@@ -70,7 +70,10 @@ router.post('', function (req, res) {
               {
                 "label": '스뮤스뮤에서 확인',
                 "action": "block",
-                "messageText": el.src.split('?mode=view&')[1],
+                "messageText": el.title,
+                "extra": {
+                  "id":  el.src.split('?mode=view&')[1]
+                },
                 "blockId": "5c3061135f38dd44d86a2710"
               }
             ]
@@ -122,7 +125,7 @@ router.post('/result', (req, res) => {
       }])
     }
   };
-  var url = 'http://www.smu.ac.kr/lounge/notice/notice.do?mode=view&' + req.body.userRequest.utterance;
+  var url = 'http://www.smu.ac.kr/lounge/notice/notice.do?mode=view&' + req.body.action.clientExtra.id;
 
   cNoticeContents.search(url)
     .then(result => {

@@ -2,7 +2,7 @@ ClassicEditor
 .create( document.querySelector( '#editor' ) , {
   language:'ko',
   ckfinder: {
-    uploadUrl: '/commu/upload'
+    uploadUrl: '/commu/board/upload'
   }
 })
 .then( editor => {

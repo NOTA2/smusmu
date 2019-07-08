@@ -181,8 +181,8 @@ exports.search = function () {
         }else{
           console.log("R관 석식 학식정보 없음");
         }        
-
-        if (eatR.length > 0) {
+        
+        if (eatR != undefined && eatR.length > 0) {
           var date = eatR.map(x => x[0]);
           var location = eatR.map(x => x[1]);
 

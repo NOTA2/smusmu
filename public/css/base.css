@@ -16,7 +16,9 @@ body {
   color : #2A3C78;
 }
 
-
+.list-unstyled.CTAs li{
+  margin-bottom : 1rem; 
+}
 
 #spinner {
   position: fixed;

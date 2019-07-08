@@ -25,8 +25,8 @@ block append content
     #title
       h1= topic.title
       hr
-      - if(user.grade==1 || user.grade==2 || user.grade==3)
-        h5= user.assoname
+      - if(board.boardGrade)
+        h5= topic.name
           span
             i.far.fa-clock
             |  #{passing_time(topic)}

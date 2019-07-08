@@ -9,13 +9,19 @@ router.post('/', (req, res) => {
   var content = req.body.action.detailParams;
   var d = new Date();
   var date = d.toFormat("YYYY-MM-DD");
-  var location = content.eat_place.value;
+  try {
+    var location = content.eat_place.value;
+  } catch {
+    var location = 'R';
+  }
   var day = d.getDay();
 
   if (location == '미래백년관')
     location = 'R';
-  if (location == '밀레니엄관')
+  else if (location == '밀레니엄관')
     location = 'T';
+  else if (location == '홍제')
+    location = 'H';
 
   var message = {
     "version": "2.0",
@@ -67,8 +73,11 @@ router.post('/', (req, res) => {
 router.post('/day', (req, res) => {
 
   var content = req.body.action.detailParams;
-
-  var location = content.eat_place.value;
+  try {
+    var location = content.eat_place.value;
+  } catch {
+    var location = 'R';
+  }
   var date = JSON.parse(content.sys_date.value).date;
   var d = new Date(date);
   var day = d.getDay();
@@ -128,7 +137,11 @@ router.post('/day', (req, res) => {
 router.post('/week', (req, res) => {
 
   var content = req.body.action.detailParams;
-  var location = content.eat_place.value;
+  try {
+    var location = content.eat_place.value;
+  } catch {
+    var location = 'R';
+  }
   var d = new Date();
 
   if (location == '미래백년관')
