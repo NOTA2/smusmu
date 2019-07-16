@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
   };
 
   if (location != 'H' && (day == 0 || day == 6)) {
-    message.template.outputs[0].simpleText.text = '오늘은 쉬는날이에요! 😔'
+    message.template.outputs[0].simpleText.text = '오늘은 쉬는날이에요!! 😔'
     return res.json(message);
   } else {
     var sql = 'SELECT content FROM Eat WHERE date=? AND location=?'
