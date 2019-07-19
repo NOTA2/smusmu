@@ -6,30 +6,8 @@ require('./config/ip')(defaultObj);
 require('date-utils');
 var passport = require('./config/passport')(app);
 
-var eatKakaoRouter = require('./routes/kakao/eat');
-var noticeKakaoRouter = require('./routes/kakao/notice');
-var weatherKakaoRouter = require('./routes/kakao/weather');
-var seoulAssemblyKakaoRouter = require('./routes/kakao/seoulAssembly');
-var calendarKakaoRouter = require('./routes/kakao/calendar');
-var foodMenuKakaoRouter = require('./routes/kakao/foodMenu');
-var schoolInfoKakaoRouter = require('./routes/kakao/schoolInfo');
-var rentKakaoRouter = require('./routes/kakao/rent')
-// var quizKakaoRouter = require('./routes/kakao/quiz');
-var authKakaoRouter = require('./routes/kakao/auth')
-var festivalKakaoRouter = require('./routes/kakao/festival')
-
-app.use('/kakao/eat', eatKakaoRouter);
-app.use('/kakao/notice', noticeKakaoRouter);
-app.use('/kakao/weather', weatherKakaoRouter);
-app.use('/kakao/seoulAssembly', seoulAssemblyKakaoRouter);
-app.use('/kakao/calendar', calendarKakaoRouter);
-app.use('/kakao/foodMenu', foodMenuKakaoRouter);
-app.use('/kakao/schoolInfo', schoolInfoKakaoRouter);
-app.use('/kakao/rent', rentKakaoRouter);
-// app.use('/kakao/quiz', quizKakaoRouter);
-app.use('/kakao/auth', authKakaoRouter);
-app.use('/kakao/festival', festivalKakaoRouter);
-
+var kakao = require('./routes/kakao/kakao_index');
+app.use('/kakao', kakao);
 
 var index = require('./routes/index');
 var auth = require('./routes/auth/auth_index')(passport);

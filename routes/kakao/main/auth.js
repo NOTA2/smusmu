@@ -1,6 +1,6 @@
-const defaultObj = require('../../config/defaultVariable');
+const defaultObj = require('../../../config/defaultVariable');
 const router = require('express').Router();
-const conn = require('../../config/db')();
+const conn = require('../../../config/db')();
 
 router.post('', function (req, res) {
   var kakaoId = req.body.userRequest.user.id;

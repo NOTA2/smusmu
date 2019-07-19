@@ -1,6 +1,6 @@
-const conn = require('../../config/db')();
+const conn = require('../../../config/db')();
 const dow = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
-const defaultObj = require('../../config/defaultVariable');
+const defaultObj = require('../../../config/defaultVariable');
 const router = require('express').Router();
 
 //오늘의 학식메뉴

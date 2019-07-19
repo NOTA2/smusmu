@@ -1,5 +1,5 @@
-var conn = require('../../config/db')();
-var defaultObj = require('../../config/defaultVariable');
+var conn = require('../../../config/db')();
+var defaultObj = require('../../../config/defaultVariable');
 var router = require('express').Router();
 
 router.post('', function (req, res) {
@@ -56,7 +56,7 @@ module.exports = router;
 
 function getmessage(rows) {
   var calresultstr = '';
-  var defaultObj = require('../../config/defaultVariable');
+  var defaultObj = require('../../../config/defaultVariable');
 
   rows.forEach((row, idx) => {
     calresultstr += '[' + row.date + ']\n';

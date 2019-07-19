@@ -1,7 +1,7 @@
-var defaultObj = require('../../config/defaultVariable');
+var defaultObj = require('../../../config/defaultVariable');
 var router = require('express').Router();
-var cNoticeContents = require('../../crawling/crawling_Notice_Contents');
-var cNotice = require('../../crawling/crawling_Notice');
+var cNoticeContents = require('../../../crawling/crawling_Notice_Contents');
+var cNotice = require('../../../crawling/crawling_Notice');
 
 router.post('', function (req, res) {
   var message = {

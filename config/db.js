@@ -14,6 +14,5 @@ module.exports = function(){
   })
 
   conn.connect();
-
   return conn;
 }

@@ -1,6 +1,6 @@
-const defaultObj = require('../../config/defaultVariable');
+const defaultObj = require('../../../config/defaultVariable');
 const router = require('express').Router();
-const conn = require('../../config/db')();
+const conn = require('../../../config/db')();
 require('date-utils');
 
 router.post('', function (req, res) {

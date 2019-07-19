@@ -1,7 +1,7 @@
-var conn = require('../../config/db')();
+var conn = require('../../../config/db')();
 
 
-var defaultObj = require('../../config/defaultVariable');
+var defaultObj = require('../../../config/defaultVariable');
 var router = require('express').Router();
 
 router.post('', function (req, res) {
