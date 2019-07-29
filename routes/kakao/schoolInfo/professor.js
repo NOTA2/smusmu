@@ -1,5 +1,5 @@
-var defaultObj = require('../../../config/defaultVariable');
 var router = require('express').Router();
+var defaultObj = require('../../../config/defaultVariable');
 var cProfessor = require('../../../crawling/crawling_professor');
 
 
@@ -61,6 +61,7 @@ router.post('', (req, res) => {
           }
         })
       }
+
       return res.json(message);
     })
 })

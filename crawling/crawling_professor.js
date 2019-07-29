@@ -5,14 +5,12 @@ exports.search = function (keyword) {
 
     var url = `https://www.smu.ac.kr/search/search.do?menu=교수검색&qt=${keyword}`;
     url = encodeURI(url)
-    
-
+  
     client.fetch(url, function (err, $, res) {
-      if (err) {
+      if (err) {        
         console.log(err);
         resolve(false);
       }
-
       var result = new Array();
 
       try {
