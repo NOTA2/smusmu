@@ -1,6 +1,6 @@
 const defaultObj = require('../../../config/defaultVariable');
 const router = require('express').Router();
-const conn = require('../../../config/db')();
+const conn = require('../../../config/db');
 
 router.post('', function (req, res) {
   var kakaoId = req.body.userRequest.user.id;
@@ -16,7 +16,7 @@ router.post('', function (req, res) {
           "title": "등록하기",
           "description": "스뮤스뮤 웹 사이트에 등록 후 사용하면 더욱 편하고 많은 기능을 사용할 수 있어요!",
           "thumbnail": {
-            "imageUrl": `http://${defaultObj.ipadd}/img/kakaoimg/register.png`
+            "imageUrl": `http://${defaultObj.ipadd}/img/function/register.png`
           },
           "buttons": [{
             "label": "등록하기",

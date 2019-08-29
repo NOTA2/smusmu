@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const conn = require('../../config/db')();
+const conn = require('../../config/db');
 const hasher = require('pbkdf2-password')();
 const crypto = require('crypto');
 

@@ -1,0 +1,80 @@
+extends ../assoLayout.pug
+block append scripts
+  script(type='text/javascript', src='https://code.jquery.com/jquery-1.12.4.min.js')
+  script(type='text/javascript', src='https://code.jquery.com/ui/jquery-ui-git.js')
+  script(src="/js/asso/kakao/job.js")
+block append css
+  link(href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', rel='stylesheet', type='text/css')
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/kakao/mainmenu.css")
+block append content
+  .article(style="width:100%")
+    h2 온라인 취업 서비스
+    hr.line
+    form#frm(action="/asso/kakao/job", method="post", enctype="multipart/form-data")
+      ul#sortable
+        - for(i=0;i<job.length;i++)
+          .card
+            table.table.table-striped
+              thead.thead-light
+                tr
+                  th(scope="col").jobtitle title
+                  th(scope="col").jobdescription description
+                  th(scope="col").joburl url
+                  th(scope="col").thumbnail thumbnail
+                  th(scope="col").jobOrder jobOrder
+              tbody
+                tr.cardContents
+                  td.jobtitle
+                    input.form-control(type='text', name=`job[${i}][title]`,autocomplete="off" value=job[i].title maxlength="20")
+                  td.jobdescription
+                    input.form-control(type='text', name=`job[${i}][description]`, value=job[i].description autocomplete="off" maxlength="40")
+                  td.joburl
+                    input.form-control(type='text', name=`job[${i}][url]`, value=job[i].url autocomplete="off")
+                  td.thumbnail
+                    .custom-file
+                      input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`job[${i}][thumbnail]`)
+                      label.custom-file-label(for='inputGroupFile01' data-browse="📂")= job[i].thumbnail
+                    - if(job[i].thumbnail)
+                      input(type="hidden", name=`job[${i}][thumbnail]`, value=job[i].thumbnail)
+                  td.jobOrder
+                    input.form-control(type='number', name=`job[${i}][jobOrder]`, value=job[i].jobOrder autocomplete="off" readonly)
+              thead.thead-light
+                tr
+                  th(scope="col").code name
+                  th(scope="col").val val
+                  th(scope="col").del 삭제
+                  th(scope="col" colspan=2)
+              tbody#parambody
+                - for(prmIdx=0;prmIdx<job[i].params.length;prmIdx++)
+                  tr.param 
+                    td
+                      input.form-control(type='text', name=`job[${i}][params][${prmIdx}][0]` value=job[i].params[prmIdx][0] autocomplete="off")
+                    td
+                      input.form-control(type='text', name=`job[${i}][params][${prmIdx}][1]` value=job[i].params[prmIdx][1] autocomplete="off")
+                    td
+                      - if(prmIdx>0)
+                        #pbt.btn.btn-primary(onclick="deleteparam(this)")
+                          i.fas.fa-minus
+                    td(colspan=2)
+                - if(job[i].params.length == 0)
+                  tr.param 
+                    td
+                      input.form-control(type='text', name=`job[${i}][params][0][0]` autocomplete="off")
+                    td
+                      input.form-control(type='text', name=`job[${i}][params][0][1]` autocomplete="off")
+                    td
+                    td(colspan=2)
+              tr
+                td 파라미터 추가
+                  #pbt.btn.btn-danger(onclick="paramplus(this)")
+                    i.fas.fa-plus
+                td(colspan=2)
+                td(colspan=2) 해당 카드 삭제
+                  input#id.form-control(type="hidden" value=job[i].id name=`job[${i}][id]`)
+                  #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                    i.fas.fa-minus
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

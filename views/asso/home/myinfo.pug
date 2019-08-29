@@ -27,7 +27,7 @@ block append content
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text(for="college") 소속 대학
-        input#college.form-control(type='tex', value=user.assocollege,disabled, autocomplete="off")
+        input#college.form-control(type='text', value=user.assocollege,disabled, autocomplete="off")
       .input-group.mb-3
         .input-group-prepend
           span.input-group-text(style="color:red;") *
@@ -56,10 +56,10 @@ block append content
         .custom-file
           - if(user.grade < 4)
             input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name='logo')
-            label.custom-file-label(for='inputGroupFile01')= user.logo
+            label.custom-file-label(for='inputGroupFile01' data-browse="📂")= user.logo
           - if(user.grade == '4')
             input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', disabled, name='logo')
-            label.custom-file-label(for='inputGroupFile01') 불가능합니다.
+            label.custom-file-label(for='inputGroupFile01' data-browse="📂") 불가능합니다.
           - if(user.logo)
             input(type="hidden", name="logopath", value=user.logo)
       p 로고는 1:1 혹은 1:2 사이즈로 여백없는 이미지로 올려주세요.

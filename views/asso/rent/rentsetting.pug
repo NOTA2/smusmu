@@ -38,18 +38,19 @@ block append content
             - for(i=0;i<rent.length;i++)
               tr.plusrow
                 td.name
-                  input.form-control(type="text" value=rent[i].name name="name" autocomplete="off" maxlength="20")
+                  input.form-control(type="text" value=rent[i].name name=`rent[${i}][0]` autocomplete="off" maxlength="20")
                 td.now
-                  input.form-control(type="number" value=rent[i].nowcount name="nowcount" autocomplete="off" )
+                  input.form-control(type="number" value=rent[i].nowcount name=`rent[${i}][1]` autocomplete="off" )
                 td.all
-                  input.form-control(type="number" value=rent[i].allcount name="allcount" autocomplete="off")
+                  input.form-control(type="number" value=rent[i].allcount name=`rent[${i}][2]` autocomplete="off")
                 td.date
-                  input.form-control(type="number", value=rent[i].day name="day" autocomplete="off")
-                  input.code.form-control(type="hidden" name="code" value=rent[i].code)
+                  input.form-control(type="number", value=rent[i].day name=`rent[${i}][3]` autocomplete="off")
+                  input#id.form-control(type="hidden" name=`rent[${i}][5]` value=rent[i].id)
                 td.minus
-                  i.fas.fa-minus-square(onclick="deleteitem(this)")
-          input#assoId.form-control(type="hidden" name="assoId" value=user.assoId)
-        #pbt.btn.btn-primary(onclick="formplus();")
-          i#fromplus.fas.fa-plus
-        #pbt
-          input#com.form-control(type='button' value="완료" onclick='complete();')
+                  #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                    i.fas.fa-minus
+                input#assoId.form-control(type="hidden" name=`rent[${i}][4]` value=user.assoId)
+        #pbt.btn.btn-success(onclick="complete();")
+          i.fas.fa-check
+        #pbt.btn.btn-danger(onclick=`formplus(${user.assoId});`)
+          i.fas.fa-plus

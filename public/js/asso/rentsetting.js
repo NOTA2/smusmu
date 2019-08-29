@@ -1,11 +1,3 @@
-var itemid = 0;
-
-$(function () {
-
-  $('.code').each(function (idx, el) {
-    itemid = parseInt($(el).val()) +1;
-  })
-});
 $('#frm').submit(function() {
   var pass = true;
 
@@ -16,28 +8,20 @@ $('#frm').submit(function() {
 
   return true;
 });
-function formplus() {
+function formplus(assoId) {
+  var rowlength = $(".plusrow").length;
   var str = `
   <tr class="plusrow">
-  <td class="name">
-    <input class="form-control" type="text" name="name" autocomplete="off" maxlength="20" />
-  </td>
-  <td class="now">
-    <input class="form-control" type="number" value="0" name="nowcount" autocomplete="off" />
-  </td>
-  <td class="all">
-    <input class="form-control" type="number" value="0" name="allcount" autocomplete="off" />
-  </td>
-  <td class="date">
-    <input class="form-control" type="number" value="1" name="day" autocomplete="off" />
-    <input class="code form-control" type="hidden" name="code" value="${getitemid()}" />
-  </td>
-  <td class="minus"><i class="fas fa-minus-square" onclick="deleteitem(this)"></i></td>
-</tr>
+  <td class="name"><input class="form-control" type="text" name="rent[${rowlength}][0]" autocomplete="off" maxlength="20" /></td>
+  <td class="now"><input class="form-control" type="number" name="rent[${rowlength}][1]" autocomplete="off" /></td>
+  <td class="all"><input class="form-control" type="number" name="rent[${rowlength}][2]" autocomplete="off" /></td>
+  <td class="date"><input class="form-control" type="number" name="rent[${rowlength}][3]" autocomplete="off" value=1 /><input class="id form-control" type="hidden" name="rent[${rowlength}][5]" /></td>
+  <td class="minus">
+    <div class="btn btn-primary" id="pbt" onclick="deleteitem(this)"><i class="fas fa-minus"></i></div>
+</td><input class="form-control" id="assoId" type="hidden" name="rent[${rowlength}][4]" value="${assoId}"/></tr>
 `
 
 $(str).appendTo('tbody').show('slow')
-
 }
 
 
@@ -62,19 +46,12 @@ function complete() {
 }
 
 
-function getitemid() {
-  $('.code').each(function (idx, el) {
-    itemid = parseInt($(el).val()) +1;
-  })
-  return itemid;
-}
-
 function deleteitem(self) {
-  var itemname = $(self).parents('.plusrow').children('.name').children('input').val();
-  var itemcode = $(self).parents('.plusrow').children('.date').children('.code').val();
-  var assoId = $('#assoId').val();
+  let itemname = $(self).parents('.plusrow').children('.name').children('input').val();
+  let row = $(self).parents('.plusrow');
+  let id = $(row).find("input#id").val();
 
-  var c = confirm(`[${itemname}] 대여 물품을 목록에서 삭제하시겠습니까?`);
+  let c = confirm(`[${itemname}] 대여 물품을 목록에서 삭제하시겠습니까?`);
 
   if (c) {
     fetch("/asso/rent/setting/delete", {
@@ -82,11 +59,11 @@ function deleteitem(self) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
-      body: `code=${itemcode}&assoId=${assoId}`
+      body: `id=${id}`
     }).then(function (res) {
       res.json().then(function (data) {
         if (data.status) {
-          $(self).parents('.plusrow').remove();
+          $(row).remove();
           alert('대여물품이 삭제되었습니다.')
         }
       })

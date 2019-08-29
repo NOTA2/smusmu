@@ -45,7 +45,7 @@ $('#inputGroupFile01').on('change',function(){
     fileName = fileName[fileName.length -1];
     //replace the "Choose a file" label
     $(this).next('.custom-file-label').html(fileName);
-})
+})  
 
 
 autosize($('textarea'));

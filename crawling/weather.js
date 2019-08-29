@@ -3,7 +3,7 @@ const fs = require('fs');
 var request = require('request');
 var xml2js = require('xml2js');
 var parser = new xml2js.Parser();
-var conn = require('../config/db')(); 
+var conn = require('../config/db'); 
 
 //☺😄😊😃😆😵😷
 //😂😁☺😉🤪😣😔😫😩😥😵☀🌦💧❄🌤🌧☃💦☔⛄⛈⛅🌥🌩🌬☂🌊💨🌨☁🌫
@@ -89,7 +89,7 @@ exports.search = function () {
   weather.s06 = 0.0;
 
   var forecastData;
-
+  
   request(urlNow, function (error1, response1, htmlNow) {
     if (!error1 && response1.statusCode == 200) {
 

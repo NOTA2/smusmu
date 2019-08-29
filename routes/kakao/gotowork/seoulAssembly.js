@@ -1,6 +1,6 @@
 var defaultObj = require('../../../config/defaultVariable');
 var router = require('express').Router();
-var conn = require('../../../config/db')();
+var conn = require('../../../config/db');
 
 router.post('', function (req, res) {
   var dt = new Date();
@@ -14,8 +14,7 @@ router.post('', function (req, res) {
         "simpleText": {
           "text": '아직 집회정보가 없스뮤 😔'
         }
-      }],
-      "quickReplies": defaultObj.Qu
+      }]
     }
   };
 
@@ -40,8 +39,7 @@ router.post('', function (req, res) {
                   "type": "basicCard",
                   "items": []
                 }
-              }],
-              "quickReplies": defaultObj.Qu
+              }]
             }
           };
 
@@ -58,21 +56,19 @@ router.post('', function (req, res) {
           var carouselIdx = message.template.outputs.length - 1
 
           saObj.twitter.forEach(el => {
-            if (el.str.indexOf('집회') != -1 || el.str.indexOf('집 회') != -1)
-              title = '집회정보 이미지로 확인하기';
-            else
-              title = '공사정보 이미지로 확인하기';
+            title = '이미지를 누르면 크게 볼 수 있습니다.';
 
             message.template.outputs[carouselIdx].carousel.items.unshift({
               "title": title,
               "thumbnail": {
-                "imageUrl": el.buttonUrl
-              },
-              "buttons": [{
-                "label": "큰 이미지로 확인하기",
-                "action": "webLink",
-                "webLinkUrl": el.buttonUrl
-              }]
+                "imageUrl": el.buttonUrl,
+                "link" : {
+                  "web" : el.buttonUrl
+                },
+                "fixedRatio" : true,
+                "width" : 500,
+                "height" : 500
+              }
             });
           })
 
@@ -116,8 +112,7 @@ router.post('', function (req, res) {
                   "description": "아직 자세한 집회정보가 없스뮤 😔\n서울지방 경찰청의 정보를 확인하스뮤!",
                   "buttons": detailbuttons
                 }
-              }],
-              "quickReplies": defaultObj.Qu
+              }]
             }
           };
 
@@ -137,8 +132,7 @@ router.post('', function (req, res) {
                   "type": "basicCard",
                   "items": []
                 }
-              }],
-              "quickReplies": defaultObj.Qu
+              }]
             }
           };
 
@@ -155,25 +149,25 @@ router.post('', function (req, res) {
           var carouselIdx = message.template.outputs.length - 1
 
           saObj.twitter.forEach(el => {
-            if (el.str.indexOf('집회') != -1 || el.str.indexOf('집 회') != -1)
-              title = '집회정보 이미지로 확인하기';
-            else
-              title = '공사정보 이미지로 확인하기';
+              title = '이미지를 누르면 크게 볼 수 있습니다.';
 
             message.template.outputs[carouselIdx].carousel.items.unshift({
               "title": title,
               "thumbnail": {
-                "imageUrl": el.buttonUrl
-              },
-              "buttons": [{
-                "label": "큰 이미지로 확인하기",
-                "action": "webLink",
-                "webLinkUrl": el.buttonUrl
-              }]
+                "imageUrl": el.buttonUrl,
+                "link" : {
+                  "web" : el.buttonUrl
+                },
+                "fixedRatio" : true,
+                "width" : 500,
+                "height" : 500
+              }
             });
           })
         }
       }
+
+      message.template.quickReplies = defaultObj.Qu.concat(defaultObj.goQuickReplies.slice(1,3))
       return res.json(message);
 
     } else {

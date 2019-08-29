@@ -71,7 +71,7 @@ html(lang='ko')
                 a(href='/asso/home/myinfo')
                   i.fas.fa-user
                   |  학생회 정보
-              - if(user.grade == '2' || user.grade == '3')
+              - if(user.grade == '1' || user.grade == '2' || user.grade == '3')
                 li
                   a(href='/auth/password')
                     i.fas.fa-key
@@ -84,27 +84,44 @@ html(lang='ko')
             a(href='/commu')
               i.fas.fa-users
               |  스뮤스뮤 커뮤니티
-          li
-            a(href='/asso/home/member')
-              i.fas.fa-user-check
-              |  부원 계정 관리하기
-          li
-            a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false')
-              i.fas.fa-toolbox
-              |   대여물품 관리
-            ul#pageSubmenu.collapse.list-unstyled
-              li
-                a(href='/asso/rent/now')
-                  i.fas.fa-cubes
-                  |  대여물품 현황
-              li
-                a(href='/asso/rent/setting')
-                  i.fas.fa-truck-loading
-                  |  물품 등록/관리
-              li
-                a(href='/asso/rent/list') 
-                  i.fas.fa-clipboard-list
-                  |  대여 기록
+          - if(user.grade == '2' || user.grade == '3')
+            li
+              a(href='/asso/home/member')
+                i.fas.fa-user-check
+                |  부원 계정 관리하기
+          - if(user.grade == '2' || user.grade == '3')
+            li
+              a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false')
+                i.fas.fa-toolbox
+                |   대여물품 관리
+              ul#pageSubmenu.collapse.list-unstyled
+                li
+                  a(href='/asso/rent/now')
+                    i.fas.fa-cubes
+                    |  대여물품 현황
+                li
+                  a(href='/asso/rent/setting')
+                    i.fas.fa-truck-loading
+                    |  물품 등록/관리
+                li
+                  a(href='/asso/rent/list') 
+                    i.fas.fa-clipboard-list
+                    |  대여 기록
+          - if(user.grade == '1')
+            li
+              a(href='/asso/kakao/mainmenu') 카카오톡 메인메뉴
+            li
+              a(href='/asso/kakao/schoolInfo') 학교정보
+            li
+              a(href='/asso/kakao/calendar') 학사일정
+            li
+              a(href='/asso/kakao/foodMenu') 배달식당
+            li
+              a(href='/asso/kakao/taxi') 택시 오픈채팅 관리
+            li
+              a(href='/asso/kakao/faq') FAQ
+            li
+              a(href='/asso/kakao/job') 온라인 취업 서비스
         //- ul.list-unstyled.CTAs
         //-   li
         //-     a.download(href='https://bootstrapious.com/tutorial/files/sidebar.zip') Download source

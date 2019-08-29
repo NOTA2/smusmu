@@ -1,4 +1,4 @@
-const conn = require('../../config/db')();
+const conn = require('../../config/db');
 const defaultObj = require('../../config/defaultVariable');
 var hasher = require('pbkdf2-password')();
 

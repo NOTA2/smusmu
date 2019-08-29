@@ -1,0 +1,38 @@
+extends ../assoLayout.pug
+block append scripts
+  script(src="/js/asso/kakao/calendar.js")
+block append css
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/kakao/mainmenu.css")
+block append content
+  .article
+    h2 학사일정
+    hr.line
+    form#frm(action="/asso/kakao/calendar", method="post")
+      table.table.table-striped
+        thead.thead-light
+          tr
+          th(scope="col").month month
+          th(scope="col").date date
+          th(scope="col").content content
+          th(scope="col").homonym homonym
+          th(scope="col").minus 삭제
+        tbody
+          - for(i=0;i<calendar.length;i++)
+            tr.plusrow
+              td.month
+                input.form-control(type="text" value=calendar[i].month name=`calendar[${i}][0]` autocomplete="off")
+              td.date
+                input.form-control(type="text" value=calendar[i].date name=`calendar[${i}][1]` autocomplete="off" )
+              td.content
+                input.form-control(type="text" value=calendar[i].content name=`calendar[${i}][2]` autocomplete="off")
+              td.homonym
+                input.form-control(type="text", value=calendar[i].homonym name=`calendar[${i}][3]` autocomplete="off" )
+              td.minus
+                input#id.form-control(type="hidden" value=calendar[i].id name=`calendar[${i}][4]`)
+                #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                  i.fas.fa-minus
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

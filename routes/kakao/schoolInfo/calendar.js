@@ -1,4 +1,4 @@
-var conn = require('../../../config/db')();
+var conn = require('../../../config/db');
 var defaultObj = require('../../../config/defaultVariable');
 var router = require('express').Router();
 
@@ -13,12 +13,7 @@ router.post('', function (req, res) {
           "text": '검색결과를 찾을 수 업스뮤 😔\n버튼을 다시 누르거나 학사일정이라고 말해줘스뮤 😔'
         }
       }],
-      "quickReplies": defaultObj.Qu.concat([{
-        "label": '학사일정',
-        "action": "block",
-        "messageText": '학사일정',
-        "blockId": "5c273fd505aaa77182aa595b"
-      }])
+      "quickReplies": defaultObj.Qu.concat(defaultObj.schoolQuickReplies.slice(0,2).concat(defaultObj.noticeQuickReplies))
     }
   };
 
@@ -73,12 +68,7 @@ function getmessage(rows) {
           "text": calresultstr
         }
       }],
-      "quickReplies": defaultObj.Qu.concat([{
-        "label": '학사일정',
-        "action": "block",
-        "messageText": '학사일정',
-        "blockId": "5c273fd505aaa77182aa595b"
-      }])
+      "quickReplies": defaultObj.Qu.concat(defaultObj.schoolQuickReplies.slice(0,2).concat(defaultObj.noticeQuickReplies))
     }
   };
 

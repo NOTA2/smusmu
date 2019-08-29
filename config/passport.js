@@ -1,5 +1,5 @@
 module.exports = function (app) {
-  var conn = require('./db')();
+  var conn = require('./db');
   var passport = require('passport');
   var LocalStrategy = require('passport-local').Strategy;
   var hasher = require('pbkdf2-password')();

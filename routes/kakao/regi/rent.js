@@ -1,4 +1,4 @@
-const conn = require('../../../config/db')();
+const conn = require('../../../config/db');
 const router = require('express').Router();
 const defaultObj = require('../../../config/defaultVariable');
 
@@ -15,8 +15,6 @@ router.post('/', (req, res) => {
       "quickReplies": defaultObj.Qu
     }
   };
-  console.log(kakaoId);
-  
 
   var sql = `SELECT users.name, assocollege, asso.id as assoId, assoname, asso.location, asso.logo, asso.description, assophone
               FROM asso
@@ -51,7 +49,7 @@ router.post('/', (req, res) => {
             "height": 300
           },
           "buttons": [{
-              "label": '물품 확인',
+              "label": '물품확인 🧰',
               "action": "block",
               "messageText": `${assocollege} 대여 물품 확인`,
               "extra": {
@@ -60,7 +58,7 @@ router.post('/', (req, res) => {
               "blockId": "5cc6fb6c384c5508fceee675"
             },
             {
-              "label": '현황 확인',
+              "label": '현황확인 📝',
               "action": "block",
               "messageText": `${assocollege} 대여 현황`,
               "extra": {
@@ -75,7 +73,7 @@ router.post('/', (req, res) => {
       return res.json(message);
     } else {
       message.template.quickReplies = message.template.quickReplies.concat([{
-        "label": '등록하기',
+        "label": '등록 📝',
         "action": "block",
         "messageText": '등록하기',
         "blockId": "5c2efe76384c5518d11fe678"
@@ -96,7 +94,7 @@ router.post('/thing', (req, res) => {
         }
       }],
       "quickReplies": defaultObj.Qu.concat([{
-        "label": '학생회 목록 확인',
+        "label": '학생회 목록 💁',
         "action": "block",
         "messageText": '학생회 목록 확인',
         "blockId": "5c273c97e8212718584bf555"
@@ -147,7 +145,7 @@ router.post('/now', (req, res) => {
         }
       }],
       "quickReplies": defaultObj.Qu.concat([{
-        "label": '학생회 목록 확인',
+        "label": '학생회 목록 💁',
         "action": "block",
         "messageText": '학생회 목록 확인',
         "blockId": "5c273c97e8212718584bf555"

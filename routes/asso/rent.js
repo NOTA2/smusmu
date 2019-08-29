@@ -1,4 +1,4 @@
-var conn = require('../../config/db')();
+var conn = require('../../config/db');
 var async = require('async');
 var router = require('express').Router();
 
@@ -121,8 +121,6 @@ router.post('/now/return', (req, res) => {
 
 
 router.get('/setting',  (req, res) => {
-
-
   var sql = `SELECT * FROM rent WHERE assoId=?`
 
   conn.query(sql, [req.user.assoId], (err, rows) => {
@@ -155,44 +153,21 @@ router.get('/setting',  (req, res) => {
 
 
 router.post('/setting', (req, res) => {
-  var sql = `SELECT * FROM rent WHERE code = ? AND assoId=?`;
-  var params = new Array();
-
-  console.log();
+  var sql = `SELECT * FROM rent WHERE id=?`;
+  var rents = req.body.rent;
 
 
-  if (req.body.code.length > 1) {
-    req.body.code.forEach(function (el, idx) {
-      params[idx] = new Array();
-      params[idx].push(req.body.name[idx])
-      params[idx].push(req.body.allcount[idx])
-      params[idx].push(req.body.nowcount[idx])
-      params[idx].push(req.body.day[idx])
-      params[idx].push(el)
-      params[idx].push(req.body.assoId)
-    })
-  } else {
-    params[0] = new Array();
-    params[0].push(req.body.name)
-    params[0].push(req.body.allcount)
-    params[0].push(req.body.nowcount)
-    params[0].push(req.body.day)
-    params[0].push(req.body.code)
-    params[0].push(req.body.assoId)
-  }
-
-
-  async.forEachOf(req.body.code, function (code, i, inner_callback) {
-    conn.query(sql, [code, req.body.assoId], function (err, rows) {
+  async.forEachOf(rents, function (rent, i, inner_callback) {
+    conn.query(sql, [rent[5]], function (err, rows) {
       if (err) {
         inner_callback(err);
       } else {
         if (rows.length > 0) { //있다면 업데이트
           sql = `UPDATE rent 
-          SET name = ?, allcount=?, nowcount=?, day=?
-          WHERE code = ? AND assoId = ?`;
+          SET name = ?, nowcount=?, allcount=?, day=?, assoId=?
+          WHERE id = ?`;
 
-          conn.query(sql, params[i], (err, rows) => {
+          conn.query(sql, rent, (err, rows) => {
             if (err) {
               console.log(err);
               return res.status(500).end();
@@ -200,10 +175,10 @@ router.post('/setting', (req, res) => {
             inner_callback(null);
           });
         } else { //없다면 추가
-          sql = `INSERT INTO rent (name, allcount, nowcount, day, code, assoId)
-          VALUES (?, ?, ?, ?, ?, ?)`;
+          sql = `INSERT INTO rent (name, nowcount, allcount, day, assoId)
+          VALUES (?, ?, ?, ?, ?)`;
 
-          conn.query(sql, params[i], (err, rows) => {
+          conn.query(sql, rent, (err, rows) => {
             if (err) {
               inner_callback(err);
             }
@@ -223,9 +198,9 @@ router.post('/setting', (req, res) => {
 
 
 router.post('/setting/delete', (req, res) => {
-  var sql = `DELETE FROM rent WHERE assoId =? AND code = ?`
+  var sql = `DELETE FROM rent WHERE id =?`
 
-  conn.query(sql, [req.body.assoId, req.body.code], (err, row) => {
+  conn.query(sql, [req.body.id], (err, row) => {
     if (err) {
       console.log(err);
       return res.status(500);

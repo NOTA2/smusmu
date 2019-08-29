@@ -1,0 +1,77 @@
+extends ../assoLayout.pug
+block append scripts
+  script(type='text/javascript', src='https://code.jquery.com/jquery-1.12.4.min.js')
+  script(type='text/javascript', src='https://code.jquery.com/ui/jquery-ui-git.js')
+  script(src="/js/asso/kakao/mainmenu.js")
+block append css
+  link(href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', rel='stylesheet', type='text/css')
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/kakao/mainmenu.css")
+block append content
+  .article
+    h2 메인메뉴
+    hr.line
+    form#frm(action="/asso/kakao/mainmenu", method="post", enctype="multipart/form-data")
+      ul#sortable
+        -for(i=0;i<menu.length;i++)
+          .card
+            table.table.table-striped
+              thead.thead-light
+                tr
+                  th(scope="col").title title
+                  th(scope="col").description description
+                  th(scope="col").auth 등록여부
+                  th(scope="col").thumbnail thumbnail
+                  th(scope="col").menuorder menuorder
+              tbody
+                tr.cardContents
+                  td.title
+                    input#title.form-control(type='text', name=`menu[${i}][title]`,autocomplete="off" value=menu[i].title maxlength="20")
+                  td.description
+                    input#description.form-control(type='text', name=`menu[${i}][description]`, value=menu[i].description autocomplete="off" maxlength="40")
+                  td.auth
+                    select.custom-select#auth(name=`menu[${i}][auth]`)
+                      - if(menu[i].auth == 0)
+                        option(value="0" selected="selected") 바로 사용가능
+                        option(value="1") 등록한 사람만 사용
+                      - else
+                        option(value="0") 바로 사용가능
+                        option(value="1" selected="selected") 등록한 사람만 사용
+                  td.thumbnail
+                    .custom-file
+                      input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`menu[${i}][thumbnail]`)
+                      label.custom-file-label(for='inputGroupFile01' data-browse="📂")= menu[i].thumbnail
+                    - if(menu[i].thumbnail)
+                      input(type="hidden", name=`menu[${i}][thumbnail]`, value=menu[i].thumbnail)
+                  td.menuorder
+                    input.form-control(type='number', name=`menu[${i}][menuorder]`, value=menu[i].menuorder autocomplete="off" readonly)
+              thead.thead-light
+                tr
+                  th(scope="col").code 버튼 유형
+                  th(scope="col").title 버튼 이름
+                  th(scope="col" colspan=3).description 값
+              tbody
+                - for(var bti=0;bti<3;bti++)
+                  tr.btr 
+                    td
+                      select.custom-select.btype(name=`menu[${i}][buttons][${bti}][0]`)
+                        option(value="null" selected=true) none
+                        option(value="block" selected = menu[i].buttons[bti][0] == "block") block
+                        option(value="webLink" selected = menu[i].buttons[bti][0] == "webLink") webLink
+                        option(value="osLink" selected = menu[i].buttons[bti][0] == "osLink") osLink
+                        option(value="message" selected = menu[i].buttons[bti][0] == "message") message
+                        option(value="phone" selected = menu[i].buttons[bti][0] == "phone") phone
+                        option(value="share" selected = menu[i].buttons[bti][0] == "share") share
+                    td
+                      input.form-control(type='text', name=`menu[${i}][buttons][${bti}][1]` value=menu[i].buttons[bti][1] autocomplete="off")
+                    td.bvalue(colspan=3)
+                      input.form-control(type='text' name=`menu[${i}][buttons][${bti}][2]`, value=menu[i].buttons[bti][2] autocomplete="off")
+              tr
+                td(colspan=6)
+                  input#id.form-control(type="hidden" value=menu[i].id name=`menu[${i}][id]`)
+                  #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                    i.fas.fa-minus
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

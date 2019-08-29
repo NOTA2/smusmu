@@ -1,0 +1,46 @@
+extends ../assoLayout.pug
+block append scripts
+  script(src="/js/asso/kakao/schoolInfo.js")
+block append css
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/kakao/mainmenu.css")
+block append content
+  .article(style="width : 100%")
+    h2 학교정보
+    hr.line
+    form#frm(action="/asso/kakao/schoolInfo", method="post")
+      table.table.table-striped
+        thead.thead-light
+          tr
+          th(scope="col").category category
+          th(scope="col").keyword keyword
+          th(scope="col").phoneNumber phoneNumber
+          th(scope="col").faxNumber faxNumber
+          th(scope="col").img img
+          th(scope="col").explanation explanation
+          th(scope="col").minus 삭제
+        tbody
+          - for(i=0;i<schoolInfo.length;i++)
+            tr.plusrow
+              td.category
+                input.form-control(type="text" value=schoolInfo[i].category name=`schoolInfo[${i}][0]` autocomplete="off")
+              td.keyword
+                input.form-control(type="text" value=schoolInfo[i].keyword name=`schoolInfo[${i}][1]` autocomplete="off" )
+              td.phoneNumber
+                input.form-control(type="text" value=schoolInfo[i].phoneNumber name=`schoolInfo[${i}][2]` autocomplete="off")
+              td.faxNumber
+                input.form-control(type="text", value=schoolInfo[i].faxNumber name=`schoolInfo[${i}][3]` autocomplete="off" )
+              td.img
+                select.custom-select.btype(name=`schoolInfo[${i}][4]`)
+                  - for(j=0;j<imglist.length;j++)
+                    option(value=imglist[j] selected = schoolInfo[i].img == imglist[j])= imglist[j]
+              td.explanation
+                input.form-control(type="text", value=schoolInfo[i].explanation name=`schoolInfo[${i}][5]` autocomplete="off" )
+              td.minus
+                input#id.form-control(type="hidden" value=schoolInfo[i].id name=`schoolInfo[${i}][6]`)
+                #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                  i.fas.fa-minus
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick=`formplus(${imglist});`)
+      i.fas.fa-plus

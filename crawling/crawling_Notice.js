@@ -1,15 +1,18 @@
 var client = require('cheerio-httpcli');
 
-exports.search = function (keyword, page, im) {
+exports.search = function (keyword, page, im, major) {
   var url = 'http://www.smu.ac.kr/lounge/notice/notice.do';
   var alimit = 10;
   var offset = ((page - 1) * alimit)
+
+  if(major.state)
+    url = `https://www.smu.ac.kr/${major.homepage}/community/notice.do`
 
   if (keyword.length > 0) //검색시
     var listUrl = url + '?mode=list&srSearchVal=' + keyword + '&articleLimit=' + alimit;
   else //평상시
     var listUrl = url + '?mode=list&articleLimit=' + alimit + '&article.offset=' + offset;
-
+  
   listUrl = encodeURI(listUrl)
 
   return new Promise(function (resolve, reject) {
@@ -36,8 +39,8 @@ exports.search = function (keyword, page, im) {
 
             noticeObj[idx] = new Object();
 
-            var title = $(this).find('a').text().trim().split(']')
-            title = title[title.length - 1].trim();
+            var title = $(this).find('a').clone().children().remove().end().text().trim()      //text().trim().split(']')
+            // title = title[title.length - 1].trim();
 
             var desc = '게시일 : ' + $(this).find('.board-thumb-content-date').text().replace(/[^-0-9]/g,'').trim();
             
@@ -65,8 +68,8 @@ exports.search = function (keyword, page, im) {
             if (noticeObj.filter(Boolean).length > alimit)
               return true;
 
-            var title = $(this).find('a').text().trim().split(']')
-            title = title[title.length - 1].trim();
+            var title = $(this).find('a').clone().children().remove().end().text().trim()      //text().trim().split(']')
+            // title = title[title.length - 1].trim();
 
             if ($(this).find('.noti').length && title.indexOf(keyword) == -1)
               return true;
@@ -98,8 +101,8 @@ exports.search = function (keyword, page, im) {
 
             noticeObj[idx] = new Object();
 
-            var title = $(this).find('a').text().trim().split(']')
-            title = title[title.length - 1].trim();
+            var title = $(this).find('a').clone().children().remove().end().text().trim()      //text().trim().split(']')
+            // title = title[title.length - 1].trim();
 
             var desc = '게시일 : ' + $(this).find('.board-thumb-content-date').text().replace(/[^-0-9]/g,'').trim();
             

@@ -1,4 +1,4 @@
-const conn = require('../../config/db')();
+const conn = require('../../config/db');
 const router = require('express').Router();
 
 

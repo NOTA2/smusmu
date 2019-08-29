@@ -1,4 +1,4 @@
-var conn = require('../../config/db')();
+var conn = require('../../config/db');
 var router = require('express').Router();
 var multer = require('multer'); // express에 multer모듈 적용 (for 파일업로드)
 var storage = multer.diskStorage({
@@ -6,8 +6,6 @@ var storage = multer.diskStorage({
     cb(null, 'public/logo') // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
   },
   filename: function (req, file, cb) {
-    console.log(req.user.assoname + '.' + file.mimetype.split('/')[1]);
-
     cb(null, req.user.assoname + '.' + file.mimetype.split('/')[1]) // cb 콜백함수를 통해 전송된 파일 이름 설정
   }
 })

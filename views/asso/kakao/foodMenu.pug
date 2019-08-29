@@ -1,0 +1,42 @@
+extends ../assoLayout.pug
+block append scripts
+  script(src="/js/asso/kakao/foodMenu.js")
+block append css
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/kakao/mainmenu.css")
+block append content
+  .article
+    h2 식당 관리
+    hr.line
+    form#frm(action="/asso/kakao/foodMenu", method="post", enctype="multipart/form-data")
+      table.table.table-striped
+        thead.thead-light
+          tr
+          th(scope="col").name name
+          th(scope="col").explanation explanation
+          th(scope="col").foodimg foodimg
+          th(scope="col").phone phone
+          th(scope="col").minus 삭제
+        tbody
+          - for(i=0;i<foodMenu.length;i++)
+            tr.plusrow
+              td.name
+                input.form-control(type="text" value=foodMenu[i].name name=`foodMenu[${i}][0]` autocomplete="off")
+              td.explanation
+                input.form-control(type="text" value=foodMenu[i].explanation name=`foodMenu[${i}][1]` autocomplete="off" )
+              td.foodimg
+                .custom-file
+                  input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`foodMenu[${i}][2]`)
+                  label.custom-file-label(for='inputGroupFile01' data-browse="📂")= foodMenu[i].img
+                - if(foodMenu[i].img)
+                  input(type="hidden", name=`foodMenu[${i}][2]`, value=foodMenu[i].img)
+              td.phone
+                input.form-control(type="text", value=foodMenu[i].phone name=`foodMenu[${i}][3]` autocomplete="off" )
+              td.minus
+                input#id.form-control(type="hidden" value=foodMenu[i].id name=`foodMenu[${i}][4]`)
+                #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                  i.fas.fa-minus
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

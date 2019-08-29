@@ -1,7 +1,7 @@
 var cheerio = require('cheerio');
 var request = require('request');
 var deasync = require('deasync');
-var conn = require('../config/db')();
+var conn = require('../config/db');
 
 exports.search = function () {
   var d = new Date();

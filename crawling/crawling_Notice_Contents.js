@@ -21,9 +21,9 @@ exports.search = function(url) {
             str = $(this).text().trim();
             img = $(this).find('img').attr('src');
             if(img){
-              result.img = 'http://www.smu.ac.kr'+img
+              result.img = 'http://www.smu.ac.kr'+img.replace('https://www.smu.ac.kr', '')
             };
-  
+            
             if(str.replace(/\s/g,"") != "")
               result.str += str +'\n';
           })

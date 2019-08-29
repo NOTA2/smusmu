@@ -1,4 +1,4 @@
-const conn = require('../../config/db')();
+const conn = require('../../config/db');
 var hasher = require('pbkdf2-password')();
 const router = require('express').Router();
 

@@ -1,6 +1,6 @@
 const defaultObj = require('../../../config/defaultVariable');
 const router = require('express').Router();
-const conn = require('../../../config/db')();
+const conn = require('../../../config/db');
 require('date-utils');
 
 router.post('', function (req, res) {
@@ -71,7 +71,6 @@ router.post('', function (req, res) {
                   message.template.outputs[0].simpleText.text = '잠시 문제가 생겼어요. 다시 시도해주세요 😔 (QR코드 인식 버튼을 다시 눌러주세요)'
                   return res.json(message);
                 }
-                console.log(rows);
                 
                 if (rows.length > 0) { //이미 행사에 참여한 경우(검색 결과가 있는 경우)
                   message.template.outputs[0] = {

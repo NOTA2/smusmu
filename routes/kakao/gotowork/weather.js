@@ -1,6 +1,6 @@
 var defaultObj = require('../../../config/defaultVariable');
 var router = require('express').Router();
-const conn = require('../../../config/db')();
+const conn = require('../../../config/db');
 
 router.post('', function (req, res) {
   var d = new Date();
@@ -12,8 +12,7 @@ router.post('', function (req, res) {
         "simpleText": {
           "text": '날씨정보가 없스뮤. 😔'
         }
-      }],
-      "quickReplies": defaultObj.Qu
+      }]
     }
   };
 
@@ -44,11 +43,12 @@ router.post('', function (req, res) {
             "simpleText": {
               "text": result[2]
             }
-          }],
-          "quickReplies": defaultObj.Qu
+          }]
         }
       };
     }
+
+    message.template.quickReplies = defaultObj.Qu.concat(defaultObj.goQuickReplies.slice(0,2))
     res.json(message);
   })
 

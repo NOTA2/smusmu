@@ -1,0 +1,57 @@
+extends ../assoLayout.pug
+block append scripts
+  script(src="/js/asso/kakao/faq.js")
+block append css
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/kakao/mainmenu.css")
+block append content
+  .article(style="width:100%")
+    h2 FAQ
+    hr.line
+    form#frm(action="/asso/kakao/faq", method="post", enctype="multipart/form-data")
+      table.table.table-striped
+        thead.thead-light
+          tr
+          th(scope="col").faqcategory category1
+          th(scope="col").faqcategory category2
+          th(scope="col").faqcategory category3
+          th(scope="col").faqcategory category4
+          th(scope="col").faqcategory category5
+          th(scope="col").question question
+          th(scope="col").answer answer
+          th(scope="col").faqurl url
+          th(scope="col").faqimg img
+          th(scope="col").minus 삭제
+        tbody
+          - for(i=0;i<faq.length;i++)
+            tr.plusrow
+              td.faqcategory
+                input.form-control(type="text" value=faq[i].category[0] name=`faq[${i}][0]` autocomplete="off")
+              td.faqcategory
+                input.form-control(type="text" value=faq[i].category[1] name=`faq[${i}][1]` autocomplete="off")
+              td.faqcategory
+                input.form-control(type="text" value=faq[i].category[2] name=`faq[${i}][2]` autocomplete="off")
+              td.faqcategory
+                input.form-control(type="text" value=faq[i].category[3] name=`faq[${i}][3]` autocomplete="off")
+              td.faqcategory
+                input.form-control(type="text" value=faq[i].category[4] name=`faq[${i}][4]` autocomplete="off")
+              td.question
+                textarea.form-control(type='text', name=`faq[${i}][5]`,rows="3", autocomplete="off")= faq[i].question
+              td.answer
+                textarea.form-control(type='text', name=`faq[${i}][6]`,rows="3", autocomplete="off")= faq[i].answer
+              td.faqurl
+                input.form-control(type="text" value=faq[i].url name=`faq[${i}][7]` autocomplete="off" )
+              td.faqimg
+                .custom-file
+                  input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`faq[${i}][8]`)
+                  label.custom-file-label(for='inputGroupFile01' data-browse="📂")= faq[i].img
+                - if(faq[i].img)
+                  input(type="hidden", name=`faq[${i}][8]`, value=faq[i].img)
+              td.minus
+                input#id.form-control(type="hidden" value=faq[i].id name=`faq[${i}][9]`)
+                #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                  i.fas.fa-minus
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

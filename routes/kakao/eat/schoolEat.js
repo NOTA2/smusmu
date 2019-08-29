@@ -1,4 +1,4 @@
-const conn = require('../../../config/db')();
+const conn = require('../../../config/db');
 const dow = ['(일)', '(월)', '(화)', '(수)', '(목)', '(금)', '(토)'];
 const defaultObj = require('../../../config/defaultVariable');
 const router = require('express').Router();
@@ -31,12 +31,7 @@ router.post('/', (req, res) => {
           "text": '학식정보가 업스뮤 😔'
         }
       }],
-      "quickReplies": defaultObj.Qu.concat([{
-        "label": '학식정보',
-        "action": "block",
-        "messageText": '학식정보',
-        "blockId": "5c271af35f38dd44d86a0dca"
-      }])
+      "quickReplies": defaultObj.Qu.concat(defaultObj.eatQuickReplies)
     }
   };
 
@@ -64,6 +59,7 @@ router.post('/', (req, res) => {
           }
         });
       }
+      
       return res.json(message);
     })
   }
@@ -95,12 +91,7 @@ router.post('/day', (req, res) => {
           "text": '학식정보가 업스뮤 😔'
         }
       }],
-      "quickReplies": defaultObj.Qu.concat([{
-        "label": '학식정보',
-        "action": "block",
-        "messageText": '학식정보',
-        "blockId": "5c271af35f38dd44d86a0dca"
-      }])
+      "quickReplies": defaultObj.Qu.concat(defaultObj.eatQuickReplies)
     }
   };
   if (location != 'H' && (day == 0 || day == 6)) {
@@ -172,12 +163,7 @@ router.post('/week', (req, res) => {
           "text": '학식정보가 업스뮤 😔'
         }
       }],
-      "quickReplies": defaultObj.Qu.concat([{
-        "label": '학식정보',
-        "action": "block",
-        "messageText": '학식정보',
-        "blockId": "5c271af35f38dd44d86a0dca"
-      }])
+      "quickReplies": defaultObj.Qu.concat(defaultObj.eatQuickReplies)
     }
   };
 

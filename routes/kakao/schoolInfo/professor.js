@@ -12,12 +12,7 @@ router.post('', (req, res) => {
           "text": '검색결과를 찾을 수 업스뮤 😔'
         }
       }],
-      "quickReplies": defaultObj.Qu.concat([{
-        "label": '교수 검색',
-        "action": "block",
-        "messageText": '교수 검색',
-        "blockId": "5d3035feffa748000122d3dc"
-      }])
+      "quickReplies": defaultObj.Qu.concat(defaultObj.schoolQuickReplies)
     }
   };
   var keyword = req.body.action.detailParams.professor_keyword.value;

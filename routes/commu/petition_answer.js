@@ -1,4 +1,4 @@
-var conn = require('../../config/db')();
+var conn = require('../../config/db');
 var router = require('express').Router();
 var multer = require('multer');
 var storage = multer.diskStorage({

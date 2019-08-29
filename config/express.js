@@ -1,4 +1,4 @@
-module.exports = function(){
+module.exports = function () {
   var express = require('express');
   var bodyParser = require('body-parser');
   var session = require('express-session');
@@ -13,30 +13,32 @@ module.exports = function(){
   //템플릿 엔진 설정 및 폴더 설정
   app.set('view engine', 'pug');
   // app.set('views', 'views');
-  app.locals.pretty = true;     //jade로 웹페이지를 만들기 때문에 태그를 깔끔하게 정리해주는 설정
-  
+  app.locals.pretty = true; //jade로 웹페이지를 만들기 때문에 태그를 깔끔하게 정리해주는 설정
+
   app.use(express.static('public'));
   app.use(compression());
   app.use(helmet());
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
-    extended: true
+    limit: '50mb',
+    extended: true,
+    parameterLimit: 1000000
   }));
   app.use(cookieParser());
-  
+
   app.use(session({
-    secret : '##@)^#*#^(#^#*^#^%$###@#@!@#$%rlaehdgusdmsanjsrkfmfgkfwnfdksmsshadlesdk)',
+    secret: '##@)^#*#^(#^#*^#^%$###@#@!@#$%rlaehdgusdmsanjsrkfmfgkfwnfdksmsshadlesdk)',
     // cookie : {maxAge:1728000},
     // rolling: true,
-    resave : false,
-    saveUninitialized : true,
-    store : new MySQLSessionStore({
-      host : 'smusmutest.cew1lcmxgnch.ap-northeast-2.rds.amazonaws.com',
-      port : 3306,
-      user : 'smusmu',
-      password : dbKey,
-      database : 'smusmutest'
+    resave: false,
+    saveUninitialized: true,
+    store: new MySQLSessionStore({
+      host: 'smusmutest.cew1lcmxgnch.ap-northeast-2.rds.amazonaws.com',
+      port: 3306,
+      user: 'smusmu',
+      password: dbKey,
+      database: 'smusmutest'
     })
   }));
 

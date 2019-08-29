@@ -1,0 +1,38 @@
+extends ../assoLayout.pug
+block append scripts
+  script(src="/js/asso/kakao/taxi.js")
+block append css
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/kakao/mainmenu.css")
+block append content
+  .article
+    h2 택시 오픈채팅방 관리
+    hr.line
+    form#frm(action="/asso/kakao/taxi", method="post")
+      table.table.table-striped
+        thead.thead-light
+          tr
+          th(scope="col").title location
+          th(scope="col").description url
+          th(scope="col").auth password
+          th(scope="col").thumbnail count
+          th(scope="col").minus 삭제
+        tbody
+          - for(i=0;i<taxi.length;i++)
+            tr.plusrow
+              td.title
+                input.form-control(type="text" value=taxi[i].location name=`taxi[${i}][0]` autocomplete="off")
+              td.description
+                input.form-control(type="text" value=taxi[i].url name=`taxi[${i}][1]` autocomplete="off" )
+              td.auth
+                input.form-control(type="text" value=taxi[i].password name=`taxi[${i}][2]` autocomplete="off")
+              td.thumbnail
+                input.form-control(type="number", value=taxi[i].count autocomplete="off" disabled)
+              td.minus
+                input#id.form-control(type="hidden" name=`taxi[${i}][3]` value=taxi[i].id)
+                #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                  i.fas.fa-minus
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

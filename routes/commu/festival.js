@@ -1,4 +1,4 @@
-const conn = require('../../config/db')();
+const conn = require('../../config/db');
 const defaultObj = require('../../config/defaultVariable');
 const router = require('express').Router();
 require('date-utils');

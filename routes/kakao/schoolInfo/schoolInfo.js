@@ -1,4 +1,4 @@
-var conn = require('../../../config/db')();
+var conn = require('../../../config/db');
 
 
 var defaultObj = require('../../../config/defaultVariable');
@@ -13,7 +13,7 @@ router.post('/', (req, res) => {
           "text": '검색결과가 업스뮤 😔'
         }
       }],
-      "quickReplies": defaultObj.Qu
+      "quickReplies": defaultObj.Qu.concat(defaultObj.schoolQuickReplies)
     }
   };
 
@@ -59,35 +59,23 @@ router.post('/', (req, res) => {
 
           if (el.img) {
             message.template.outputs[0].carousel.items[idx].thumbnail = {
-              "imageUrl": `http://${defaultObj.ipadd}/img/mapimg/${el.img}2.png`
+              "imageUrl": `http://${defaultObj.ipadd}/img/mapimg/${el.img}2.png`,
+              "link": {
+                "web": `http://${defaultObj.ipadd}/img/mapimg/${el.img}1.png`
+              }
             };
-            message.template.outputs[0].carousel.items[idx].buttons = [{
-              "action": "webLink",
-              "label": "지도 크게보기",
-              "webLinkUrl": `http://${defaultObj.ipadd}/img/mapimg/${el.img}1.png`
-            }];
-          } else {
-            message.template.outputs[0].carousel.items[idx].buttons = []
           }
 
           if (el.phoneNumber) {
-            if (message.template.outputs[0].carousel.items[idx].buttons.length > 0) {
-              message.template.outputs[0].carousel.items[idx].buttons.push({
-                "action": "phone",
-                "label": "전화하기",
-                "phoneNumber": el.phoneNumber
-              });
-            } else {
-              message.template.outputs[0].carousel.items[idx].buttons = [{
-                "action": "phone",
-                "label": "전화하기",
-                "phoneNumber": el.phoneNumber
-              }];
-            }
+            message.template.outputs[0].carousel.items[idx].buttons = [{
+              "action": "phone",
+              "label": "전화하기",
+              "phoneNumber": el.phoneNumber
+            }];
           }
 
           if (el.faxNumber) {
-            if (message.template.outputs[0].carousel.items[idx].buttons.length > 0) {
+            if (message.template.outputs[0].carousel.items[idx].buttons) {
               message.template.outputs[0].carousel.items[idx].buttons.push({
                 "action": "phone",
                 "label": "FAX 번호 복사하기",

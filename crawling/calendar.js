@@ -1,6 +1,6 @@
 var cheerio = require('cheerio');
 var phantom = require('phantom');
-var conn = require('../config/db')();
+var conn = require('../config/db');
 var async = require('async');
 
 exports.crawling = function () {

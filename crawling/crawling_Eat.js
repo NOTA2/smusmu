@@ -1,5 +1,5 @@
 var client = require('cheerio-httpcli');
-var conn = require('../config/db')();
+var conn = require('../config/db');
 var async = require('async');
 
 exports.search = function () {

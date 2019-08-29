@@ -1,4 +1,4 @@
-var conn = require('../../../config/db')();
+var conn = require('../../../config/db');
 
 
 var defaultObj = require('../../../config/defaultVariable');
@@ -13,10 +13,10 @@ router.post('', function (req, res) {
           "text": '검색결과를 찾을 수 업스뮤 😔'
         }
       }],
-      "quickReplies": defaultObj.Qu
+      "quickReplies": defaultObj.Qu.concat(defaultObj.eatQuickReplies).slice(0,3)
     }
   };
-  var outputsIdx = -1;
+  var outputsIdx = 0;
 
   var sql = 'SELECT * FROM FoodMenu';
 
@@ -28,8 +28,10 @@ router.post('', function (req, res) {
     rows = JSON.parse(JSON.stringify(rows))
 
     if (rows.length > 0) {
+
+      message.template.outputs[0].simpleText.text = '이미지를 누르면 크게 볼 수 있습니다.'
       rows.forEach((el, idx) => {
-        if (idx % 5 == 0) {
+        if (idx % 10 == 0) {
           outputsIdx++;
           message.template.outputs[outputsIdx] = {
             "carousel": {
@@ -42,19 +44,19 @@ router.post('', function (req, res) {
           "title": el.name,
           "description": el.explanation,
           "thumbnail": {
-            "imageUrl": `http://${defaultObj.ipadd}/img${el.img}`
+            "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/menu/${el.img}`),
+            "link": {
+              "web": encodeURI(`http://${defaultObj.ipadd}/img/menu/${el.img}`)
+            },
+            "fixedRatio": true,
+            "width": 800,
+            "height": 800
           },
           "buttons": [{
-              "action": "webLink",
-              "label": "메뉴판 크게보기",
-              "webLinkUrl": `http://${defaultObj.ipadd}/img${el.img}`
-            },
-            {
-              "action": "phone",
-              "label": "전화하기",
-              "phoneNumber": el.phone
-            }
-          ]
+            "action": "phone",
+            "label": "전화하기",
+            "phoneNumber": el.phone
+          }]
         });
       })
     }
