@@ -31,15 +31,22 @@ function formplus() {
   <td class="faqcategory"><input class="form-control" type="text" name="faq[${rowlength}][2]" autocomplete="off" /></td>
   <td class="faqcategory"><input class="form-control" type="text" name="faq[${rowlength}][3]" autocomplete="off" /></td>
   <td class="faqcategory"><input class="form-control" type="text" name="faq[${rowlength}][4]" autocomplete="off" /></td>
-  <td class="question"><textarea class="form-control" type="text" name="faq[${rowlength}][5]" rows="3" autocomplete="off"></textarea></td>
-  <td class="answer"><textarea class="form-control" type="text" name="faq[${rowlength}][6]" rows="3" autocomplete="off"></textarea></td>
-  <td class="url"><input class="form-control" type="text" name="faq[${rowlength}][7]" autocomplete="off" /></td>
-  <td class="faqimg">
-      <div class="custom-file"><input class="custom-file-input" id="inputGroupFile01" type="file" aria-describedby="inputGroupFileAddon01" name="faq[${rowlength}][8]"/>
-      <label class="custom-file-label" for="inputGroupFile01" data-browse="📂"></label></div>
-  </td>
-  <td class="minus">
+  <td class="question" rowspan="2"><textarea class="form-control" type="text" name="faq[${rowlength}][5]" rows="3" autocomplete="off"></textarea></td>
+  <td class="answer" rowspan="2"><textarea class="form-control" type="text" name="faq[${rowlength}][6]" rows="3" autocomplete="off"></textarea></td>
+  <td class="faqurl"><input class="form-control" type="text" name="faq[${rowlength}][7]" autocomplete="off" /></td>
+  <td class="minus" rowspan="2"><input class="form-control" id="id" type="hidden" name="faq[${rowlength}][10]" />
       <div class="btn btn-primary" id="pbt" onclick="deleteitem(this)"><i class="fas fa-minus"></i></div>
+  </td>
+</tr>
+<tr>
+  <th colspan="3">
+    <select class="custom-select" id="auth" name="faq[${rowlength}][9]"><option value="0" selected="selected">미등록</option><option value="1">등록</option></select>
+  </th>
+  <th colspan="2">
+    <input class="form-control" type="number" value="0" disabled="disabled" />
+  </th>
+  <td>
+  <div class="custom-file"><input class="custom-file-input" id="inputGroupFile01" type="file" aria-describedby="inputGroupFileAddon01" name="faq[${rowlength}][8]" /><label class="custom-file-label" for="inputGroupFile01" data-browse="📂"></label></div>
   </td>
 </tr>
   `
@@ -86,6 +93,7 @@ function deleteitem(self) {
     }).then(function (res) {
       res.json().then(function (data) {
         if (data.status) {
+          $(row).next().remove();
           $(row).remove();
           alert('해당 정보가 삭제되었습니다.')
         }

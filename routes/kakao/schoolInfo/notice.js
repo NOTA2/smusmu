@@ -102,7 +102,9 @@ router.post('', (req, res) => {
             [temp[1], temp[2]] = [temp[2], temp[1]];
           }
         }
-        if (major.state) { ///여기 수정해야 함
+        console.log(major.state);
+        
+        if (major.state) {
           if (resultList == 'false')
             message.template.quickReplies[1].label = '학과 ' + message.template.quickReplies[1].label.replace('학과 ', '');
           message.template.quickReplies[1].messageText = '학과 ' + message.template.quickReplies[1].messageText.replace('학과 ', '');

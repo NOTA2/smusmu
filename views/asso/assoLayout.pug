@@ -80,10 +80,11 @@ html(lang='ko')
                 a(href='/auth/logout')
                   i.fas.fa-sign-out-alt
                   |  로그아웃
-          li
-            a(href='/commu')
-              i.fas.fa-users
-              |  스뮤스뮤 커뮤니티
+          - if(user.grade <= 4)
+            li
+              a(href='/commu')
+                i.fas.fa-users
+                |  스뮤스뮤 커뮤니티
           - if(user.grade == '2' || user.grade == '3')
             li
               a(href='/asso/home/member')
@@ -107,7 +108,12 @@ html(lang='ko')
                   a(href='/asso/rent/list') 
                     i.fas.fa-clipboard-list
                     |  대여 기록
-          - if(user.grade == '1')
+          - if(user.grade == '1')   //스뮤스뮤 전용
+            hr
+            li
+              a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false')
+                //- i.fas.fa-comments
+                |   💬 스뮤스뮤
             li
               a(href='/asso/kakao/mainmenu') 카카오톡 메인메뉴
             li
@@ -122,6 +128,21 @@ html(lang='ko')
               a(href='/asso/kakao/faq') FAQ
             li
               a(href='/asso/kakao/job') 온라인 취업 서비스
+            hr
+            li
+              a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false')
+                |   🦌 안다미로
+          - if(user.grade == '5' || user.grade == '1')   //안다미로 전용
+            li
+              a(href='/asso/andamiro/main') 기본정보
+            li
+              a(href='/asso/andamiro/menu') 메뉴
+            li
+              a(href='/asso/andamiro/event') 이벤트
+            li
+              a(href='/asso/andamiro/faq') FAQ
+            li
+              a(href='/asso/andamiro/voc') VOC
         //- ul.list-unstyled.CTAs
         //-   li
         //-     a.download(href='https://bootstrapious.com/tutorial/files/sidebar.zip') Download source

@@ -85,4 +85,17 @@ defaultObj.noticeQuickReplies =[{
   "messageText": '공지사항 검색'
 }]
 
+
+defaultObj.faqQuickReplies = [{
+  "label": 'FAQ 🙋️',
+  "action": "block",
+  "messageText": '자주 묻는 질문 🙋️',
+  "blockId": "5d6805fcb617ea0001c168ff"
+}, {
+  "label": '아는게 뭐야? 🤔',
+  "action": "block",
+  "messageText": '아는게 뭐야? 🤔',
+  "blockId": "5d680610b617ea0001c16902"
+}]
+
 module.exports = defaultObj;

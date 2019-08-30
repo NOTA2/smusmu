@@ -100,11 +100,8 @@ router.get('', (req, res) => {
     }
   });
 
-  console.log(params);
   let url = params.pop();
   let submit = `$("#frm").submit()`
-  
-  // return res.send('hello')
 
   if(Object.keys(req.query).indexOf("UserName_client") != -1)
     submit = "eduwillSubmit()"

@@ -3,13 +3,13 @@ block append scripts
   script(src="/js/asso/kakao/faq.js")
 block append css
   link(rel="stylesheet" href="/css/asso/home.css")
-  link(rel="stylesheet" href="/css/asso/mainMenu.css")
+  link(rel="stylesheet" href="/css/asso/kakao.css")
 block append content
   .article(style="width:100%")
     h2 FAQ
     hr.line
     form#frm(action="/asso/kakao/faq", method="post", enctype="multipart/form-data")
-      table.table.table-striped
+      table.table
         thead.thead-light
           tr
           th(scope="col").faqcategory category1
@@ -19,8 +19,8 @@ block append content
           th(scope="col").faqcategory category5
           th(scope="col").question question
           th(scope="col").answer answer
-          th(scope="col").faqurl url
-          th(scope="col").faqimg img
+          th(scope="col").faqurl url/img
+          //- th(scope="col").faqimg img
           th(scope="col").minus 삭제
         tbody
           - for(i=0;i<faq.length;i++)
@@ -35,22 +35,29 @@ block append content
                 input.form-control(type="text" value=faq[i].category[3] name=`faq[${i}][3]` autocomplete="off")
               td.faqcategory
                 input.form-control(type="text" value=faq[i].category[4] name=`faq[${i}][4]` autocomplete="off")
-              td.question
+              td.question(rowspan=2)
                 textarea.form-control(type='text', name=`faq[${i}][5]`,rows="3", autocomplete="off")= faq[i].question
-              td.answer
+              td.answer(rowspan=2)
                 textarea.form-control(type='text', name=`faq[${i}][6]`,rows="3", autocomplete="off")= faq[i].answer
               td.faqurl
                 input.form-control(type="text" value=faq[i].url name=`faq[${i}][7]` autocomplete="off" )
-              td.faqimg
+              td.minus(rowspan=2)
+                input#id.form-control(type="hidden" value=faq[i].id name=`faq[${i}][10]`)
+                #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                  i.fas.fa-minus
+            tr
+              th(colspan=3)
+                  select.custom-select#auth(name=`faq[${i}][9]`)
+                    option(value="0" selected= faq[i].faq == 0) 미등록
+                    option(value="1" selected= faq[i].faq == 1) 등록
+              th(colspan=2)
+                  input.form-control(type="number", value=faq[i].count disabled)
+              td
                 .custom-file
                   input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`faq[${i}][8]`)
                   label.custom-file-label(for='inputGroupFile01' data-browse="📂")= faq[i].img
                 - if(faq[i].img)
                   input(type="hidden", name=`faq[${i}][8]`, value=faq[i].img)
-              td.minus
-                input#id.form-control(type="hidden" value=faq[i].id name=`faq[${i}][9]`)
-                #pbt.btn.btn-primary(onclick="deleteitem(this)")
-                  i.fas.fa-minus
     #pbt.btn.btn-success(onclick="complete();")
       i.fas.fa-check
     #pbt.btn.btn-danger(onclick="formplus();")

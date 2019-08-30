@@ -1,0 +1,217 @@
+tbody {
+	transition: all 1s;
+}
+
+th {
+	text-align: center;
+}
+
+.table td,
+.table th {
+	padding: .4rem;
+}
+
+.card {
+	padding: 1.2rem .3rem .2rem;
+	margin: 1rem 0;
+	border: #333333 solid 1px;
+}
+
+.card:hover {
+	box-shadow: 5px 5px 5px 5px gray;
+}
+
+.itemBoxHighlight {
+	width: 100%;
+	height: 380px;
+	padding: 10px;
+	margin-bottom: 10px;
+	background-color: rgb(218, 216, 216);
+	border-radius: 2rem;
+}
+
+.title {
+	width: 30%;
+}
+
+.description {
+	width: 45%;
+}
+
+.auth {
+	width: 13%;
+}
+
+.thumbnail {
+	width: 12%;
+}
+
+.menuorder {
+	width: 5%;
+}
+
+
+.custom-file-label {
+	cursor: pointer;
+}
+
+td.minus {
+	/* width: 15%; */
+	text-align: center;
+	vertical-align: middle;
+}
+
+.minus i.fa-minus-square {
+	color: rgb(55, 28, 206);
+}
+
+#pbt,
+#com {
+	display: inline-block;
+	height: calc(1.5em + .75rem + 2px);
+	padding: .375rem .75rem;
+	margin: .2rem;
+	cursor: pointer;
+}
+
+@media screen and (max-width:768px) {
+	.line {
+		margin: .5rem 0;
+	}
+
+	th {
+		font-size: 0.8rem;
+	}
+
+	.name {
+		width: 30%;
+	}
+
+	.now {
+		width: 20%;
+	}
+
+	.all {
+		width: 20%;
+	}
+
+	.date {
+		width: 20%;
+	}
+
+
+	.table td,
+	.table th {
+		padding: 0.2rem;
+	}
+
+	.nowtable {
+		width: 100%;
+		margin: 2rem auto;
+	}
+
+	/* Force table to not be like tables anymore */
+	#fromtable table,
+	#fromtable thead,
+	#fromtable tbody,
+	#fromtable th,
+	#fromtable td,
+	#fromtable tr {
+		display: block;
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#fromtable thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	#fromtable tr {
+		border: 1px solid #ccc;
+	}
+
+	#fromtable td {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50%;
+		height: 3rem;
+		margin-bottom: 0;
+	}
+
+	#fromtable td:before {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+	}
+
+	#pbt {
+		display: block;
+		margin: 1rem 0;
+	}
+
+
+
+	/* Force table to not be like tables anymore */
+	#rentstatus table,
+	#rentstatus thead,
+	#rentstatus tbody,
+	#rentstatus th,
+	#rentstatus td,
+	#rentstatus tr {
+		display: block;
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#rentstatus thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+	#rentstatus tr {
+		border: 1px solid #ccc;
+	}
+
+	#rentstatus td {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50%;
+		height: 1.8rem;
+	}
+
+	#rentstatus td:before {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+	}
+
+	.thing {
+		width: 100%;
+	}
+
+	#rentstatus td.com {
+		height: 3rem;
+		text-align: center;
+		padding-left: 0;
+	}
+
+	td.com .btn {
+		width: 100%;
+	}
+
+}

@@ -1,31 +1,43 @@
 const router = require('express').Router();
 
+
+const mainmenu = require('./main/mainmenu')
+const auth = require('./main/auth')
+
 const eat = require('./eat/schoolEat');
-const notice = require('./schoolInfo/notice');
-const weather = require('./gotowork/weather');
-const seoulAssembly = require('./gotowork/seoulAssembly');
-const calendar = require('./schoolInfo/calendar');
 const foodMenu = require('./eat/foodMenu');
+
+const notice = require('./schoolInfo/notice');
+const calendar = require('./schoolInfo/calendar');
 const schoolInfo = require('./schoolInfo/schoolInfo');
 const professor = require('./schoolInfo/professor');
-const rent = require('./regi/rent')
-const auth = require('./main/auth')
-const mainmenu = require('./main/mainmenu')
+const faq = require('./schoolInfo/faq')
+
+const weather = require('./gotowork/weather');
+const seoulAssembly = require('./gotowork/seoulAssembly');
 const taxi = require('./gotowork/taxi')
+
+const rent = require('./regi/rent')
 const job = require('./regi/job')
 
+
+router.use('/mainmenu', mainmenu);
+router.use('/auth', auth);
+
 router.use('/eat', eat);
-router.use('/notice', notice);
-router.use('/weather', weather);
-router.use('/seoulAssembly', seoulAssembly);
-router.use('/calendar', calendar);
 router.use('/foodMenu', foodMenu);
+
+router.use('/notice', notice);
+router.use('/calendar', calendar);
 router.use('/schoolInfo', schoolInfo);
 router.use('/professor', professor);
-router.use('/rent', rent);
-router.use('/auth', auth);
-router.use('/mainmenu', mainmenu);
+router.use('/faq', faq);
+
 router.use('/taxi', taxi);
+router.use('/weather', weather);
+router.use('/seoulAssembly', seoulAssembly);
+
+router.use('/rent', rent);
 router.use('/job', job);
 
 

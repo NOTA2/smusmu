@@ -56,20 +56,21 @@ router.post('',  faqupload.any(), (req, res) => {
       x[6],                               //answer
       x[7],                               //url
       x[8]? x[8] : '',                     //img
-      x[9]? x[9] : null,                   //id
+      x[9],                                 //faq 여부
+      x[10]? x[10] : null,                   //id
     ]
   })
 
   let sql = `SELECT * FROM faq WHERE id = ?`;
 
   async.forEachOf(faqs, function (faq, i, inner_callback) {
-    conn.query(sql, [faq[5]], function (err, rows) {
+    conn.query(sql, [faq[6]], function (err, rows) {
       if (err) {
         inner_callback(err);
       } else {
         if (rows.length > 0) { //있다면 업데이트
           sql = `UPDATE faq 
-          SET category = ?, question=?, answer=?, url=?, img=?
+          SET category = ?, question=?, answer=?, url=?, img=?, faq=?
           WHERE id = ?`;
 
           conn.query(sql, faq, (err, rows) => {
@@ -80,8 +81,8 @@ router.post('',  faqupload.any(), (req, res) => {
             inner_callback(null);
           });
         } else { //없다면 추가
-          sql = `INSERT INTO faq (category, question, answer, url, img)
-          VALUES (?, ?, ?, ?, ?)`;
+          sql = `INSERT INTO faq (category, question, answer, url, img, faq)
+          VALUES (?, ?, ?, ?, ?, ?)`;
 
           conn.query(sql, faq, (err, rows) => {
             if (err) {

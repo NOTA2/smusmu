@@ -34,7 +34,7 @@ exports.search = function (keyword, page, im, major) {
             if (idx > (page * alimit))
               return true;
 
-            if (page > 1 && idx < offset)
+            if (page > 1 && idx <= offset)
               return true;
 
             noticeObj[idx] = new Object();

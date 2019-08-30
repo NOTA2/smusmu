@@ -101,8 +101,13 @@ th {
 .faqcategory{
 	width : 8%
 }
-.faqimg{
-	width : 10%
+
+.faqurl{
+	width : 13%
+}
+
+.plusrow{
+	border-top: #333333 2px solid;
 }
 
 /*job*/
@@ -115,7 +120,6 @@ th {
 .joburl{
 	width : 30%;
 }
-
 
 .custom-file-label {
 	cursor: pointer;
@@ -223,32 +227,7 @@ td.minus {
 		margin: 1rem 0;
 	}
 
-	/*
-	Label the data
-	*/
-	#fromtable td:nth-of-type(1):before {
-		content: "물품";
-	}
 
-	#fromtable td:nth-of-type(2):before {
-		content: "이름";
-	}
-
-	#fromtable td:nth-of-type(3):before {
-		content: "학번";
-	}
-
-	#fromtable td:nth-of-type(4):before {
-		content: "학과";
-	}
-
-	#fromtable td:nth-of-type(5):before {
-		content: "전화번호";
-	}
-
-	#fromtable td:nth-of-type(6):before {
-		content: "비고";
-	}
 
 	/* Force table to not be like tables anymore */
 	#rentstatus table,
@@ -305,40 +284,4 @@ td.minus {
 		width: 100%;
 	}
 
-	/*
-	Label the data
-	*/
-	#rentstatus td:nth-of-type(1):before {
-		content: "물품";
-	}
-
-	#rentstatus td:nth-of-type(2):before {
-		content: "이름";
-	}
-
-	#rentstatus td:nth-of-type(3):before {
-		content: "학번";
-	}
-
-	#rentstatus td:nth-of-type(4):before {
-		content: "학과";
-	}
-
-	#rentstatus td:nth-of-type(5):before {
-		content: "전화번호";
-	}
-
-	#rentstatus td:nth-of-type(6):before {
-		content: "비고";
-	}
-
-	#rentstatus td:nth-of-type(7):before {
-		content: "대여기간";
-	}
-
-	#rentstatus td:nth-of-type(8):before {
-		content: "반납기일";
-	}
-
-	/* #rentstatus td:nth-of-type(9):before { content: "반납"; vertical-align: middle; height: 3rem;} */
 }
