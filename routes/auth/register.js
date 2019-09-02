@@ -81,7 +81,6 @@ router.post('/schoolId', (req, res) => {
 
 //수정해야 할듯함
 router.post('/nickname', (req, res) => {
-
   if (req.body.username) {
     var sql = 'SELECT nickname FROM users WHERE username=?';
     conn.query(sql, [req.body.username], (err, results) => {

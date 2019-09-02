@@ -16,9 +16,15 @@ router.post('', (req, res) => {
     }
   };
 
+  // let sql = `SELECT kakaoId, name, major, homepage, token
+  //           FROM users, major 
+  //           where kakaoId=? AND majorId=major.id`
+
   let sql = `SELECT kakaoId, name, major, homepage, token
-            FROM users, major 
-            where kakaoId=? AND majorId=major.id`
+  FROM users
+  LEFT OUTER JOIN major
+  ON majorId=major.id
+  where kakaoId=?`
 
   conn.query(sql, [kakaoId], (err, rows) => {
 
@@ -28,9 +34,11 @@ router.post('', (req, res) => {
     //    user = 'email'
     //user가 등록되어 있지 않은 경우
     //    user = undefined
+    //user가 등록되어 있고 인증도 받았지만 학과정보가 없는경우
+    //    user.major = null
 
     let user = rows[0];
-
+    
     sql = `SELECT * FROM mainMenu ORDER BY menuorder`
 
     conn.query(sql, (err, rows) => {
@@ -107,7 +115,21 @@ router.post('', (req, res) => {
               }]
             }
           }
-          if (user && user.homepage) { //학과 홈페이지 🌐 기능을 위한 코드
+          else if(!user.major){     //등록되어 있고 인증도 받았지만 학과정보가 없는경우
+            message.template.outputs[0].carousel.items[idx] = {
+              "title": el.title,
+              "description": '학과정보가 없어요 😔 커뮤니티에 들어가서 학과정보를 입력해주세요!',
+              "thumbnail": {
+                "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/main/${el.thumbnail}`)
+              },
+              "buttons": [{
+                "label": "커뮤니티 🌐",
+                "action": "webLink",
+                "webLinkUrl": `https://smusmu.co.kr/commu/home/myinfo`
+              }]
+            }
+          }
+          if (user && user.major && user.homepage) { //학과 홈페이지 🌐 기능을 위한 코드
             let btIdx = message.template.outputs[0].carousel.items[idx].buttons.findIndex(x => x.action === "webLink");
             message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl += user.homepage
           }

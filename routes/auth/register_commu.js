@@ -17,6 +17,7 @@ router.get('/', (req, res) => {
     return res.redirect('/auth/register/info')
 
   var sql = 'SELECT * FROM users WHERE kakaoId=?';
+
   conn.query(sql, [kakaoId], (err, results) => {
     if (err) {
       console.log(err);
