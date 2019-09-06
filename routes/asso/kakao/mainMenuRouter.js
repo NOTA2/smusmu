@@ -31,14 +31,15 @@ router.get('', (req, res) => {
       throw err;
     }
 
+    //button이 json 형태로 저장되어 있으니 이를 정리해준다.
     for (let i = 0; i < rows.length; i++) {
       rows[i].buttons = JSON.parse(rows[i].buttons);
 
       for (let j = 0; j < 3; j++) {
-        if (!rows[i].buttons[j]){
+        if (!rows[i].buttons[j]) {
           rows[i].buttons[j] = ['null'];
           continue;
-        } 
+        }
         let temp = [rows[i].buttons[j].action, rows[i].buttons[j].label]
         if (rows[i].buttons[j].action == "block")
           temp[2] = rows[i].buttons[j].blockId;
@@ -50,11 +51,11 @@ router.get('', (req, res) => {
           temp[2] = rows[i].buttons[j].messageText;
         else if (rows[i].buttons[j].action == "phone")
           temp[2] = rows[i].buttons[j].phoneNumber;
-        
-          rows[i].buttons[j] = temp.slice();
+
+        rows[i].buttons[j] = temp.slice();
       }
     }
-    
+
     res.render('asso/kakao/mainmenu', {
       user: req.user,
       info: {
@@ -69,17 +70,17 @@ router.get('', (req, res) => {
 
 router.post('', mainupload.any(), (req, res) => {
   let menus = req.body.menu;
-  
+
   //파일이 추가된 경우 객체의 파라미터로 해당 파일명을 등록
-  req.files.forEach(x=>{
-    let fileIdx = x.fieldname.replace(/[^0-9]/g,'');
+  req.files.forEach(x => {
+    let fileIdx = x.fieldname.replace(/[^0-9]/g, '');
     menus[fileIdx].thumbnail = x.filename;
   })
-  
-    //버튼에 사용된 2차원 배열을 객체로 바꾸는 작업
+
+  //버튼에 사용된 2차원 배열을 객체로 바꾸는 작업
   menus = menus.map(x => {
     x.bt = new Array();
-    for (let i = 0; i < 3; i++) { 
+    for (let i = 0; i < 3; i++) {
       if (x.buttons[i][0] == "null")
         continue;
 
@@ -110,24 +111,27 @@ router.post('', mainupload.any(), (req, res) => {
     return [
       x.title ? x.title : null,
       x.description ? x.description : null,
-      x.thumbnail ? x.thumbnail :null,
+      x.thumbnail ? x.thumbnail : null,
       x.auth ? x.auth : null,
       x.buttons ? x.buttons : null,
-      x.menuorder ? x.menuorder : null
+      x.menuorder ? x.menuorder : null,
+      x.id ? x.id : null          //menu[6]
     ]
   })
 
-  let sql = `SELECT * FROM mainMenu WHERE menuorder = ?`;
+  menus = menus.filter(x=>true);
+
+  let sql = `SELECT * FROM mainMenu WHERE id = ?`;
 
   async.forEachOf(menus, function (menu, i, inner_callback) {
-    conn.query(sql, [menu[5]], function (err, rows) {
+    conn.query(sql, [menu[6]], function (err, rows) {
       if (err) {
         inner_callback(err);
       } else {
         if (rows.length > 0) { //있다면 업데이트
           sql = `UPDATE mainMenu 
-          SET title = ?, description=?, thumbnail=?, auth=?, buttons=?
-          WHERE menuorder = ?`;
+          SET title = ?, description=?, thumbnail=?, auth=?, buttons=?, menuorder=?
+          WHERE id = ?`;
 
           conn.query(sql, menu, (err, rows) => {
             if (err) {

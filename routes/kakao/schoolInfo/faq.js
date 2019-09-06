@@ -30,7 +30,7 @@ router.post('', (req, res) => {
         message.template.outputs[1].carousel.items.push({
           "title": `Q. ${el.question}`,
           "buttons": [{
-            "label": '답변보기',
+            "label": '답변보기 💡',
             "action": "block",
             "messageText": el.question,
             "extra": {
@@ -65,7 +65,7 @@ router.post('/result', (req, res) => {
           "text": '문제가 생겼스뮤 😔 다시 시도해주세요!'
         }
       }
-      console.err(err);
+      console.error(err);
 
       return res.json(message);
     }
@@ -74,7 +74,7 @@ router.post('/result', (req, res) => {
       message.template.outputs.push({
         "simpleImage": {
           "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/faq/${answer.img}`),
-          "altText": "answer.answer"
+          "altText": answer.answer
         }
       })
 
@@ -91,7 +91,7 @@ router.post('/result', (req, res) => {
           "buttons": [
             {
               "action": "webLink",
-              "label": "자세히 알아보기 🌐",
+              "label": "자세히보기 🌐",
               "webLinkUrl": answer.url
             }
           ]

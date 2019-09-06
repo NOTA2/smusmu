@@ -1,0 +1,43 @@
+extends ../assoLayout.pug
+block append scripts
+block append css
+  link(rel='stylesheet', href='/css/asso/andamiro.css')
+block append content
+  .article
+    #list
+      table.table.table-striped
+        thead.thead-light
+          tr
+            th(scope="col").id 번호
+            th(scope="col").content 내용
+            th(scope="col").major 학과
+            th(scope="col").date 날짜
+        tbody
+          - for(i=0;i<voc.length;i++)
+            tr
+              td.id= voc[i].id
+              td.content
+                a= voc[i].content
+              td.major= voc[i].major
+              td.date= voc[i].date
+      #page
+        nav(aria-label='Page navigation example')
+          ul.pagination
+            - if(startPage > 5)
+              li.page-item
+                a.page-link(href=`/asso/andamiro/voc?&page=${(startPage-1)}`, aria-label='Back')
+                  span(aria-hidden='true') «
+                  span.sr-only Back
+            - for(var idx=startPage;idx<=endPage;idx++){
+              - if(idx == page)
+                li.page-item.active
+                  a.page-link(href=`/asso/andamiro/voc?&page=${idx}`)= idx
+              - else
+                li.page-item
+                  a.page-link(href=`/asso/andamiro/voc?&page=${idx}`)= idx
+            - }
+            - if(endPage < totalPage)
+              li.page-item
+                a.page-link(href=`/asso/andamiro/voc?&page=${(endPage+1)}`, aria-label='Next')
+                  span(aria-hidden='true') »
+                  span.sr-only Next

@@ -19,7 +19,7 @@ router.post('', function (req, res) {
             "imageUrl": `http://${defaultObj.ipadd}/img/function/register.png`
           },
           "buttons": [{
-            "label": "등록하기",
+            "label": "등록 📝",
             "action": "webLink",
             "webLinkUrl": url
           }]
@@ -46,7 +46,7 @@ router.post('', function (req, res) {
           "basicCard": {
             "title": '학교 메일인증을 아직 안했스뮤!',
             "buttons": [{
-              "label": "학교 이메일 확인하기",
+              "label": "이메일 확인 📫",
               "action": "webLink",
               "webLinkUrl": 'https://outlook.office365.com/owa/?realm=sangmyung.kr&exsvurl=1&ll-cc=1042&modurl=0'
             }]
@@ -59,7 +59,7 @@ router.post('', function (req, res) {
           "basicCard": {
             "title": '이미 등록되어 있스뮤!!',
             "buttons": [{
-              "label": "스뮤스뮤 커뮤니티 바로가기",
+              "label": "스뮤스뮤 커뮤니티 🌐",
               "action": "webLink",
               "webLinkUrl": 'https://smusmu.co.kr'
             }]

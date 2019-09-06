@@ -1,6 +1,4 @@
 var conn = require('../../../config/db');
-
-
 var defaultObj = require('../../../config/defaultVariable');
 var router = require('express').Router();
 
@@ -22,7 +20,7 @@ router.post('', function (req, res) {
 
   conn.query(sql, (err, rows) => {
     if (err) {
-      console.err(err);
+      console.error(err);
       return res.json(message);
     }
     rows = JSON.parse(JSON.stringify(rows))
@@ -54,7 +52,7 @@ router.post('', function (req, res) {
           },
           "buttons": [{
             "action": "phone",
-            "label": "전화하기",
+            "label": "전화 ☎️",
             "phoneNumber": el.phone
           }]
         });

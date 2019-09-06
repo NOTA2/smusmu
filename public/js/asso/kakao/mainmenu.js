@@ -118,9 +118,10 @@ function complete() {
 
   $(title).each(function (idx, el) {
     var description = $(el).parents('.cardContents').children('.description').children('input').val();
-    var thumbnail = $(el).parents('.cardContents').children('.thumbnail').children('input').val();
+    var thumbnail = $(el).parents('.cardContents').children('.thumbnail').find('input').val();
+    var thumbnailHidden = $(el).parents('.cardContents').children('.thumbnail').find('.thumbnailHidden').val();
 
-    if (!$(el).val() && !description && !thumbnail) {
+    if (!$(el).val() && !description && !(thumbnail || thumbnailHidden)) {
       alert('하나 이상 입력해주세요!');
       return false;
     }

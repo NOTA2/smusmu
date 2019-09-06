@@ -65,11 +65,11 @@ router.post('', (req, res) => {
               "description": el.desc,
               "buttons": [{
                   "action": "webLink",
-                  "label": "홈페이지에서 확인",
+                  "label": "홈페이지에서 확인 🌐",
                   "webLinkUrl": el.src
                 },
                 {
-                  "label": '스뮤스뮤에서 확인',
+                  "label": '스뮤스뮤에서 확인 👇',
                   "action": "block",
                   "messageText": el.title,
                   "extra": {

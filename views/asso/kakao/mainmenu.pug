@@ -42,7 +42,7 @@ block append content
                       input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`menu[${i}][thumbnail]`)
                       label.custom-file-label(for='inputGroupFile01' data-browse="📂")= menu[i].thumbnail
                     - if(menu[i].thumbnail)
-                      input(type="hidden", name=`menu[${i}][thumbnail]`, value=menu[i].thumbnail)
+                      input.thumbnailHidden(type="hidden", name=`menu[${i}][thumbnail]`, value=menu[i].thumbnail)
                   td.menuorder
                     input.form-control(type='number', name=`menu[${i}][menuorder]`, value=menu[i].menuorder autocomplete="off" readonly)
               thead.thead-light

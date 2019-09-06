@@ -69,7 +69,7 @@ router.post('/', (req, res) => {
           if (el.phoneNumber) {
             message.template.outputs[0].carousel.items[idx].buttons = [{
               "action": "phone",
-              "label": "전화하기",
+              "label": "전화 ☎️",
               "phoneNumber": el.phoneNumber
             }];
           }
@@ -78,13 +78,13 @@ router.post('/', (req, res) => {
             if (message.template.outputs[0].carousel.items[idx].buttons) {
               message.template.outputs[0].carousel.items[idx].buttons.push({
                 "action": "phone",
-                "label": "FAX 번호 복사하기",
+                "label": "FA번호 복사 📠",
                 "phoneNumber": el.faxNumber
               });
             } else {
               message.template.outputs[0].carousel.items[idx].buttons = [{
                 "action": "phone",
-                "label": "FAX 번호 복사하기",
+                "label": "FAX번호 복사 📠",
                 "phoneNumber": el.faxNumber
               }];
             }

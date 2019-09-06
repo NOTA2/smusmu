@@ -74,6 +74,7 @@ router.post('', jobupload.any(), (req, res) => {
     ]
   })
 
+  jobs = jobs.filter(x=>true);
   let sql = `SELECT * FROM job WHERE jobOrder = ?`;
 
   async.forEachOf(jobs, function (job, i, inner_callback) {

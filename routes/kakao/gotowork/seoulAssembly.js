@@ -77,14 +77,14 @@ router.post('', function (req, res) {
 
           saObj.detail.forEach((url, idx) => {
             detailbuttons[idx] = {
-              "label": "서울지방 경찰청 정보 " + (idx + 1),
+              "label": "👮 서울 경찰청 정보 " + (idx + 1),
               "action": "webLink",
               "webLinkUrl": url
             }
           });
           var i = message.template.outputs[carouselIdx].carousel.items.length;
           message.template.outputs[carouselIdx].carousel.items[i] = {
-            "title": "서울지방 경찰청의 정보",
+            "title": "👮 서울 경찰청 정보",
             "description": "더 자세한 집회 정보는 서울지방 경찰청의 정보로 확인하스뮤!",
             "buttons": detailbuttons
           };
@@ -97,7 +97,7 @@ router.post('', function (req, res) {
 
           saObj.detail.forEach((url, idx) => {
             detailbuttons[idx] = {
-              "label": "서울지방 경찰청 정보 " + (idx + 1),
+              "label": "👮 서울 경찰청 정보 " + (idx + 1),
               "action": "webLink",
               "webLinkUrl": url
             }
@@ -108,7 +108,7 @@ router.post('', function (req, res) {
             "template": {
               "outputs": [{
                 "basicCard": {
-                  "title": "서울지방 경찰청의 정보",
+                  "title": "👮 서울 경찰청의 정보",
                   "description": "아직 자세한 집회정보가 없스뮤 😔\n서울지방 경찰청의 정보를 확인하스뮤!",
                   "buttons": detailbuttons
                 }

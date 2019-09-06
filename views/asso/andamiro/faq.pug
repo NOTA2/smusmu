@@ -1,0 +1,63 @@
+extends ../assoLayout.pug
+block append scripts
+  script(type='text/javascript').
+    var col = "#{col}";
+  script(type='text/javascript', src='https://code.jquery.com/jquery-1.12.4.min.js')
+  script(type='text/javascript', src='https://code.jquery.com/ui/jquery-ui-git.js')
+  script(src="/js/asso/andamiro/faq.js")
+block append css
+  link(href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', rel='stylesheet', type='text/css')
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/andamiro.css")
+block append content
+  .article(style="width:100%")
+    h2 FAQ      
+    #page
+      nav(aria-label='Page navigation example')
+        ul.pagination
+          - for(let i=0;i<3;i++)
+            li.page-item(class=col==i?"active":null)
+              a.page-link(href=`/asso/andamiro/faq?col=${i}`)= i+1
+    hr.line
+    form#frm(action="/asso/andamiro/faq", method="post", enctype="multipart/form-data")
+      ul#sortable
+        -for(i=0;i<faq.length;i++)
+          .card.faqcard
+            table.table
+              thead.thead-light
+                tr
+                  th(scope="col").question question
+                  th(scope="col").answer answer
+                  th(scope="col").faqurl 이미지/url/phone
+                  th(scope="col").faqorder 순서/삭제
+              tbody
+                tr.cardContents
+                  td.question(rowspan=3)
+                    textarea.form-control(type='text', name=`faq[${i}][0]`,rows="5", autocomplete="off")= faq[i].question
+                  td.answer(rowspan=3)
+                    textarea.form-control(type='text', name=`faq[${i}][1]`,rows="5", autocomplete="off")= faq[i].answer
+                  td
+                    .custom-file
+                      input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`faq[${i}][2]`)
+                      label.custom-file-label(for='inputGroupFile01' data-browse="📂")= faq[i].img
+                        -if(!faq[i].img)
+                          | 답변에 추가할 이미지가 있다면 넣어주세요
+                      - if(faq[i].img)
+                        input(type="hidden", name=`faq[${i}][8]`, value=faq[i].img)
+                  td#faqorder.faqorder(rowspan=2)
+                    input.form-control(type='number', name=`faq[${i}][6]`, autocomplete="off" readonly)
+                tr
+                  td  
+                    input.form-control(type="text" name=`faq[${i}][3]` autocomplete="off" value=faq[i].url placeholder="버튼으로 추가할 url이 있다면 넣어주세요")
+                tr
+                  td.faqurl
+                    input.form-control(type="text" name=`faq[${i}][4]` autocomplete="off" value=faq[i].phone placeholder="버튼으로 추가할 전화번호가 있다면 넣어주세요")
+                  td.faqorder
+                    input#col.form-control(type="hidden" value=col name=`faq[${i}][5]`)
+                    input#id.form-control(type="hidden" value=faq[i].id name=`faq[${i}][7]`)
+                    #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                      i.fas.fa-minus
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

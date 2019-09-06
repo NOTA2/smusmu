@@ -1,0 +1,66 @@
+extends ../assoLayout.pug
+block append scripts
+  script(type='text/javascript').
+    var col = "#{col}";
+    var infoId = "#{infoId}";
+  script(type='text/javascript', src='https://code.jquery.com/jquery-1.12.4.min.js')
+  script(type='text/javascript', src='https://code.jquery.com/ui/jquery-ui-git.js')
+  script(src="/js/asso/andamiro/menu.js")
+block append css
+  link(href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', rel='stylesheet', type='text/css')
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/andamiro.css")
+block append content
+  .article(style="width:100%")
+    h2 메뉴      
+    #page
+      nav(aria-label='Page navigation example')
+        ul.pagination
+          - for(let i=0;i<infoList.length;i++)
+            li.page-item(class= infoId==infoList[i].id?"active":null)
+              a.page-link(href=`/asso/andamiro/menu?col=0&infoId=${infoList[i].id}`)= infoList[i].title
+      - if(infoId)
+        nav(aria-label='Page navigation example')
+          ul.pagination
+            - for(let i=0;i<3;i++)
+              li.page-item(class=col==i?"active":null)
+                a.page-link(href=`/asso/andamiro/menu?col=${i}&infoId=${infoId}`)= i+1
+    hr.line
+    form#frm(action="/asso/andamiro/menu", method="post", enctype="multipart/form-data")
+      ul#sortable
+        -for(i=0;i<menu.length;i++)
+          .card.faqcard
+            table.table
+              thead.thead-light
+                tr
+                  th(scope="col") 제목/설명/이미지
+                  th(scope="col") 순서/삭제
+              tbody
+                tr.cardContents
+                  td.title
+                    input.form-control(type="text" name=`menu[${i}][0]` autocomplete="off" value=menu[i].title placeholder="제목")
+                  td#faqorder.faqorder(rowspan=2)
+                    input.form-control(type='number', name=`menu[${i}][5]`, autocomplete="off" readonly)
+                tr
+                  td.description
+                    input.form-control(type="text" name=`menu[${i}][1]` autocomplete="off" value=menu[i].description placeholder="설명")
+                tr
+                  td.thumbnail
+                    .custom-file
+                      input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`menu[${i}][2]`)
+                      label.custom-file-label(for='inputGroupFile01' data-browse="📂")= menu[i].thumbnail
+                        -if(!menu[i].thumbnail)
+                          | 추가할 이미지가 있다면 넣어주세요
+                      - if(menu[i].thumbnail)
+                        input.thumbnailHidden(type="hidden", name=`menu[${i}][2]`, value=menu[i].thumbnail)
+                  td.faqorder
+                    input#col.form-control(type="hidden" value=col name=`menu[${i}][3]`)
+                    input#infoId.form-control(type="hidden" value=infoId name=`menu[${i}][4]`)
+                    input#id.form-control(type="hidden" value=menu[i].id name=`menu[${i}][6]`)
+                    #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                      i.fas.fa-minus
+    - if(infoId)
+      #pbt.btn.btn-success(onclick="complete();")
+        i.fas.fa-check
+      #pbt.btn.btn-danger(onclick="formplus();")
+        i.fas.fa-plus

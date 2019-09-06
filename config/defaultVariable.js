@@ -98,4 +98,28 @@ defaultObj.faqQuickReplies = [{
   "blockId": "5d680610b617ea0001c16902"
 }]
 
+defaultObj.andamiroQuickReplies = [{
+  "label": '안다미로 🦌',
+  "action": "block",
+  "messageText": '안다미로',
+  "blockId": "5d51522392690d000134f58e"
+}]
+
+defaultObj.andamiroMainQuickReplies = [{
+  "action": "block",
+  "label": "이벤트 🎉",
+  "messageText": "안다미로 이벤트",
+  "blockId": "5d5154b28192ac0001b44efa"
+},{
+  "action": "block",
+  "label": "FAQ 🙋️",
+  "messageText": "안다미로 FAQ",
+  "blockId": "5d5154c18192ac0001b44efc"
+},{
+  "action": "block",
+  "label": "고객의 소리 ✍️",
+  "messageText": "안다미로 고객의 소리",
+  "blockId": "5d515c8effa748000110f245"
+}]
+
 module.exports = defaultObj;

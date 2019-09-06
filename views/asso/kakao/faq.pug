@@ -24,7 +24,7 @@ block append content
           th(scope="col").minus 삭제
         tbody
           - for(i=0;i<faq.length;i++)
-            tr.plusrow
+            tr.plusrow.faqtr
               td.faqcategory
                 input.form-control(type="text" value=faq[i].category[0] name=`faq[${i}][0]` autocomplete="off")
               td.faqcategory

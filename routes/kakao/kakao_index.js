@@ -20,6 +20,8 @@ const taxi = require('./gotowork/taxi')
 const rent = require('./regi/rent')
 const job = require('./regi/job')
 
+const andamiro = require('./andamiro/andamiro')
+
 
 router.use('/mainmenu', mainmenu);
 router.use('/auth', auth);
@@ -39,6 +41,8 @@ router.use('/seoulAssembly', seoulAssembly);
 
 router.use('/rent', rent);
 router.use('/job', job);
+
+router.use('/andamiro', andamiro);
 
 
 // const quiz = require('./event/quiz');

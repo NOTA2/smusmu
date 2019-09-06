@@ -1,0 +1,47 @@
+extends ../assoLayout.pug
+block append scripts
+  script(type='text/javascript', src='https://code.jquery.com/jquery-1.12.4.min.js')
+  script(type='text/javascript', src='https://code.jquery.com/ui/jquery-ui-git.js')
+  script(src="/js/asso/andamiro/mainInfo.js")
+block append css
+  link(href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', rel='stylesheet', type='text/css')
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/andamiro.css")
+block append content
+  .article
+    h2 메인 정보
+    hr.line
+    form#frm(action="/asso/andamiro/mainInfo", method="post", enctype="multipart/form-data")
+      ul#sortable
+        -for(i=0;i<mainInfo.length;i++)
+          .card
+            table.table.table-striped
+              thead.thead-light
+                tr
+                  th(scope="col").title 제목
+                  th(scope="col").description 설명
+                  th(scope="col").thumbnail 이미지
+                  th(scope="col").menuorder 순서
+                  th(scope="col").minus 삭제
+              tbody
+                tr.cardContents
+                  td.title
+                    input#title.form-control(type='text', name=`mainInfo[${i}][0]`,autocomplete="off" value=mainInfo[i].title maxlength="20" placeholder="최대 20자")
+                  td.description
+                    input#description.form-control(type='text', name=`mainInfo[${i}][1]`, value=mainInfo[i].description autocomplete="off" maxlength="40" placeholder="최대 40자")
+                  td.thumbnail
+                    .custom-file
+                      input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`mainInfo[${i}][2]`)
+                      label.custom-file-label(for='inputGroupFile01' data-browse="📂")= mainInfo[i].thumbnail
+                    - if(mainInfo[i].thumbnail)
+                      input.thumbnailHidden(type="hidden", name=`mainInfo[${i}][2]`, value=mainInfo[i].thumbnail)
+                  td.menuorder
+                    input.form-control(type='number', name=`mainInfo[${i}][3]`, value=mainInfo[i].infoorder autocomplete="off" readonly)
+                  td
+                    input#id.form-control(type="hidden" value=mainInfo[i].id name=`mainInfo[${i}][4]`)
+                    #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                      i.fas.fa-minus
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

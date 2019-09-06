@@ -3,6 +3,7 @@ var router = require('express').Router();
 var rent = require('./rent');
 var home = require('./ahome');
 var kakao = require('./kakao');
+var andamiro = require('./andamiro');
 
 
 router.all('*', (req, res, next) => {
@@ -26,6 +27,7 @@ router.all('*', (req, res, next) => {
 router.use('/rent', rent);
 router.use('/home', home);
 router.use('/kakao', kakao);
+router.use('/andamiro', andamiro);
 
 router.get('/', (req, res) => {
   res.render('asso/home/index', {

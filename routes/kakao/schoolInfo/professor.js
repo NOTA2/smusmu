@@ -39,18 +39,18 @@ router.post('', (req, res) => {
             //"description": `${el.position}\n${el.office}`,
             "buttons": [{
               "action": "phone",
-              "label": "사무실 전화",
+              "label": "사무실 전화 ☎️",
               "phoneNumber": el.phone
             },{
               "action": "webLink",
-              "label": "이메일 보내기",
+              "label": "이메일 보내기 📧",
               "webLinkUrl": el.mail
             }]
           }
           if (el.homepage) {
             message.template.outputs[1].carousel.items[idx].buttons.push({
               "action": "webLink",
-              "label": "홈페이지",
+              "label": "홈페이지 🌐",
               "webLinkUrl": el.homepage
             })
           }
