@@ -18,7 +18,7 @@ const menuUpload = multer({
 router.get('', (req, res) => {
   let infoId = req.query.infoId
 
-  let sql = `SELECT * FROM andamiro_info ORDER BY id`
+  let sql = `SELECT * FROM andamiro_info ORDER BY infoorder`
 
   conn.query(sql, (err, rows) => {
     if (err) {

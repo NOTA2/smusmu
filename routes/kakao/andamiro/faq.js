@@ -67,6 +67,9 @@ router.post('/result', (req, res) => {
 
   let answer = req.body.action.clientExtra.answer;
 
+  console.log(answer);
+  
+
   if (answer.img)
     message.template.outputs.push({
       "simpleImage": {
@@ -99,7 +102,7 @@ router.post('/result', (req, res) => {
       message.template.outputs[message.template.outputs.length - 1].basicCard.buttons.push({
         "action": "phone",
         "label": "전화 ☎️",
-        "webLinkUrl": answer.phone
+        "phoneNumber": answer.phone
       })
     
   }

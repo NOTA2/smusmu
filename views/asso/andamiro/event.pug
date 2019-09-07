@@ -63,7 +63,7 @@ block append content
               td
                 select.custom-select.btype(name=`event[buttons][${bti}][0]`)
                   option(value="null" selected=true) none
-                  option(value="webLink" selected = event.buttons[bti][0] == "webLink") 웹 링크
+                  option(value="osLink" selected = event.buttons[bti][0] == "osLink") 웹 링크
                   option(value="phone" selected = event.buttons[bti][0] == "phone") 전화
               td
                 input.form-control(type='text', name=`event[buttons][${bti}][1]` value=event.buttons[bti][1] autocomplete="off")

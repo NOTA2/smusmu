@@ -16,7 +16,7 @@ const eventUpload = multer({
 })
 
 router.get('', (req, res) => {
-  let sql = `SELECT * FROM andamiro_event`;
+  let sql = `SELECT * FROM andamiro_event ORDER BY id DESC LIMIT 1 `;
 
   conn.query(sql, (err, rows) => {
     if (err) {
@@ -40,7 +40,7 @@ router.get('', (req, res) => {
       event = {
         "img": rows[0].img ? rows[0].img : null,
         "content": rows[0].content ? rows[0].content : null,
-        "buttons": rows[0].buttons ? JSON.parse(rows[0].buttons) : null,
+        "buttons": rows[0].buttons ? JSON.parse(rows[0].buttons) : [['null','',''],['null','',''],['null','','']],
         "title": rows[0].title ? rows[0].title : null,
         "description": rows[0].description ? rows[0].description : null,
         "thumbnail": rows[0].thumbnail ? rows[0].thumbnail : null,
@@ -50,16 +50,17 @@ router.get('', (req, res) => {
       console.log(event.buttons);
       
 
-      for (let j = 0; j < 3; j++) {
-        if (!event.buttons[j]) {
-          event.buttons[j] = ['null'];
-          continue;
-        }
+        for (let j = 0; j < 3; j++) {
+          if (!event.buttons[j]) {
+            event.buttons[j] = ['null'];
+            continue;
+          }
+
 
         let temp = [event.buttons[j].action, event.buttons[j].label]
 
-        if (event.buttons[j].action == "webLink")
-          temp[2] = event.buttons[j].webLinkUrl;
+        if (event.buttons[j].action == "osLink")
+          temp[2] = event.buttons[j].osLink.mobile;
         else if (event.buttons[j].action == "phone")
           temp[2] = event.buttons[j].phoneNumber;
 
@@ -96,8 +97,12 @@ router.post('', eventUpload.any(), (req, res) => {
       "label": event.buttons[i][1]
     }
 
-    if (bt[i].action == "webLink")
-      bt[i].webLinkUrl = event.buttons[i][2];
+    if (bt[i].action == "osLink"){
+      bt[i].osLink = {
+        "mobile": event.buttons[i][2]
+      }
+    }
+      
     else if (bt[i].action == "phone")
       bt[i].phoneNumber = event.buttons[i][2];
   }
@@ -115,6 +120,9 @@ router.post('', eventUpload.any(), (req, res) => {
       "description": event.description ? event.description : null,
       "thumbnail": event.thumbnail ? event.thumbnail : null,
     }
+
+    console.log(event);
+    
 
   let sql = `INSERT INTO andamiro_event SET ?`;
 

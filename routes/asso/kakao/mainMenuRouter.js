@@ -46,7 +46,7 @@ router.get('', (req, res) => {
         else if (rows[i].buttons[j].action == "webLink")
           temp[2] = rows[i].buttons[j].webLinkUrl;
         else if (rows[i].buttons[j].action == "osLink")
-          temp[2] = rows[i].buttons[j].link.web
+          temp[2] = rows[i].buttons[j].osLink.web
         else if (rows[i].buttons[j].action == "message")
           temp[2] = rows[i].buttons[j].messageText;
         else if (rows[i].buttons[j].action == "phone")
@@ -94,7 +94,7 @@ router.post('', mainupload.any(), (req, res) => {
       else if (x.bt[i].action == "webLink")
         x.bt[i].webLinkUrl = x.buttons[i][2];
       else if (x.bt[i].action == "osLink")
-        x.bt[i].link = {
+        x.bt[i].osLink = {
           "web ": x.buttons[i][2]
         }
       else if (x.bt[i].action == "message")

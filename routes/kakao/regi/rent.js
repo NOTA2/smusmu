@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
           "title": title,
           "description": el.description,
           "thumbnail": {
-            "imageUrl": `http://smusmu.co.kr/${el.logo}`,
+            "imageUrl": encodeURI(`http://${defaultObj.ipadd}/${el.logo}`),
             "fixedRatio": true,
             "width": 300,
             "height": 300

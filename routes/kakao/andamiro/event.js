@@ -18,7 +18,7 @@ router.post('', function (req, res) {
     }
   };
 
-  var sql = `SELECT * FROM andamiro_event`
+  var sql = `SELECT * FROM andamiro_event ORDER BY id DESC LIMIT 1 `;
 
 
   conn.query(sql, (err, rows) => {

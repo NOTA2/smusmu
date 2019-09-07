@@ -41,6 +41,9 @@ router.post('', function (req, res) {
         "description": el.description,
         "thumbnail": {
           "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/andamiro/menu/${el.thumbnail}`),
+          "link" : {
+            "web" : encodeURI(`http://${defaultObj.ipadd}/img/andamiro/menu/${el.thumbnail}`)
+          },
           "fixedRatio": true,
           "width": 800,
           "height": 800

@@ -43,7 +43,7 @@ block append content
                         -if(!faq[i].img)
                           | 답변에 추가할 이미지가 있다면 넣어주세요
                       - if(faq[i].img)
-                        input(type="hidden", name=`faq[${i}][8]`, value=faq[i].img)
+                        input(type="hidden", name=`faq[${i}][2]`, value=faq[i].img)
                   td#faqorder.faqorder(rowspan=2)
                     input.form-control(type='number', name=`faq[${i}][6]`, autocomplete="off" readonly)
                 tr

@@ -101,4 +101,40 @@ router.post('/result', (req, res) => {
   })
 });
 
+
+router.get('/plus', (req, res) =>{
+  
+  let sql = `SELECT * FROM faq`
+
+  conn.query(sql, (err, rows)=>{
+    if(err){
+      throw err;
+    }
+    let values = rows.map(x=>{
+      let category =  JSON.parse(x.category)
+      return [
+        x.id, 
+        category[0], 
+        category[1], 
+        category[2], 
+        category[3], 
+        category[4], 
+        x.question, 
+        x.answer, 
+        x.url? x.url : '', 
+        x.img? x.img : ''
+      ]
+    })
+
+    return res.json({
+      "values" : values,
+      "name" : "스뮤스뮤FAQ",
+      "schema_type" : "1.0"
+    })
+  })
+})
+
+
+
+
 module.exports = router;
