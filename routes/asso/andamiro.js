@@ -16,14 +16,16 @@ router.all('*', (req, res, next) => {
 });
 
 
-const mainInfo = require('./andamiro/mainInfoRouter');
+const main = require('./andamiro/mainRouter');
+const info = require('./andamiro/infoRouter');
 const menu = require('./andamiro/menuRouter');
 const event = require('./andamiro/eventRouter');
 const faq = require('./andamiro/faqRouter');
 const voc = require('./andamiro/vocRouter');
 
 
-router.use('/mainInfo', mainInfo);
+router.use('/main', main);
+router.use('/info', info);
 router.use('/menu', menu);
 router.use('/event', event);
 router.use('/faq', faq);

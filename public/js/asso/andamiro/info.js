@@ -55,14 +55,14 @@ function formplus() {
       </thead>
       <tbody>
           <tr class="cardContents">
-              <td class="title"><input class="form-control" id="title" type="text" name="mainInfo[${cardlength}][0]" autocomplete="off" maxlength="20" placeholder="최대 20자"/></td>
-              <td class="description"><input class="form-control" id="description" type="text" name="mainInfo[${cardlength}][1]" autocomplete="off" maxlength="40" placeholder="최대 40자" /></td>
+              <td class="title"><input class="form-control" id="title" type="text" name="andainfo[${cardlength}][0]" autocomplete="off" maxlength="20" placeholder="최대 20자"/></td>
+              <td class="description"><input class="form-control" id="description" type="text" name="andainfo[${cardlength}][1]" autocomplete="off" maxlength="40" placeholder="최대 40자" /></td>
               <td class="thumbnail">
-                  <div class="custom-file"><input class="custom-file-input" id="inputGroupFile01" type="file" aria-describedby="inputGroupFileAddon01" name="mainInfo[${cardlength}][2]" /><label class="custom-file-label" for="inputGroupFile01" data-browse="📂"></label></div>
+                  <div class="custom-file"><input class="custom-file-input" id="inputGroupFile01" type="file" aria-describedby="inputGroupFileAddon01" name="andainfo[${cardlength}][2]" /><label class="custom-file-label" for="inputGroupFile01" data-browse="📂"></label></div>
               </td>
-              <td class="menuorder"><input class="form-control" type="number" name="mainInfo[${cardlength}][3]" autocomplete="off" readonly="readonly" /></td>
+              <td class="menuorder"><input class="form-control" type="number" name="andainfo[${cardlength}][3]" autocomplete="off" readonly="readonly" /></td>
               <td>
-                <input class="form-control" id="id" type="hidden" name="mainInfo[${cardlength}][4]" />
+                <input class="form-control" id="id" type="hidden" name="andainfo[${cardlength}][4]" />
                   <div class="btn btn-primary" id="pbt" onclick="deleteitem(this)"><i class="fas fa-minus"></i></div>
               </td>
           </tr>

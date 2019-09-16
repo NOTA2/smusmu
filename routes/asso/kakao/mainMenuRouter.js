@@ -95,7 +95,7 @@ router.post('', mainupload.any(), (req, res) => {
         x.bt[i].webLinkUrl = x.buttons[i][2];
       else if (x.bt[i].action == "osLink")
         x.bt[i].osLink = {
-          "web ": x.buttons[i][2]
+          "web": x.buttons[i][2]
         }
       else if (x.bt[i].action == "message")
         x.bt[i].messageText = x.buttons[i][2];

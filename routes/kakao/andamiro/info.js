@@ -28,23 +28,23 @@ router.post('', function (req, res) {
 
     let info = rows;
 
-    sql = `SELECT title, description, thumbnail FROM andamiro_event`
+    sql = `SELECT title, description, thumbnail FROM andamiro_main ORDER BY id DESC LIMIT 1`
 
     conn.query(sql, (err, rows) =>{
       if (err) {
         console.error(err);
         return res.json(message);
       }
-      let mainInfo = rows[0];
+      let main = rows[0];
 
       message.template.outputs[0] = {
         "carousel": {
           "type": "basicCard",
           "items": [{
-            "title": mainInfo.title,
-            "description": mainInfo.description,
+            "title": main.title,
+            "description": main.description,
             "thumbnail": {
-              "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/andamiro/event/${mainInfo.thumbnail}`)
+              "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/andamiro/main/${main.thumbnail}`)
             },
             "buttons": defaultObj.andamiroMainQuickReplies
           }]
@@ -56,7 +56,7 @@ router.post('', function (req, res) {
           "title": el.title,
           "description": el.description,
           "thumbnail": {
-            "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/andamiro/mainInfo/${el.thumbnail}`)
+            "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/andamiro/info/${el.thumbnail}`)
           },
           "buttons": [{
             "action": "block",

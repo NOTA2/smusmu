@@ -1,22 +1,22 @@
-const conn = require('../../../config/db');
+const conn = require('../../config/db');
 const async = require('async');
 const router = require('express').Router();
 const multer = require('multer');
 
-const eventStorage = multer.diskStorage({
+const volunteerStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/img/andamiro/event') // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
+    cb(null, 'public/img/volunteer') // cb 콜백함수를 통해 전송된 파일 저장 디렉토리 설정
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname) // cb 콜백함수를 통해 전송된 파일 이름 설정
   }
 })
-const eventUpload = multer({
-  storage: eventStorage
+const volunteerUpload = multer({
+  storage: volunteerStorage
 })
 
 router.get('', (req, res) => {
-  let sql = `SELECT * FROM andamiro_event ORDER BY eventorder`;
+  let sql = `SELECT * FROM volunteer ORDER BY volunteerorder`;
 
   conn.query(sql, (err, rows) => {
     if (err) {
@@ -42,27 +42,28 @@ router.get('', (req, res) => {
       }
     }
 
-    res.render('asso/andamiro/event', {
+    res.render('asso/volunteer', {
       user: req.user,
       info: {
         title: '',
-        titlehref: '/asso/andamiro/event',
+        titlehref: '/asso/volunteer',
         headbar: []
       },
-      event: rows
+      volunteer: rows
     });
   })
 });
 
-router.post('', eventUpload.any(), (req, res) => {
-  let events = req.body.event;
+router.post('', volunteerUpload.any(), (req, res) => {
+  let volunteers = req.body.volunteer;
 
   req.files.forEach(x=>{
     let fileIdx = x.fieldname.replace(/[^0-9]/g,'')[0];
-    events[fileIdx][2] = x.originalname;
+    volunteers[fileIdx][2] = x.originalname;
   })
 
-  events = events.map(x=>{
+
+  volunteers = volunteers.map(x=>{
     x.bt = new Array();
     for (let i = 0; i < 3; i++) {
       if (x[4][i][0] == "null")
@@ -92,26 +93,26 @@ router.post('', eventUpload.any(), (req, res) => {
       x[2] ? x[2] : null,           // thumbnail
       x[3] ? x[3] : null,           // content
       x[4],                         // buttons
-      x[5],                         // eventorder
+      x[5],                         // volunteerorder
       x[6]                          // id
     ]
   })
 
-  events = events.filter(x=>true);
+  volunteers = volunteers.filter(x=>true);
 
-  let sql = `SELECT * FROM andamiro_event WHERE id = ?`;
+  let sql = `SELECT * FROM volunteer WHERE id = ?`;
 
-  async.forEachOf(events, function (event, i, inner_callback) {
-    conn.query(sql, [event[6]], function (err, rows) {
+  async.forEachOf(volunteers, function (volunteer, i, inner_callback) {
+    conn.query(sql, [volunteer[6]], function (err, rows) {
       if (err) {
         inner_callback(err);
       } else {
         if (rows.length > 0) { //있다면 업데이트
-          sql = `UPDATE andamiro_event 
-          SET title=?, description=?, thumbnail=?, content=?, buttons=?, eventorder=?
+          sql = `UPDATE volunteer 
+          SET title=?, description=?, thumbnail=?, content=?, buttons=?, volunteerorder=?
           WHERE id = ?`;
 
-          conn.query(sql, event, (err, rows) => {
+          conn.query(sql, volunteer, (err, rows) => {
             if (err) {
               console.log(err);
               return res.status(500).end();
@@ -119,10 +120,10 @@ router.post('', eventUpload.any(), (req, res) => {
             inner_callback(null);
           });
         } else { //없다면 추가
-          sql = `INSERT INTO andamiro_event (title, description, thumbnail, content, buttons, eventorder)
+          sql = `INSERT INTO volunteer (title, description, thumbnail, content, buttons, volunteerorder)
           VALUES (?, ?, ?, ?, ?, ?)`;
 
-          conn.query(sql, event, (err, rows) => {
+          conn.query(sql, volunteer, (err, rows) => {
             if (err) {
               inner_callback(err);
             }
@@ -135,7 +136,7 @@ router.post('', eventUpload.any(), (req, res) => {
     if (err) {
       throw err
     } else {
-      res.redirect('/asso/andamiro/event')
+      res.redirect('/asso/volunteer')
     }
   });
 

@@ -64,11 +64,7 @@ router.post('/result', (req, res) => {
     }
   };
 
-
   let answer = req.body.action.clientExtra.answer;
-
-  console.log(answer);
-  
 
   if (answer.img)
     message.template.outputs.push({

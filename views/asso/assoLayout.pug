@@ -71,7 +71,7 @@ html(lang='ko')
                 a(href='/asso/home/myinfo')
                   i.fas.fa-user
                   |  학생회 정보
-              - if(user.grade == '1' || user.grade == '2' || user.grade == '3')
+              - if(user.grade <= 3)
                 li
                   a(href='/auth/password')
                     i.fas.fa-key
@@ -85,12 +85,18 @@ html(lang='ko')
               a(href='/commu')
                 i.fas.fa-users
                 |  스뮤스뮤 커뮤니티
-          - if(user.grade == '2' || user.grade == '3')
+          - if(user.grade == '1')   //스뮤스뮤 전용
+            hr
+            li
+              a.dropdown-toggle(data-toggle='collapse')
+                //- i.fas.fa-comments
+                |   💁 학생회
+          - if(user.grade <= 3)
             li
               a(href='/asso/home/member')
                 i.fas.fa-user-check
                 |  부원 계정 관리하기
-          - if(user.grade == '2' || user.grade == '3')
+          - if(user.grade <= 4)
             li
               a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false')
                 i.fas.fa-toolbox
@@ -108,10 +114,15 @@ html(lang='ko')
                   a(href='/asso/rent/list') 
                     i.fas.fa-clipboard-list
                     |  대여 기록
+          - if(user.grade <= 2)
+            li
+              a(href='/asso/volunteer')
+                i.fas.fa-hands-helping
+                |   봉사활동 관리
           - if(user.grade == '1')   //스뮤스뮤 전용
             hr
             li
-              a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false')
+              a.dropdown-toggle(data-toggle='collapse')
                 //- i.fas.fa-comments
                 |   💬 스뮤스뮤
             li
@@ -130,11 +141,13 @@ html(lang='ko')
               a(href='/asso/kakao/job') 온라인 취업 서비스
             hr
             li
-              a.dropdown-toggle(href='#pageSubmenu', data-toggle='collapse', aria-expanded='false')
+              a.dropdown-toggle(data-toggle='collapse')
                 |   🦌 안다미로
           - if(user.grade == '5' || user.grade == '1')   //안다미로 전용
             li
-              a(href='/asso/andamiro/mainInfo') 기본정보
+              a(href='/asso/andamiro/main') 메인정보
+            li
+              a(href='/asso/andamiro/info') 기본정보
             li
               a(href='/asso/andamiro/menu') 메뉴
             li

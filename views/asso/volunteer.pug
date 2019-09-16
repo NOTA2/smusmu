@@ -1,0 +1,73 @@
+extends ./assoLayout.pug
+block append scripts
+  script(type='text/javascript', src='https://code.jquery.com/jquery-1.12.4.min.js')
+  script(type='text/javascript', src='https://code.jquery.com/ui/jquery-ui-git.js')
+  script(src="/js/asso/volunteer.js")
+block append css
+  link(href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', rel='stylesheet', type='text/css')
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/andamiro.css")
+block append content
+  .article(style="width:100%")
+    h2 봉사활동
+    #page
+    hr.line
+    form#frm(action="/asso/volunteer", method="post", enctype="multipart/form-data")
+      ul#sortable
+        -for(i=0;i<volunteer.length;i++)
+          .card.eventcard
+            table.table
+              thead.thead-light
+                tr
+                  th(scope="col" colspan=3).eventcontent 봉사활동 TEXT
+              tbody
+                tr.cardContents                  
+                  td.eventcontent(colspan=3)
+                    textarea.form-control(type='text', name=`volunteer[${i}][3]`,rows="5", autocomplete="off")= volunteer[i].content
+              thead.thead-light
+                tr
+                  th(scope="col" colspan=2).etitle 카드 제목/설명/이미지
+                  th(scope="col").eventorder 순서/삭제
+              tbody
+                tr.cardContents
+                  td.etitle(colspan=2)
+                    input.form-control(type="text" name=`volunteer[${i}][0]` autocomplete="off" value=volunteer[i].title placeholder="카드에 표시될 제목")
+                  td#eventorder.eventorder(rowspan=2)
+                    input.form-control(type='number', name=`volunteer[${i}][5]`, autocomplete="off" readonly)
+                tr
+                  td(colspan=2)
+                    input.form-control(type="text" name=`volunteer[${i}][1]` autocomplete="off" value=volunteer[i].description placeholder="카드에 표시될 설명")
+                tr
+                  td(colspan=2)
+                    .custom-file
+                      input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`volunteer[${i}][2]`)
+                      label.custom-file-label(for='inputGroupFile01' data-browse="📂")= volunteer[i].thumbnail
+                        -if(!volunteer[i].thumbnail)
+                          | 카드 및 상세보기시 표시될 이미지
+                      - if(volunteer[i].thumbnail)
+                        input(type="hidden", name=`volunteer[${i}][2]`, value=volunteer[i].thumbnail)
+                  td.eventorder
+                    input#id.form-control(type="hidden" value=volunteer[i].id name=`volunteer[${i}][6]`)
+                    #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                      i.fas.fa-minus
+              thead.thead-light
+                tr
+                  th(scope="col").ebtt 버튼 유형
+                  th(scope="col").ebtn 버튼 이름
+                  th(scope="col").ebtv 값
+              tbody
+                - for(var bti=0;bti<3;bti++)
+                  tr.btr 
+                    td.ebtt
+                      select.custom-select.btype(name=`volunteer[${i}][4][${bti}][0]`)
+                        option(value="null" selected=true) none
+                        option(value="osLink" selected = volunteer[i].buttons[bti][0] == "osLink") 웹 링크
+                        option(value="phone" selected = volunteer[i].buttons[bti][0] == "phone") 전화
+                    td.ebtn
+                      input.form-control(type='text', name=`volunteer[${i}][4][${bti}][1]` value=volunteer[i].buttons[bti][1] autocomplete="off")
+                    td.ebtv
+                      input.form-control(type='text' name=`volunteer[${i}][4][${bti}][2]`, value=volunteer[i].buttons[bti][2] autocomplete="off")
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

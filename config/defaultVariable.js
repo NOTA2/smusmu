@@ -86,6 +86,24 @@ defaultObj.noticeQuickReplies =[{
 }]
 
 
+defaultObj.allianceQuickReplies =  [{
+  "label": '제휴 🤝',
+  "action": "block",
+  "messageText": '제휴 정보',
+  "blockId": "5c2f021d5f38dd44d86a2321"
+}, {
+  "label": '취업 💼',
+  "action": "block",
+  "messageText": '온라인 취업 서비스',
+  "blockId": "5d672bb292690d000181043f"
+}, {
+  "label" : "봉사 💑",
+  "action" : "block",
+  "messageText" : "봉사활동",
+  "blockId" : "5d7c969492690d0001815fe2"
+}]
+
+
 defaultObj.faqQuickReplies = [{
   "label": 'FAQ 🙋️',
   "action": "block",

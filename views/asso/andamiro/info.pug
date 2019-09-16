@@ -2,7 +2,7 @@ extends ../assoLayout.pug
 block append scripts
   script(type='text/javascript', src='https://code.jquery.com/jquery-1.12.4.min.js')
   script(type='text/javascript', src='https://code.jquery.com/ui/jquery-ui-git.js')
-  script(src="/js/asso/andamiro/mainInfo.js")
+  script(src="/js/asso/andamiro/info.js")
 block append css
   link(href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', rel='stylesheet', type='text/css')
   link(rel="stylesheet" href="/css/asso/home.css")
@@ -11,9 +11,9 @@ block append content
   .article
     h2 메인 정보
     hr.line
-    form#frm(action="/asso/andamiro/mainInfo", method="post", enctype="multipart/form-data")
+    form#frm(action="/asso/andamiro/info", method="post", enctype="multipart/form-data")
       ul#sortable
-        -for(i=0;i<mainInfo.length;i++)
+        -for(i=0;i<andainfo.length;i++)
           .card
             table.table.table-striped
               thead.thead-light
@@ -26,19 +26,19 @@ block append content
               tbody
                 tr.cardContents
                   td.title
-                    input#title.form-control(type='text', name=`mainInfo[${i}][0]`,autocomplete="off" value=mainInfo[i].title maxlength="20" placeholder="최대 20자")
+                    input#title.form-control(type='text', name=`andainfo[${i}][0]`,autocomplete="off" value=andainfo[i].title maxlength="20" placeholder="최대 20자")
                   td.description
-                    input#description.form-control(type='text', name=`mainInfo[${i}][1]`, value=mainInfo[i].description autocomplete="off" maxlength="40" placeholder="최대 40자")
+                    input#description.form-control(type='text', name=`andainfo[${i}][1]`, value=andainfo[i].description autocomplete="off" maxlength="40" placeholder="최대 40자")
                   td.thumbnail
                     .custom-file
-                      input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`mainInfo[${i}][2]`)
-                      label.custom-file-label(for='inputGroupFile01' data-browse="📂")= mainInfo[i].thumbnail
-                    - if(mainInfo[i].thumbnail)
-                      input.thumbnailHidden(type="hidden", name=`mainInfo[${i}][2]`, value=mainInfo[i].thumbnail)
+                      input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`andainfo[${i}][2]`)
+                      label.custom-file-label(for='inputGroupFile01' data-browse="📂")= andainfo[i].thumbnail
+                    - if(andainfo[i].thumbnail)
+                      input.thumbnailHidden(type="hidden", name=`andainfo[${i}][2]`, value=andainfo[i].thumbnail)
                   td.menuorder
-                    input.form-control(type='number', name=`mainInfo[${i}][3]`, value=mainInfo[i].infoorder autocomplete="off" readonly)
+                    input.form-control(type='number', name=`andainfo[${i}][3]`, value=andainfo[i].andainfoorder autocomplete="off" readonly)
                   td
-                    input#id.form-control(type="hidden" value=mainInfo[i].id name=`mainInfo[${i}][4]`)
+                    input#id.form-control(type="hidden" value=andainfo[i].id name=`andainfo[${i}][4]`)
                     #pbt.btn.btn-primary(onclick="deleteitem(this)")
                       i.fas.fa-minus
     #pbt.btn.btn-success(onclick="complete();")

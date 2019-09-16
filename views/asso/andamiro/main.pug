@@ -1,0 +1,34 @@
+extends ../assoLayout.pug
+block append scripts
+  script(src="/js/asso/andamiro/main.js")
+block append css
+  link(rel="stylesheet" href="/css/asso/home.css")
+  link(rel="stylesheet" href="/css/asso/andamiro.css")
+block append content
+  .article(style="width:100%")
+    h2 이벤트
+    #page
+    hr.line
+    form#frm(action="/asso/andamiro/main", method="post", enctype="multipart/form-data")
+      table.table
+        thead.thead-light
+          tr
+            th(scope="col") 메인 제목/내용/이미지
+        tbody
+          tr.cardContents
+            td  
+              input#title.form-control(type="text" name=`main[title]` autocomplete="off" value=main.title placeholder="안다미로 메인에 표시될 제목")
+          tr
+            td
+              input#description.form-control(type="text" name=`main[description]` autocomplete="off" value=main.description placeholder="안다미로 메인에 표시될 설명")
+          tr
+            td
+              .custom-file
+                input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`main[thumbnail]`)
+                label.custom-file-label(for='inputGroupFile01' data-browse="📂")= main.thumbnail
+                  -if(!main.thumbnail)
+                    | 메인에 표시될 이미지
+                - if(main.thumbnail)
+                  input#thumbnailHidden(type="hidden", name=`main[thumbnail]`, value=main.thumbnail)
+    #pbt.btn.btn-success(onclick="complete();")
+      i.fas.fa-check

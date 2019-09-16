@@ -35,12 +35,6 @@ router.post('', (req, res) => {
         return res.json(message)
       }
 
-      message.template.quickReplies = defaultObj.Qu.concat({
-        "label": "제휴정보 🤝",
-        "action": "block",
-        "messageText": "제휴정보",
-        "blockId": "5c2f021d5f38dd44d86a2321"
-      })
       message.template.outputs[0] = {
         "carousel": {
           "type": "basicCard",
@@ -85,6 +79,9 @@ router.post('', (req, res) => {
           }]
         });
       })
+      let allianceQuickReplies = defaultObj.allianceQuickReplies.slice();
+      allianceQuickReplies.splice(1,1);
+      message.template.quickReplies = defaultObj.Qu.concat(allianceQuickReplies)
       return res.json(message)
     });
   })

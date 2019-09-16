@@ -1,73 +1,73 @@
 extends ../assoLayout.pug
 block append scripts
+  script(type='text/javascript', src='https://code.jquery.com/jquery-1.12.4.min.js')
+  script(type='text/javascript', src='https://code.jquery.com/ui/jquery-ui-git.js')
   script(src="/js/asso/andamiro/event.js")
 block append css
+  link(href='https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', rel='stylesheet', type='text/css')
   link(rel="stylesheet" href="/css/asso/home.css")
   link(rel="stylesheet" href="/css/asso/andamiro.css")
 block append content
   .article(style="width:100%")
-    h2 이벤트
+    h2 이벤트      
     #page
     hr.line
     form#frm(action="/asso/andamiro/event", method="post", enctype="multipart/form-data")
-      table.table
-        thead.thead-light
-          tr
-            th(scope="col") 메인 제목/내용/이미지
-        tbody
-          tr.cardContents
-            td  
-              input#title.form-control(type="text" name=`event[title]` autocomplete="off" value=event.title placeholder="안다미로 메인에 표시될 제목")
-          tr
-            td
-              input#description.form-control(type="text" name=`event[description]` autocomplete="off" value=event.description placeholder="안다미로 메인에 표시될 설명")
-          tr
-            td
-              .custom-file
-                input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`event[thumbnail]`)
-                label.custom-file-label(for='inputGroupFile01' data-browse="📂")= event.thumbnail
-                  -if(!event.thumbnail)
-                    | 메인에 표시될 이미지
-                - if(event.thumbnail)
-                  input#thumbnailHidden(type="hidden", name=`event[thumbnail]`, value=event.thumbnail)
-      hr.line
-      table.table
-        thead.thead-light
-          tr
-            th(scope="col" colspan=3) 이미지
-        tbody
-          tr
-            td(colspan=3)
-              .custom-file
-                input#inputGroupFile02.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`event[img]`)
-                label.custom-file-label(for='inputGroupFile02' data-browse="📂")= event.img
-                  -if(!event.img)
-                    | 이벤트를 알릴 이미지가 있다면 넣어주세요
-                - if(event.img)
-                  input#imgHidden(type="hidden", name=`event[img]`, value=event.img)
-        thead.thead-light
-          tr
-            th(scope="col" colspan=3) 내용
-        tbody
-          tr
-            td(colspan=3)
-              textarea#eventcontent.form-control(type='text', name=`event[content]`,rows="8", autocomplete="off")= event.content
-        thead.thead-light
-          tr
-            th(scope="col").code 버튼 유형
-            th(scope="col").title 버튼 이름
-            th(scope="col").description 값
-        tbody
-          - for(var bti=0;bti<3;bti++)
-            tr.btr 
-              td
-                select.custom-select.btype(name=`event[buttons][${bti}][0]`)
-                  option(value="null" selected=true) none
-                  option(value="osLink" selected = event.buttons[bti][0] == "osLink") 웹 링크
-                  option(value="phone" selected = event.buttons[bti][0] == "phone") 전화
-              td
-                input.form-control(type='text', name=`event[buttons][${bti}][1]` value=event.buttons[bti][1] autocomplete="off")
-              td.bvalue
-                input.form-control(type='text' name=`event[buttons][${bti}][2]`, value=event.buttons[bti][2] autocomplete="off")
+      ul#sortable
+        -for(i=0;i<event.length;i++)
+          .card.eventcard
+            table.table
+              thead.thead-light
+                tr
+                  th(scope="col" colspan=3).eventcontent 이벤트 TEXT
+              tbody
+                tr.cardContents                  
+                  td.eventcontent(colspan=3)
+                    textarea.form-control(type='text', name=`event[${i}][3]`,rows="5", autocomplete="off")= event[i].content
+              thead.thead-light
+                tr
+                  th(scope="col" colspan=2).etitle 카드 제목/설명/이미지
+                  th(scope="col").eventorder 순서/삭제
+              tbody
+                tr.cardContents
+                  td.etitle(colspan=2)
+                    input.form-control(type="text" name=`event[${i}][0]` autocomplete="off" value=event[i].title placeholder="카드에 표시될 제목")
+                  td#eventorder.eventorder(rowspan=2)
+                    input.form-control(type='number', name=`event[${i}][5]`, autocomplete="off" readonly)
+                tr
+                  td(colspan=2)
+                    input.form-control(type="text" name=`event[${i}][1]` autocomplete="off" value=event[i].description placeholder="카드에 표시될 설명")
+                tr
+                  td(colspan=2)
+                    .custom-file
+                      input#inputGroupFile01.custom-file-input(type='file', aria-describedby='inputGroupFileAddon01', name=`event[${i}][2]`)
+                      label.custom-file-label(for='inputGroupFile01' data-browse="📂")= event[i].thumbnail
+                        -if(!event[i].thumbnail)
+                          | 카드 및 상세보기시 표시될 이미지
+                      - if(event[i].thumbnail)
+                        input(type="hidden", name=`event[${i}][2]`, value=event[i].thumbnail)
+                  td.eventorder
+                    input#id.form-control(type="hidden" value=event[i].id name=`event[${i}][6]`)
+                    #pbt.btn.btn-primary(onclick="deleteitem(this)")
+                      i.fas.fa-minus
+              thead.thead-light
+                tr
+                  th(scope="col").ebtt 버튼 유형
+                  th(scope="col").ebtn 버튼 이름
+                  th(scope="col").ebtv 값
+              tbody
+                - for(var bti=0;bti<3;bti++)
+                  tr.btr 
+                    td.ebtt
+                      select.custom-select.btype(name=`event[${i}][4][${bti}][0]`)
+                        option(value="null" selected=true) none
+                        option(value="osLink" selected = event[i].buttons[bti][0] == "osLink") 웹 링크
+                        option(value="phone" selected = event[i].buttons[bti][0] == "phone") 전화
+                    td.ebtn
+                      input.form-control(type='text', name=`event[${i}][4][${bti}][1]` value=event[i].buttons[bti][1] autocomplete="off")
+                    td.ebtv
+                      input.form-control(type='text' name=`event[${i}][4][${bti}][2]`, value=event[i].buttons[bti][2] autocomplete="off")
     #pbt.btn.btn-success(onclick="complete();")
       i.fas.fa-check
+    #pbt.btn.btn-danger(onclick="formplus();")
+      i.fas.fa-plus

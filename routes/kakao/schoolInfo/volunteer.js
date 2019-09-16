@@ -3,9 +3,6 @@ var defaultObj = require('../../../config/defaultVariable');
 var router = require('express').Router();
 
 router.post('', function (req, res) {
-  let andamiroMainQuickReplies = defaultObj.andamiroMainQuickReplies.slice();
-  andamiroMainQuickReplies.splice(0, 1);
-
   let message = {
     "version": "2.0",
     "template": {
@@ -14,11 +11,11 @@ router.post('', function (req, res) {
           "text": '문제가 생겼스뮤 😔 다시 시도해 주세요!'
         }
       }],
-      "quickReplies": defaultObj.Qu.concat(defaultObj.andamiroQuickReplies.concat(defaultObj.andamiroMainQuickReplies))
+      "quickReplies": defaultObj.Qu.concat(defaultObj.allianceQuickReplies.slice(0,2))
     }
   };
 
-  var sql = `SELECT * FROM andamiro_event ORDER BY eventorder`;
+  var sql = `SELECT * FROM volunteer ORDER BY volunteerorder`;
 
 
   conn.query(sql, (err, rows) => {
@@ -41,9 +38,9 @@ router.post('', function (req, res) {
           "title": el.title,
           "description": el.description,
           "thumbnail": {
-            "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/andamiro/event/${el.thumbnail}`),
+            "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/volunteer/${el.thumbnail}`),
             "link": {
-              "web": encodeURI(`http://${defaultObj.ipadd}/img/andamiro/event/${el.thumbnail}`)
+              "web": encodeURI(`http://${defaultObj.ipadd}/img/volunteer/${el.thumbnail}`)
             },
             "fixedRatio": true,
             "width": 800,
@@ -52,9 +49,9 @@ router.post('', function (req, res) {
           "buttons": [{
             "action": "block",
             "label": "자세히 보기",
-            "blockId": "5d7c9003b617ea0001c1bff8",
+            "blockId": "5d7c969b92690d0001815fe4",
             "extra": {
-              "event": el
+              "volunteer": el
             }
           }]
         })
@@ -77,38 +74,35 @@ router.post('', function (req, res) {
 
 router.post('/result', (req, res) => {
 
-  let andamiroMainQuickReplies = defaultObj.andamiroMainQuickReplies.slice();
-  andamiroMainQuickReplies.splice(0, 1);
-
   let message = {
     "version": "2.0",
     "template": {
       "outputs": [],
-      "quickReplies": defaultObj.Qu.concat(defaultObj.andamiroQuickReplies.concat(defaultObj.andamiroMainQuickReplies))
+      "quickReplies": defaultObj.Qu
     }
   };
 
-  let event = req.body.action.clientExtra.event;
+  let volunteer = req.body.action.clientExtra.volunteer;
 
-  if (event.thumbnail)
+  if (volunteer.thumbnail)
     message.template.outputs.push({
       "simpleImage": {
-        "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/andamiro/event/${event.thumbnail}`),
-        "altText": event.thumbnail
+        "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/volunteer/${volunteer.thumbnail}`),
+        "altText": volunteer.thumbnail
       }
     })
 
   message.template.outputs.push({
     "simpleText": {
-      "text": event.content
+      "text": volunteer.content
     }
   })
 
-  if (JSON.parse(event.buttons).length > 0)
+  if (JSON.parse(volunteer.buttons).length > 0)
     message.template.outputs.push({
       "basicCard": {
         "title": "아래의 버튼을 눌러서 더 자세히 알아보세요!",
-        "buttons": JSON.parse(event.buttons)
+        "buttons": JSON.parse(volunteer.buttons)
       }
     })
     
