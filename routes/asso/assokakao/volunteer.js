@@ -1,4 +1,4 @@
-const conn = require('../../config/db');
+const conn = require('../../../config/db');
 const async = require('async');
 const router = require('express').Router();
 const multer = require('multer');
@@ -42,11 +42,11 @@ router.get('', (req, res) => {
       }
     }
 
-    res.render('asso/volunteer', {
+    res.render('asso/assokakao/volunteer', {
       user: req.user,
       info: {
         title: '',
-        titlehref: '/asso/volunteer',
+        titlehref: '/asso/assokakao/volunteer',
         headbar: []
       },
       volunteer: rows
@@ -136,7 +136,7 @@ router.post('', volunteerUpload.any(), (req, res) => {
     if (err) {
       throw err
     } else {
-      res.redirect('/asso/volunteer')
+      res.redirect('/asso/assokakao/volunteer')
     }
   });
 

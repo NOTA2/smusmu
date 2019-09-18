@@ -1,4 +1,4 @@
-var conn = require('../../config/db');
+var conn = require('../../../config/db');
 var async = require('async');
 var router = require('express').Router();
 

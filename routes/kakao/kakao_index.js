@@ -12,7 +12,11 @@ const calendar = require('./schoolInfo/calendar');
 const schoolInfo = require('./schoolInfo/schoolInfo');
 const professor = require('./schoolInfo/professor');
 const faq = require('./schoolInfo/faq')
-const volunteer = require('./schoolInfo/volunteer')
+
+
+const volunteer = require('./assokakao/volunteer')
+const scholarship = require('./assokakao/scholarship')
+
 
 const weather = require('./gotowork/weather');
 const seoulAssembly = require('./gotowork/seoulAssembly');
@@ -35,7 +39,9 @@ router.use('/calendar', calendar);
 router.use('/schoolInfo', schoolInfo);
 router.use('/professor', professor);
 router.use('/faq', faq);
+
 router.use('/volunteer', volunteer);
+router.use('/scholarship', scholarship);
 
 router.use('/taxi', taxi);
 router.use('/weather', weather);

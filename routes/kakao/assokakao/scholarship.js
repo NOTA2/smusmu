@@ -11,11 +11,11 @@ router.post('', function (req, res) {
           "text": '문제가 생겼스뮤 😔 다시 시도해 주세요!'
         }
       }],
-      "quickReplies": defaultObj.Qu.concat(defaultObj.allianceQuickReplies.slice(0,2))
+      "quickReplies": defaultObj.Qu.concat(defaultObj.assokakaoQuickReplies.slice(1,2))
     }
   };
 
-  var sql = `SELECT * FROM volunteer ORDER BY volunteerorder`;
+  var sql = `SELECT * FROM scholarship ORDER BY scholarshiporder`;
 
 
   conn.query(sql, (err, rows) => {
@@ -38,9 +38,9 @@ router.post('', function (req, res) {
           "title": el.title,
           "description": el.description,
           "thumbnail": {
-            "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/volunteer/${el.thumbnail}`),
+            "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/scholarship/${el.thumbnail}`),
             "link": {
-              "web": encodeURI(`http://${defaultObj.ipadd}/img/volunteer/${el.thumbnail}`)
+              "web": encodeURI(`http://${defaultObj.ipadd}/img/scholarship/${el.thumbnail}`)
             },
             "fixedRatio": true,
             "width": 800,
@@ -48,10 +48,11 @@ router.post('', function (req, res) {
           },
           "buttons": [{
             "action": "block",
-            "label": "자세히 보기",
-            "blockId": "5d7c969b92690d0001815fe4",
+            "label": "자세히 보기 ✔️",
+            "messageText": el.title,
+            "blockId": "5d81b530b617ea0001e16fd5",
             "extra": {
-              "volunteer": el
+              "scholarship": el
             }
           }]
         })
@@ -65,7 +66,7 @@ router.post('', function (req, res) {
       })
 
     } else {
-      message.template.outputs[0].simpleText.text = "현재 진행중인 이벤트가 없스뮤 😔"
+      message.template.outputs[0].simpleText.text = "현재 등록된 장학금 정보가 없스뮤 😔"
     }
     
     return res.json(message)
@@ -78,31 +79,31 @@ router.post('/result', (req, res) => {
     "version": "2.0",
     "template": {
       "outputs": [],
-      "quickReplies": defaultObj.Qu
+      "quickReplies": defaultObj.Qu.concat(defaultObj.assokakaoQuickReplies)
     }
   };
 
-  let volunteer = req.body.action.clientExtra.volunteer;
+  let scholarship = req.body.action.clientExtra.scholarship;
 
-  if (volunteer.thumbnail)
+  if (scholarship.thumbnail)
     message.template.outputs.push({
       "simpleImage": {
-        "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/volunteer/${volunteer.thumbnail}`),
-        "altText": volunteer.thumbnail
+        "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/scholarship/${scholarship.thumbnail}`),
+        "altText": scholarship.thumbnail
       }
     })
 
   message.template.outputs.push({
     "simpleText": {
-      "text": volunteer.content
+      "text": scholarship.content
     }
   })
 
-  if (JSON.parse(volunteer.buttons).length > 0)
+  if (JSON.parse(scholarship.buttons).length > 0)
     message.template.outputs.push({
       "basicCard": {
         "title": "아래의 버튼을 눌러서 더 자세히 알아보세요!",
-        "buttons": JSON.parse(volunteer.buttons)
+        "buttons": JSON.parse(scholarship.buttons)
       }
     })
     

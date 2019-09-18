@@ -116,9 +116,13 @@ html(lang='ko')
                     |  대여 기록
           - if(user.grade <= 2)
             li
-              a(href='/asso/volunteer')
+              a(href='/asso/assokakao/volunteer')
                 i.fas.fa-hands-helping
                 |   봉사활동 관리
+            li
+              a(href='/asso/assokakao/scholarship')
+                i.fas.fa-money-bill-wave
+                |   장학금 정보 관리
           - if(user.grade == '1')   //스뮤스뮤 전용
             hr
             li

@@ -46,12 +46,12 @@ function formplus() {
   <table class="table">
   <thead class="thead-light">
   <tr>
-      <th class="eventcontent" scope="col" colspan="3">봉사활동 상세보기 TEXT</th>
+      <th class="eventcontent" scope="col" colspan="3">장학금 상세보기 TEXT</th>
   </tr>
 </thead>
 <tbody>
 <tr>
-<td colspan="3" class="eventcontent"><textarea class="form-control" type="text" name="volunteer[${cardlength}][3]" rows="5" autocomplete="off"></textarea></td>
+<td colspan="3" class="eventcontent"><textarea class="form-control" type="text" name="scholarship[${cardlength}][3]" rows="5" autocomplete="off"></textarea></td>
 </tr>
 </tbody>
       <thead class="thead-light">
@@ -63,17 +63,17 @@ function formplus() {
       <tbody>
         </tr>
           <tr class="cardContents">
-              <td class="etitle" colspan="2"><input class="form-control" type="text" name="volunteer[${cardlength}][0]" autocomplete="off" placeholder="카드에 표시될 제목" /></td>
-              <td class="eventorder" id="eventorder" rowspan="2"><input class="form-control" type="number" name="volunteer[${cardlength}][5]" autocomplete="off" readonly="readonly" /></td>
+              <td class="etitle" colspan="2"><input class="form-control" type="text" name="scholarship[${cardlength}][0]" autocomplete="off" placeholder="카드에 표시될 제목" /></td>
+              <td class="eventorder" id="eventorder" rowspan="2"><input class="form-control" type="number" name="scholarship[${cardlength}][5]" autocomplete="off" readonly="readonly" /></td>
           </tr>
           <tr>
-              <td colspan="2"> <input class="form-control" type="text" name="volunteer[${cardlength}][1]" autocomplete="off" placeholder="카드에 표시될 설명" /></td>
+              <td colspan="2"> <input class="form-control" type="text" name="scholarship[${cardlength}][1]" autocomplete="off" placeholder="카드에 표시될 설명" /></td>
           </tr>
           <tr>
               <td colspan="2">
-                  <div class="custom-file"><input class="custom-file-input" id="inputGroupFile01" type="file" aria-describedby="inputGroupFileAddon01" name="volunteer[${cardlength}][2]" /><label class="custom-file-label" for="inputGroupFile01" data-browse="📂">카드 및 상세보기시 표시될 이미지</label></div>
+                  <div class="custom-file"><input class="custom-file-input" id="inputGroupFile01" type="file" aria-describedby="inputGroupFileAddon01" name="scholarship[${cardlength}][2]" /><label class="custom-file-label" for="inputGroupFile01" data-browse="📂">카드 및 상세보기시 표시될 이미지</label></div>
               </td>
-              <td class="eventorder"><input class="form-control" id="id" type="hidden" name="volunteer[${cardlength}][6]" />
+              <td class="eventorder"><input class="form-control" id="id" type="hidden" name="scholarship[${cardlength}][6]" />
                   <div class="btn btn-primary" id="pbt" onclick="deleteitem(this)"><i class="fas fa-minus"></i></div>
               </td>
           </tr>
@@ -87,19 +87,19 @@ function formplus() {
       </thead>
       <tbody>
           <tr class="btr">
-              <td class="ebtt"><select class="custom-select btype" name="volunteer[${cardlength}][4][0][0]"><option value="null" selected="selected">none</option><option value="osLink">웹 링크</option><option value="phone">전화</option></select></td>
-              <td class="ebtn"><input class="form-control" type="text" name="volunteer[${cardlength}][4][0][1]" autocomplete="off" /></td>
-              <td class="ebtv"><input class="form-control" type="text" name="volunteer[${cardlength}][4][0][2]" autocomplete="off" /></td>
+              <td class="ebtt"><select class="custom-select btype" name="scholarship[${cardlength}][4][0][0]"><option value="null" selected="selected">none</option><option value="osLink">웹 링크</option><option value="phone">전화</option></select></td>
+              <td class="ebtn"><input class="form-control" type="text" name="scholarship[${cardlength}][4][0][1]" autocomplete="off" /></td>
+              <td class="ebtv"><input class="form-control" type="text" name="scholarship[${cardlength}][4][0][2]" autocomplete="off" /></td>
           </tr>
           <tr class="btr">
-              <td class="ebtt"><select class="custom-select btype" name="volunteer[${cardlength}][4][1][0]"><option value="null" selected="selected">none</option><option value="osLink">웹 링크</option><option value="phone">전화</option></select></td>
-              <td class="ebtn"><input class="form-control" type="text" name="volunteer[${cardlength}][4][1][1]" autocomplete="off" /></td>
-              <td class="ebtv"><input class="form-control" type="text" name="volunteer[${cardlength}][4][1][2]" autocomplete="off" /></td>
+              <td class="ebtt"><select class="custom-select btype" name="scholarship[${cardlength}][4][1][0]"><option value="null" selected="selected">none</option><option value="osLink">웹 링크</option><option value="phone">전화</option></select></td>
+              <td class="ebtn"><input class="form-control" type="text" name="scholarship[${cardlength}][4][1][1]" autocomplete="off" /></td>
+              <td class="ebtv"><input class="form-control" type="text" name="scholarship[${cardlength}][4][1][2]" autocomplete="off" /></td>
           </tr>
           <tr class="btr">
-              <td class="ebtt"><select class="custom-select btype" name="volunteer[${cardlength}][4][2][0]"><option value="null" selected="selected">none</option><option value="osLink">웹 링크</option><option value="phone">전화</option></select></td>
-              <td class="ebtn"><input class="form-control" type="text" name="volunteer[${cardlength}][4][2][1]" autocomplete="off" /></td>
-              <td class="ebtv"><input class="form-control" type="text" name="volunteer[${cardlength}][4][2][2]" autocomplete="off" /></td>
+              <td class="ebtt"><select class="custom-select btype" name="scholarship[${cardlength}][4][2][0]"><option value="null" selected="selected">none</option><option value="osLink">웹 링크</option><option value="phone">전화</option></select></td>
+              <td class="ebtn"><input class="form-control" type="text" name="scholarship[${cardlength}][4][2][1]" autocomplete="off" /></td>
+              <td class="ebtv"><input class="form-control" type="text" name="scholarship[${cardlength}][4][2][2]" autocomplete="off" /></td>
           </tr>
       </tbody>
   </table>
@@ -143,7 +143,7 @@ function deleteitem(self) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
-      body: `table=volunteer&val=${id}`
+      body: `table=scholarship&val=${id}`
     }).then(function (res) {
       res.json().then(function (data) {
         if (data.status) {

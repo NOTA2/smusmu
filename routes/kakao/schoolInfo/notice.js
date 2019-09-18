@@ -44,12 +44,14 @@ router.post('', (req, res) => {
   let sql = `SELECT kakaoId, name, major, homepage, token
     FROM users, major 
     where kakaoId=? AND majorId=major.id`
+
   conn.query(sql, [kakaoId], (err, rows) => {
     if (rows)
       major.homepage = rows[0].homepage
 
     cNotice.search(keyword, page, im, major)
       .then(resultList => {
+        
         if (resultList != 'false') {
           message.template.outputs[0] = {
             "carousel": {
@@ -58,8 +60,8 @@ router.post('', (req, res) => {
             }
           }
 
-          resultList.forEach((el) => {
 
+          resultList.forEach((el) => {
             message.template.outputs[0].carousel.items.push({
               "title": el.title,
               "description": el.desc,
@@ -102,8 +104,6 @@ router.post('', (req, res) => {
             [temp[1], temp[2]] = [temp[2], temp[1]];
           }
         }
-        console.log(major.state);
-        
         if (major.state) {
           if (resultList == 'false')
             message.template.quickReplies[1].label = '학과 ' + message.template.quickReplies[1].label.replace('학과 ', '');

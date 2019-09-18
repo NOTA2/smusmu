@@ -85,6 +85,17 @@ defaultObj.noticeQuickReplies =[{
   "messageText": '공지사항 검색'
 }]
 
+defaultObj.assokakaoQuickReplies =  [{
+  "label": '장학금 💸',
+  "action": "block",
+  "messageText": '장학금 정보',
+  "blockId": "5d81b4c392690d0001d7f539"
+}, {
+  "label" : "봉사 💑",
+  "action" : "block",
+  "messageText" : "봉사활동",
+  "blockId" : "5d7c969492690d0001815fe2"
+}]
 
 defaultObj.allianceQuickReplies =  [{
   "label": '제휴 🤝',
@@ -96,11 +107,6 @@ defaultObj.allianceQuickReplies =  [{
   "action": "block",
   "messageText": '온라인 취업 서비스',
   "blockId": "5d672bb292690d000181043f"
-}, {
-  "label" : "봉사 💑",
-  "action" : "block",
-  "messageText" : "봉사활동",
-  "blockId" : "5d7c969492690d0001815fe2"
 }]
 
 

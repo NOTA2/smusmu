@@ -1,10 +1,9 @@
 var router = require('express').Router();
 
-var rent = require('./rent');
-var home = require('./ahome');
-var kakao = require('./kakao');
-var andamiro = require('./andamiro');
-const volunteer = require('./volunteer');
+const kakao = require('./kakao');
+const andamiro = require('./andamiro');
+const basic = require('./basic');
+const assokakao = require('./assokakao');
 
 
 router.all('*', (req, res, next) => {
@@ -25,21 +24,11 @@ router.all('*', (req, res, next) => {
 });
 
 
-router.use('/rent', rent);
-router.use('/home', home);
+router.use('/', basic);
 router.use('/kakao', kakao);
 router.use('/andamiro', andamiro);
-router.use('/volunteer', volunteer);
+router.use('/assokakao', assokakao);
 
-router.get('/', (req, res) => {
-  res.render('asso/home/index', {
-    user: req.user,
-    info: {
-      title: '관리페이지 홈',
-      titlehref: '/asso',
-      headbar: []
-    }
-  });
-});
+
 
 module.exports = router;

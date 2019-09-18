@@ -9,7 +9,8 @@ $('#frm').submit(function () {
     return true;
   });
   
-  function formplus() {
+  function formplus(il) {
+  
     var rowlength = $(".plusrow").length;
     var str = `
     <tr class="plusrow">
@@ -26,7 +27,7 @@ $('#frm').submit(function () {
       <input class="form-control" type="text" name="schoolInfo[${rowlength}][3]" autocomplete="off">
     </td>
     <td class="img">
-      <select class="custom-select btype" name="schoolInfo[${rowlength}][4]"></select>
+      <select class="custom-select btype" name="schoolInfo[${rowlength}][4]">
         <option selected=""></option>
         <option value="A">A</option>
         <option value="B">B</option>

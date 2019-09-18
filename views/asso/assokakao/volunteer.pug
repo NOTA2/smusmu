@@ -1,4 +1,4 @@
-extends ./assoLayout.pug
+extends ../assoLayout.pug
 block append scripts
   script(type='text/javascript', src='https://code.jquery.com/jquery-1.12.4.min.js')
   script(type='text/javascript', src='https://code.jquery.com/ui/jquery-ui-git.js')
@@ -12,14 +12,14 @@ block append content
     h2 봉사활동
     #page
     hr.line
-    form#frm(action="/asso/volunteer", method="post", enctype="multipart/form-data")
+    form#frm(action="/asso/assokakao/volunteer", method="post", enctype="multipart/form-data")
       ul#sortable
         -for(i=0;i<volunteer.length;i++)
           .card.eventcard
             table.table
               thead.thead-light
                 tr
-                  th(scope="col" colspan=3).eventcontent 봉사활동 TEXT
+                  th(scope="col" colspan=3).eventcontent 봉사활동 상세보기 TEXT
               tbody
                 tr.cardContents                  
                   td.eventcontent(colspan=3)

@@ -123,7 +123,6 @@ exports.search = function (keyword, page, im, major) {
       if (noticeObj.length == 0) {
         noticeObj = 'false'
       }
-
       resolve(noticeObj);
     });
   });

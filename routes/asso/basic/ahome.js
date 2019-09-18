@@ -1,4 +1,4 @@
-var conn = require('../../config/db');
+var conn = require('../../../config/db');
 var router = require('express').Router();
 var multer = require('multer'); // express에 multer모듈 적용 (for 파일업로드)
 var storage = multer.diskStorage({
