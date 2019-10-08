@@ -80,7 +80,7 @@ router.post('/result', (req, res) => {
 
     message.template.outputs.push({
       "simpleText": {
-        "text": `A. ${answer.answer}`
+        "text": `A.\n${answer.answer}`
       }
     })
 

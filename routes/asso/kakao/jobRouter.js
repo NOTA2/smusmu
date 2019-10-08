@@ -60,6 +60,7 @@ router.post('', jobupload.any(), (req, res) => {
       x.description,
       x.thumbnail ? x.thumbnail : null,
       x.url,
+      x.jobOrder,
       JSON.stringify(x.params.filter(y => {
         if (y[0] === '')
           return false;
@@ -70,21 +71,21 @@ router.post('', jobupload.any(), (req, res) => {
           value: z[1] ? z[1] : null,
         }
       })),
-      x.jobOrder
+      x.id
     ]
   })
 
   jobs = jobs.filter(x=>true);
-  let sql = `SELECT * FROM job WHERE jobOrder = ?`;
+  let sql = `SELECT * FROM job WHERE id = ?`;
 
   async.forEachOf(jobs, function (job, i, inner_callback) {
-    conn.query(sql, [job[5]], function (err, rows) {
+    conn.query(sql, [job[6]], function (err, rows) {
       if (err) {
         inner_callback(err);
       } else {
         if (rows.length > 0) { //있다면 업데이트
           sql = `UPDATE job 
-          SET title = ?, description=?, thumbnail=?, url=?, params=?
+          SET title = ?, description=?, thumbnail=?, url=?, jobOrder=?, params=?
           WHERE jobOrder = ?`;
 
           conn.query(sql, job, (err, rows) => {
@@ -95,7 +96,7 @@ router.post('', jobupload.any(), (req, res) => {
             inner_callback(null);
           });
         } else { //없다면 추가
-          sql = `INSERT INTO job (title, description, thumbnail, url, params, jobOrder)
+          sql = `INSERT INTO job (title, description, thumbnail, url, jobOrder, params)
           VALUES (?, ?, ?, ?, ?, ?)`;
 
           conn.query(sql, job, (err, rows) => {

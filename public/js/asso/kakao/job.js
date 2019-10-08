@@ -130,8 +130,6 @@ function paramplus(that) {
 
 function complete() {
   let title = $('.jobtitle input');
-  console.log('aaaa');
-
   $(title).each(function (idx, el) {
     let description = $(el).parents('.cardContents').children('.jobdescription').children('input').val();
     let url = $(el).parents('.cardContents').children('.joburl').children('input').val();
@@ -141,8 +139,6 @@ function complete() {
       return false;
     }
     if (idx + 1 == title.length) {
-      console.log('aaaa');
-      
       $("#frm").submit();
     }
 

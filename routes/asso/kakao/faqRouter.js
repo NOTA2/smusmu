@@ -16,7 +16,7 @@ const faqupload = multer({
 })
 
 router.get('', (req, res) => {
-  let sql = `SELECT * FROM faq`;
+  let sql = `SELECT * FROM faq ORDER BY category`;
 
   conn.query(sql, (err, rows) => {
     if (err) {
@@ -43,7 +43,7 @@ router.post('',  faqupload.any(), (req, res) => {
   let faqs = req.body.faq;
 
   req.files.forEach(x=>{
-    let fileIdx = x.fieldname.replace(/[^0-9]/g,'')[0];
+    let fileIdx = Number(x.fieldname.split('[')[1].split(']')[0]);
     faqs[fileIdx][8] = x.originalname;
   })
 
