@@ -18,8 +18,6 @@ module.exports = function (passport) {
   });
 
   router.get('*', (req, res, next) => {
-    // console.log(req);
-    
     if (req.user) { //로그인 정보가 있을 때(세션이 유지가 되어 있을 때)
       //일반 학생 계정일 경우
       if (req.user.kakaoId) {

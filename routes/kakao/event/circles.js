@@ -107,7 +107,6 @@ router.post('', function (req, res) {
 
                     let sumpoint = rows[0].sumpoint;
                     let surveycount = rows[0].surveycount;
-                    console.log(surveycount);
                     
 
                     sumpoint = sumpoint + (surveycount * 15);
