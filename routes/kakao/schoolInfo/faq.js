@@ -104,16 +104,17 @@ router.post('/result', (req, res) => {
 
 router.get('/plus', (req, res) =>{
   
-  let sql = `SELECT * FROM faq`
+  let sql = `SELECT * FROM faq ORDER BY category DESC`
 
   conn.query(sql, (err, rows)=>{
     if(err){
       throw err;
     }
+    let i = 1;
     let values = rows.map(x=>{
       let category =  JSON.parse(x.category)
       return [
-        x.id, 
+        i++, 
         category[0], 
         category[1], 
         category[2], 
@@ -122,7 +123,7 @@ router.get('/plus', (req, res) =>{
         x.question, 
         x.answer, 
         x.url? x.url : '', 
-        x.img? x.img : ''
+        x.img? `http://smusmu.co.kr/img/faq/${x.img}` : ''
       ]
     })
 
@@ -133,8 +134,5 @@ router.get('/plus', (req, res) =>{
     })
   })
 })
-
-
-
 
 module.exports = router;

@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
     }
   };
 
-  let sql = `SELECT * FROM taxi ORDER BY count, code DESC`
+  let sql = `SELECT * FROM taxi ORDER BY count, id DESC`
 
   conn.query(sql, (err, rows) => {
     if (err) {

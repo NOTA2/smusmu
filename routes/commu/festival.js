@@ -4,8 +4,8 @@ const router = require('express').Router();
 require('date-utils');
 
 
-router.get('*', (req, res, next)=>{
-  
+router.get('*', (req, res, next) => {
+
   var sql = `SELECT users.id as id, username, kakaoId, token, email, majorId, major.college, major.major, schoolId, name, nickname,
   assoname, phone, grade, assoId, assocollege, location, logo, description, assoemail, assophone
   fROM users
@@ -13,11 +13,11 @@ router.get('*', (req, res, next)=>{
   LEFT JOIN major ON users.majorId=major.id
   WHERE kakaoId=?`
 
-  conn.query(sql, [req.query.kakaoId], (err, rows)=>{
-    if(err)
+  conn.query(sql, [req.query.kakaoId], (err, rows) => {
+    if (err)
       throw err;
 
-    if((rows.length>0 && rows[0].token == 'true')){
+    if ((rows.length > 0 && rows[0].token == 'true')) {
       req.user = rows[0];
     }
     next();
@@ -42,6 +42,17 @@ router.get('/info', (req, res) => {
     info: {
       title: '록록록',
       titlehref: '/commu/festival',
+      headbar: []
+    }
+  })
+})
+
+router.get('/circlesInfo', (req, res) => {
+  res.render('commu/circles/circlesInfo', {
+    user: req.user,
+    info: {
+      title: '2019 동화제',
+      titlehref: '/commu/festival/circlesInfo',
       headbar: []
     }
   })
@@ -325,7 +336,7 @@ router.get('/final', (req, res) => {
           throw err;
 
         var count = rows;
-        
+
         //가장 많이 참여한 행사
         sql = ` select count(distinct uid) as eventu, host, eventName
                 from festivalstatus LEFT JOIN festival ON festivalstatus.fid=festival.id
@@ -337,7 +348,7 @@ router.get('/final', (req, res) => {
             throw err;
 
           var eventMax = rows;
-          
+
           //총 점수  학교 평균 점수  전체 참여자 수  QR코드 찍힌 횟수   1인당 평균 참여 행사 수    
           sql = ` select sum(point) as sumpoint, count(distinct uid) as cu, count(*) as sumcount
           From festivalstatus 
@@ -350,7 +361,7 @@ router.get('/final', (req, res) => {
             var etc = rows[0];
             etc.avgpoint = (etc.sumpoint / etc.cu).toFixed(2);
             etc.avgcount = (etc.sumcount / etc.cu).toFixed(2);
-            
+
 
             sql = `SELECT
             college, count(distinct uid) as uidc, sum(sumpoint) as collegesp, sum(eventCount) as collegeec, avg(sumpoint) as collegeavg
@@ -387,29 +398,116 @@ router.get('/final', (req, res) => {
                 if (err)
                   throw err;
 
-                  var major = rows;
+                var major = rows;
 
-                  res.render('commu/festival/final', {
-                    user: req.user,
-                    info: {
-                      title: '록록록',
-                      titlehref: '/commu/festival',
-                      headbar: []
-                    },
-                    rank: rank,
-                    point: point,
-                    count: count,
-                    eventMax: eventMax,
-                    etc: etc,
-                    college: college,
-                    major: major
-                  })
+                res.render('commu/festival/final', {
+                  user: req.user,
+                  info: {
+                    title: '록록록',
+                    titlehref: '/commu/festival',
+                    headbar: []
+                  },
+                  rank: rank,
+                  point: point,
+                  count: count,
+                  eventMax: eventMax,
+                  etc: etc,
+                  college: college,
+                  major: major
+                })
               });
             });
           });
         });
       });
     });
+  })
+})
+
+router.get('/circles', (req, res) => {
+  var sql = `SELECT users.id as id, username, kakaoId, token, email, majorId, major.college, major.major, schoolId, name, nickname,
+  assoname, phone, grade, assoId, assocollege, location, logo, description, assoemail, assophone
+  fROM users
+  LEFT JOIN asso ON users.assoId=asso.id
+  LEFT JOIN major ON users.majorId=major.id
+  WHERE kakaoId=?`
+
+  conn.query(sql, [req.query.kakaoId], (err, rows) => {
+    if (err)
+      throw err;
+
+    if (rows.length > 0) {
+      req.user = rows[0];
+
+      sql = `select host, eventName, location, point, DATE_FORMAT(onTime, "%H시 %i분") as onTime
+      from circlesstatus
+      LEFT JOIN circles ON circles.id=circlesstatus.fid
+      LEFT JOIN users ON users.id=circlesstatus.uid
+      WHERE kakaoId = ?
+      ORDER BY circlesstatus.onTIme DESC`
+
+      conn.query(sql, [req.user.kakaoId], (err, rows) => { //쿼리문에 설문조사 횟수 * 15 를 더한걸 sumpoint로 해야 됨
+        if (err)
+          throw err;
+        var myinfo = new Object();
+        myinfo.now = rows;
+
+
+        sql = `SELECT
+                  sumpoint, a.uid, majorId,eventCount, major, name, surveycount,
+                  ( @rank := @rank + 1 ) AS rank
+              FROM
+                  (SELECT count(*) AS eventCount, count(circlesstatus.survey) AS surveycount, sum(point)+(count(circlesstatus.survey)*15) AS sumpoint, kakaoId, uid, majorId, college, major.major as major, users.name as name
+                  FROM circlesstatus 
+                  LEFT JOIN circles ON circles.id=circlesstatus.fid
+                  LEFT JOIN users ON users.id=circlesstatus.uid
+                  LEFT JOIN major ON users.majorId=major.id
+                  GROUP BY uid) AS a,
+                  ( SELECT @rank := 0 ) AS b 
+              ORDER BY
+                  a.sumpoint DESC, eventCount DESC, surveycount DESC`
+
+        conn.query(sql, (err, rows) => {
+          if (err)
+            throw err;
+
+          let rank = rows.slice();
+
+          rank = rank.map(x => {
+            return {
+              sumpoint: x.sumpoint,
+              major: x.major,
+              name: x.name[0] + '*' + x.name.substring(2),
+              rank: rank
+            }
+          })
+          var schoolRank = rows;
+          if (rows.length > 0)
+            schoolRank = schoolRank.filter(x => x.uid == req.user.id)[0]
+          if (schoolRank)
+            schoolRank = schoolRank
+
+          if (!schoolRank)
+            schoolRank = {
+              rank: undefined,
+            }
+
+          res.render('commu/circles/circles', {
+            user: req.user,
+            info: {
+              title: '2019 동화제',
+              titlehref: '/commu/festival/circles',
+              headbar: []
+            },
+            myinfo: myinfo,
+            schoolRank: schoolRank,
+            rank: rank
+          })
+        });
+      })
+    } else {
+      return res.redirect('/commu/festival/circlesInfo')
+    }
   })
 })
 

@@ -1,0 +1,90 @@
+extends layout.pug
+block append scripts
+block append css
+block append content
+  #article
+    -
+      function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+    h1 2019 동화제 내 상황
+    #myinfo
+      h2 내 등수는?
+      h4.rank
+        - if(schoolRank.rank == 1)
+          i.fas.fa-trophy.first
+        - else if(schoolRank.rank == 2)
+          i.fas.fa-trophy.second
+        - else if(schoolRank.rank == 3)
+          i.fas.fa-trophy.third
+        - else if(schoolRank.rank < 6)
+          i.fas.fa-trophy.normal
+        - if(schoolRank.rank)
+          |  #{numberWithCommas(schoolRank.rank)}등 
+        - else
+          |  - 등 
+      h4 총 
+        - if(schoolRank.eventCount  == undefined){ schoolRank.eventCount = 0 }
+        span #{schoolRank.eventCount}개
+        | 의 행사에 참여하여<br>
+        i.fas.fa-award
+        - if(schoolRank.sumpoint  == undefined){ schoolRank.sumpoint = 0 }
+        span   #{numberWithCommas(schoolRank.sumpoint)}점
+        | 을 획득!
+    hr.line
+    #rank
+      - for(var i=0;i<rank.length && i<10;i++)
+        - if(i==0)
+          h3
+            i.fas.fa-trophy.first 
+            |  #{i+1}등<br>#{rank[i].name} (#{rank[i].major}) #{rank[i].sumpoint}점
+        - else if(i==1)
+          h4
+            i.fas.fa-trophy.second 
+            |  #{i+1}등<br>#{rank[i].name} (#{rank[i].major}) #{rank[i].sumpoint}점
+        - else if(i==2)
+          h5
+            i.fas.fa-trophy.third 
+            |  #{i+1}등<br>#{rank[i].name} (#{rank[i].major}) #{rank[i].sumpoint}점
+        - else
+          p
+            |  #{i+1}등 #{rank[i].name}(#{rank[i].major}) #{rank[i].sumpoint}점
+    hr.line
+    #award
+      h2 
+        i.fas.fa-trophy
+        |  등수별 상품지급
+      h4 
+        i.fas.fa-money-bill-wave
+        |   1등    
+        i.fas.fa-money-bill-wave-alt
+      p 신세계 상품권 10만원권
+      h4 2등   
+        i.fas.fa-money-bill-wave
+      p 신세계 상품권 5만원권 
+      h4 3등   
+        i.fas.fa-money-bill-wave-alt
+      p 신세계 상품권 3만원권 
+      h4
+        i.fas.fa-film
+        |  4~10등    
+        i.fas.fa-film
+      p 영화관람권 2장
+      h4 11~20등   
+        i.fas.fa-film
+      p 영화관람권 1장
+      h4 21~40등   
+        i.fas.fa-coffee
+      p 스타벅스 5000원권 (기프트 카드)
+    hr
+    #hunter
+      h2 
+        i.fas.fa-exclamation-triangle
+        |  부정행위 신고!
+      p
+        span 참가자의 부정행위가 발견되면 총학생회 인스타(@s.catch44) DM을 통해 정확한 시간과 장소, 행사명을 알려주세요!<br>
+      p
+        span 신고자에게는 추가점수 50점이, 부정행위자에게는 패널티가 부여됩니다!
+      p 부정행위란?<br>행사에 참여하지 않고 QR코드만 찍고 가는 행위
+      p ※ 부정행위 신고 1인 3번이 최대
+

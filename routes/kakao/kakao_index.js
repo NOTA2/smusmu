@@ -13,10 +13,8 @@ const schoolInfo = require('./schoolInfo/schoolInfo');
 const professor = require('./schoolInfo/professor');
 const faq = require('./schoolInfo/faq')
 
-
 const volunteer = require('./assokakao/volunteer')
 const scholarship = require('./assokakao/scholarship')
-
 
 const weather = require('./gotowork/weather');
 const seoulAssembly = require('./gotowork/seoulAssembly');
@@ -53,10 +51,13 @@ router.use('/job', job);
 router.use('/andamiro', andamiro);
 
 
-// const quiz = require('./event/quiz');
-// const festival = require('./event/festival')
-// router.use('/festival', festival);
-// router.use('/quiz', quiz);
+const quiz = require('./event/quiz');
+const festival = require('./event/festival')
+const circles = require('./event/circles')
+
+router.use('/quiz', quiz);
+router.use('/festival', festival);
+router.use('/circles', circles);
 
 
 module.exports = router;

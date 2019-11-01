@@ -125,6 +125,11 @@ html(lang='ko')
               a.liarticle(href='/commu/festival' target="_blank")
                 i.fas.fa-qrcode
                 |  록록록 특별 페이지
+          if(user.kakaoId)
+            li
+              a.liarticle(href='/commu/festival/circles' target="_blank")
+                i.fas.fa-qrcode
+                |  동화제 특별 페이지
       #content
         nav.navbar.navbar-expand-lg.navbar-light.bg-light
           .container-fluid

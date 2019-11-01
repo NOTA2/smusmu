@@ -72,7 +72,9 @@ h1{
 .normal{
   color:black;
 }
-
+#rank h3,#rank h4,#rank h5, #rank p{
+  margin-bottom : 2rem;
+}
 #rank h6{
   font-size : 1.15rem;
 }

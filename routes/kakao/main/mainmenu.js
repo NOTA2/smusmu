@@ -84,6 +84,14 @@ router.post('', (req, res) => {
         });
 
 
+        ///동화제를 위한 코드
+        let btIdx = message.template.outputs[0].carousel.items[idx].buttons.findIndex(x => x.action === "webLink");
+        if(btIdx != -1){
+          let circles = message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl
+          message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl = circles.replace('${kakaoId}', kakaoId)
+        }
+        /////////////////////////////////
+
         if (el.auth == 1) { //등록한 사람만 쓸수 있는 블록의 경우
           //이메일 인증을 받지 않은 경우
           if (user === 'email') {
@@ -129,11 +137,12 @@ router.post('', (req, res) => {
               }]
             }
           }
+
           if (user && user.major && user.homepage) { //학과 홈페이지 🌐 기능을 위한 코드
             let btIdx = message.template.outputs[0].carousel.items[idx].buttons.findIndex(x => x.action === "webLink");
-            message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl += user.homepage
+            let majorpage = message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl
+            message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl = majorpage.replace('${homepage}', user.homepage)
           }
-
         }
       })
       return res.json(message)

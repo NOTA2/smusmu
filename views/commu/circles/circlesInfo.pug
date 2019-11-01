@@ -1,0 +1,87 @@
+extends layout.pug
+block append scripts
+block append css
+block append content
+  #article
+    #info
+      h1 2019 동화제
+      #festivalimg
+        img.fimg(src="/img/circles.jpg")
+      hr
+      #condition
+        h2 
+          i.fas.fa-sign-in-alt
+          |  행사 참여조건!
+        p
+          | 상명대학교에 재학중인 학생 중<br>
+          span 카카오톡 플러스친구 [스뮤스뮤]
+          | 가<br>
+          span 친구추가
+          | 되어있고, 
+          span [등록하기]
+          | 를 통해 등록한 슴우!
+      hr
+      #base
+        h2
+          i.fas.fa-qrcode
+          |  행사 참여방법!
+        h3.num ①
+        h3 동화제의 
+          span 아무 행사에 참여
+          | 한다.<br>
+        h3.num ② 
+        h3 행사에 참여 후<br>
+          span QR코드  
+            i.fas.fa-qrcode
+          | 를 보여달라고 한다.
+        h3.num ③ 
+        h3 [스뮤스뮤] 챗봇 
+          i.fas.fa-robot
+          |  에서<br>
+          span [QR코드 인식]
+          | 을 누른다.<br>
+        h3.num ④ 
+        h3 QR 코드 인식 후<br>
+          span 
+            i.fas.fa-star
+            |  점수   
+            i.fas.fa-star
+          | 를 획득한다!
+      hr
+      #award
+        h2 
+          i.fas.fa-trophy
+          |  등수별 상품지급
+        h4 
+          i.fas.fa-money-bill-wave
+          |   1등    
+          i.fas.fa-money-bill-wave-alt
+        p 신세계 상품권 10만원권
+        h4 2등   
+          i.fas.fa-money-bill-wave
+        p 신세계 상품권 5만원권 
+        h4 3등   
+          i.fas.fa-money-bill-wave-alt
+        p 신세계 상품권 3만원권 
+        h4
+          i.fas.fa-film
+          |  4~10등    
+          i.fas.fa-film
+        p 영화관람권 2장
+        h4 11~20등   
+          i.fas.fa-film
+        p 영화관람권 1장
+        h4 21~40등   
+          i.fas.fa-coffee
+        p 스타벅스 5000원권 (기프트 카드)
+      hr
+      #hunter
+        h2 
+          i.fas.fa-exclamation-triangle
+          |  부정행위 신고!
+        p
+          span 참가자의 부정행위가 발견되면 총학생회 인스타(@s.catch44) DM을 통해 정확한 시간과 장소, 행사명을 알려주세요!<br>
+        p
+          span 신고자에게는 추가점수 50점이, 부정행위자에게는 패널티가 부여됩니다!
+        p 부정행위란?<br>행사에 참여하지 않고 QR코드만 찍고 가는 행위
+        p ※ 부정행위 신고 1인 3번이 최대
