@@ -46,7 +46,7 @@ router.post('', (req, res) => {
     where kakaoId=? AND majorId=major.id`
 
   conn.query(sql, [kakaoId], (err, rows) => {
-    if (rows)
+    if (rows.length > 0)
       major.homepage = rows[0].homepage
 
     cNotice.search(keyword, page, im, major)

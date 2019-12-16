@@ -85,11 +85,11 @@ router.post('', (req, res) => {
 
 
         ///동화제를 위한 코드
-        let btIdx = message.template.outputs[0].carousel.items[idx].buttons.findIndex(x => x.action === "webLink");
-        if(btIdx != -1){
-          let circles = message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl
-          message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl = circles.replace('${kakaoId}', kakaoId)
-        }
+        // let btIdx = message.template.outputs[0].carousel.items[idx].buttons.findIndex(x => x.action === "webLink");
+        // if(btIdx != -1){
+        //   let circles = message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl
+        //   message.template.outputs[0].carousel.items[idx].buttons[btIdx].webLinkUrl = circles.replace('${kakaoId}', kakaoId)
+        // }
         /////////////////////////////////
 
         if (el.auth == 1) { //등록한 사람만 쓸수 있는 블록의 경우

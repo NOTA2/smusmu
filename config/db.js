@@ -21,7 +21,7 @@ const dbKey = fs.readFileSync('key/dbKey', 'utf-8');
 const mysql = require('mysql');
 
 const conn = mysql.createConnection({
-  host: 'smusmutest.cew1lcmxgnch.ap-northeast-2.rds.amazonaws.com',
+  host: 'smusmu.ckkukgt0dpwr.ap-northeast-2.rds.amazonaws.com',
   user: 'smusmu',
   password: dbKey,
   database: 'smusmutest',

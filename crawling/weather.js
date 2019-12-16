@@ -139,6 +139,7 @@ exports.search = function () {
           request(urlDust, function (error3, response3, htmlDust) {
             if (!error3 && response3.statusCode == 200) {
               try {
+                console.log(htmlDust)
                 var items = JSON.parse(htmlDust).list
 
                 if (items.length > 0) {

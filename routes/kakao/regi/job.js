@@ -25,82 +25,86 @@ router.post('', (req, res) => {
       throw err;
     }
 
-    let user = rows[0];
+    if (rows.length > 0) {
+      let user = rows[0];
 
-    sql = `SELECT * FROM job ORDER BY jobOrder`
+      sql = `SELECT * FROM job ORDER BY jobOrder`
 
-    conn.query(sql, (err, rows) => {
-      if (err || rows.length == 0) {
-        console.log(err);
+      conn.query(sql, (err, rows) => {
+        if (err || rows.length == 0) {
+          console.log(err);
+          return res.json(message)
+        }
+
+        message.template.outputs[0] = {
+          "carousel": {
+            "type": "basicCard",
+            "items": []
+          }
+        }
+        rows.forEach((el, idx) => {
+
+          let params = JSON.parse(el.params);
+
+          let middleurl
+
+          if (params.length > 0) {
+            middleurl = `http://${defaultObj.ipadd}/kakao/job?`
+            params.forEach((el, idx) => {
+              if (el.value)
+                middleurl += `${el.name}=${el.value}`
+              else {
+                if (el.name.indexOf('ID') != -1)
+                  middleurl += `${el.name}=${user.schoolId}`
+                else if (el.name.indexOf('Name') != -1)
+                  middleurl += `${el.name}=${user.name}`
+              }
+
+              middleurl += `&`
+            })
+            middleurl += `url=${el.url}`
+          } else {
+            middleurl = encodeURI(el.url)
+          }
+
+          message.template.outputs[0].carousel.items.push({
+            "title": el.title,
+            "description": el.description,
+            "thumbnail": {
+              "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/job/${el.thumbnail}`)
+            },
+            "buttons": [{
+              "label": "서비스 바로가기 🌐",
+              "action": "webLink",
+              "webLinkUrl": middleurl
+            }]
+          });
+        })
+        let allianceQuickReplies = defaultObj.allianceQuickReplies.slice();
+        allianceQuickReplies.splice(1, 1);
+        message.template.quickReplies = defaultObj.Qu.concat(allianceQuickReplies)
         return res.json(message)
-      }
-
-      message.template.outputs[0] = {
-        "carousel": {
-          "type": "basicCard",
-          "items": []
-        }
-      }
-      rows.forEach((el, idx) => {
-
-        let params = JSON.parse(el.params);
-
-        let middleurl
-
-        if (params.length > 0) {
-          middleurl = `http://${defaultObj.ipadd}/kakao/job?`
-          params.forEach((el, idx) => {
-            if (el.value)
-              middleurl += `${el.name}=${el.value}`
-            else {
-              if (el.name.indexOf('ID') != -1)
-                middleurl += `${el.name}=${user.schoolId}`
-              else if (el.name.indexOf('Name') != -1)
-                middleurl += `${el.name}=${user.name}`
-            }
-            
-            middleurl += `&`
-          })
-          middleurl+=`url=${el.url}`
-        } else {
-          middleurl = encodeURI(el.url)
-        }
-
-        message.template.outputs[0].carousel.items.push({
-          "title": el.title,
-          "description": el.description,
-          "thumbnail": {
-            "imageUrl": encodeURI(`http://${defaultObj.ipadd}/img/job/${el.thumbnail}`)
-          },
-          "buttons": [{
-            "label": "서비스 바로가기 🌐",
-            "action": "webLink",
-            "webLinkUrl": middleurl
-          }]
-        });
-      })
-      let allianceQuickReplies = defaultObj.allianceQuickReplies.slice();
-      allianceQuickReplies.splice(1,1);
-      message.template.quickReplies = defaultObj.Qu.concat(allianceQuickReplies)
+      });
+    }else{
       return res.json(message)
-    });
+    }
   })
 })
 
 router.get('', (req, res) => {
   let params;
 
-  params =  Object.keys(req.query).map(x=>{
+  params = Object.keys(req.query).map(x => {
     return {
-      name : x,
-      value : req.query[x]
+      name: x,
+      value: req.query[x]
     }
   });
 
   let url = params.pop();
   let submit = `$("#frm").submit()`
 
-  if(Object.keys(req.query).indexOf("UserName_client") != -1)
+  if (Object.keys(req.query).indexOf("UserName_client") != -1)
     submit = "eduwillSubmit()"
 
   res.send(`      

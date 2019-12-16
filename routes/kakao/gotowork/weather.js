@@ -16,6 +16,8 @@ router.post('', function (req, res) {
     }
   };
 
+  console.log('전현태 병신');
+  
   var sql = 'SELECT * FROM weather WHERE date = ?';
 
   conn.query(sql, [date], function(err, rows){
