@@ -21,7 +21,7 @@ module.exports = function () {
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
-    limit: '50mb',
+    limit: '60mb',
     extended: true,
     parameterLimit: 1000000
   }));
