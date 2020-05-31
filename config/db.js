@@ -1,5 +1,5 @@
 const fs = require('fs');
-const dbKey = fs.readFileSync('key/dbKey', 'utf-8');
+const dbKey = fs.readFileSync('key/dbKey', 'utf-8').replace(/\n/g, '');
 
 // module.exports = function(){
 //   const mysql = require('mysql');

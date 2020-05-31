@@ -12,10 +12,10 @@ exports.search = function search(nextweek, check) {
     else
       url = `https://hongje.happydorm.or.kr/hongje/food/getWeeklyMenu.kmc?locgbn=AA&sch_date=${d.toFormat("YYYY-MM-DD")}`
 
-    request(url, (err, res, body) => {
-      if (err && res.statusCode != 200) {
-        console.log(err);
-        throw err
+    request({method:'GET', uri:encodeURI(url)}, (err, res, body) => {
+      if (err || res.statusCode != 200) {
+        console.log(body);
+        return;
       }
 
       let jdata = JSON.parse(body).root[0].WEEKLYMENU;
