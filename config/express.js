@@ -34,7 +34,7 @@ module.exports = function () {
     resave: false,
     saveUninitialized: true,
     store: new MySQLSessionStore({
-      host: 'smusmu.ckkukgt0dpwr.ap-northeast-2.rds.amazonaws.com',
+      host: 'smusmu-dev.c5smsp2kymwd.ap-northeast-2.rds.amazonaws.com',
       port: 3306,
       user: 'smusmu',
       password: dbKey,
