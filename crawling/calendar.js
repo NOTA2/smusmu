@@ -12,7 +12,7 @@ exports.crawling = function () {
   var test = 0;
 
   //phantom을 사용하여 크롤링
-  console.log(time + ' 학사정보 업데이트 시작');
+  console.log(time + ' 학사정보 업데이트 시작!!!');
 
   (async function () { //phantom js 사용
 
