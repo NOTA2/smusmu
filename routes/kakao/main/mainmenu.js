@@ -48,7 +48,6 @@ router.post('', (req, res) => {
       }
 
       message.template.quickReplies = defaultObj.homeQuickReplies
-
       let qrtemp = defaultObj.homeQuickReplies.slice()
 
       if (user && user.token != "true") { //이메일 인증만 안되어 있는 경우
@@ -72,7 +71,6 @@ router.post('', (req, res) => {
 
       rows.forEach((el, idx) => {
         let buttons = JSON.parse(el.buttons);
-
         message.template.outputs[0].carousel.items.push({
           "title": el.title,
           "description": el.description,
