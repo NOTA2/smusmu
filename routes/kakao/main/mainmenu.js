@@ -71,7 +71,6 @@ router.post('', (req, res) => {
       }
 
       rows.forEach((el, idx) => {
-
         let buttons = JSON.parse(el.buttons);
 
         message.template.outputs[0].carousel.items.push({
