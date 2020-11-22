@@ -4,7 +4,8 @@ var router = require('express').Router();
 var home = require('./chome')
 var petition = require('./petition')
 var board = require('./board')
-var festival = require('./festival')
+// var festival = require('./festival')
+var festival = require('./festival20')
 
 router.use('/festival', festival);
 

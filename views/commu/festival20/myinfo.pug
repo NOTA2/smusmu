@@ -1,0 +1,122 @@
+extends layout.pug
+block append scripts
+block append css
+block append content
+  #article
+    -
+      function numberWithCommas(x) {
+        x = !!x ? x : 0
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+    h1 록록록 내 상황
+    #myinfo
+      h2 내 등수는?
+      h4.rank
+        - if(schoolRank == 1)
+          i.fas.fa-trophy.first
+        - else if(schoolRank == 2)
+          i.fas.fa-trophy.second
+        - else if(schoolRank == 3)
+          i.fas.fa-trophy.third
+        - else if(schoolRank < 6)
+          i.fas.fa-trophy.normal
+        - if(schoolRank)
+          |  #{numberWithCommas(schoolRank)}등 
+        - else
+          |  - 등 
+      h4 총 
+        - if(myinfo.eventCount  == undefined){ myinfo.eventCount = 0 }
+        span #{myinfo.eventCount}개
+        | 의 행사에 참여하여<br>
+        i.fas.fa-award
+        - if(myinfo.sumpoint  == undefined){ myinfo.sumpoint = 0 }
+        span   #{numberWithCommas(myinfo.sumpoint)}점
+        | 을 획득!
+    hr.line
+    #schoolInfo
+      h2 학교 총 점수
+      h4.score #{numberWithCommas(schoolInfo.sum)}점
+      h4
+        span  
+          - if(schoolRank)
+            | #{numberWithCommas(schoolRank)}등
+          - else
+            |  - 등 
+        |  / #{numberWithCommas(schoolInfo.count)}명
+      h4 내 점수는 
+        span #{(myinfo.sumpoint/schoolInfo.sum*100).toFixed(2)}%
+        | 를 차지
+      p 학교 평균 점수는 #{numberWithCommas(schoolInfo.avg)}점<br>
+        - if(schoolInfo.avg > myinfo.sumpoint)
+          |  내 점수보다 #{numberWithCommas(schoolInfo.avg - myinfo.sumpoint)}점 높다
+        - else if(schoolInfo.avg < myinfo.sumpoint)
+          |  내 점수보다 #{(myinfo.sumpoint - schoolInfo.avg)}점 낮다
+        - else
+          | 내 점수와 같다
+    hr.line
+    #collegeInfo
+      h2 #{user.college} 총 점수
+      h4.score #{numberWithCommas(collegeInfo.sum)}점
+      h4
+        span  
+          - if(collegeRank)
+            | #{collegeRank}등
+          - else
+            |  - 등 
+        |  / #{collegeInfo.count}명
+      h4 내 점수는 
+        span  #{(myinfo.sumpoint/collegeInfo.sum*100).toFixed(2)}%
+        | 를 차지
+      p 단과대 평균 점수는 #{numberWithCommas(collegeInfo.avg)}점<br>
+        - if(collegeInfo.avg > myinfo.sumpoint)
+          |  내 점수보다 #{numberWithCommas(collegeInfo.avg - myinfo.sumpoint)}점 높다
+        - else if(collegeInfo.avg < myinfo.sumpoint)
+          |  내 점수보다 #{(myinfo.sumpoint - collegeInfo.avg)}점 낮다
+        - else
+          | 내 점수와 같다
+    
+    hr.line
+    #majorInfo
+      h2 #{user.major} 총 점수
+      h4.score #{numberWithCommas(majorInfo.sum)}점
+      h4
+        span 
+          - if(majorRank)
+            | #{majorRank}등
+          - else
+            |  - 등 
+        |  / #{majorInfo.count}명
+      h4 내 점수는 
+        span  #{(myinfo.sumpoint/majorInfo.sum*100).toFixed(2)}%
+        | 를 차지
+      p 단과대 평균 점수는 #{numberWithCommas(majorInfo.avg)}점<br>
+        - if(majorInfo.avg > myinfo.sumpoint)
+          |  내 점수보다 #{numberWithCommas(majorInfo.avg - myinfo.sumpoint)}점 높다
+        - else if(majorInfo.avg < myinfo.sumpoint)
+          |  내 점수보다 #{(myinfo.sumpoint - majorInfo.avg)}점 낮다
+        - else
+          | 내 점수와 같다
+
+    hr.line
+    #now
+      h2 내가 참여한 행사  
+      - for(var i=0;i<myinfo.now.length;i++)
+        - if(myinfo.now[i].location)
+          p
+            i.far.fa-clock
+            |   [#{myinfo.now[i].onTime}]<br>
+            i.fas.fa-map-marked-alt
+            |   #{myinfo.now[i].location}<br>
+            i.fas.fa-running
+            |   #{myinfo.now[i].host} - #{myinfo.now[i].eventName}<br>
+            i.far.fa-star
+            span   #{myinfo.now[i].point}점
+        - else
+          p
+            i.far.fa-clock
+            |    [#{myinfo.now[i].onTime}]<br>
+            i.fas.fa-running
+            |    #{myinfo.now[i].host} - #{myinfo.now[i].eventName}<br>
+            i.far.fa-star
+            span   #{myinfo.now[i].point}점 <br>
+        hr

@@ -1,0 +1,55 @@
+extends layout.pug
+block append scripts
+block append css
+block append content
+  #article
+    h1 록록록 최종 랭킹
+    #rank
+      - for(var i=0;i<rank.length;i++)
+        - if(i==0)
+          h3
+            i.fas.fa-trophy.first 
+            |  #{i+1}등<br>#{rank[i].name} (#{rank[i].major})<br>#{rank[i].sumPoint}점
+        - else if(i==1)
+          h4
+            i.fas.fa-trophy.second 
+            |  #{i+1}등<br>#{rank[i].name} (#{rank[i].major})<br>#{rank[i].sumPoint}점
+        - else if(i==2)
+          h5
+            i.fas.fa-trophy.third 
+            |  #{i+1}등<br>#{rank[i].name} (#{rank[i].major})<br>#{rank[i].sumPoint}점
+        - else if(i==3)
+          h6
+            i.fas.fa-trophy 
+            |  #{i+1}등 #{rank[i].name} (#{rank[i].major})<br>#{rank[i].sumPoint}점
+        - else if(i==4)
+          h6
+            i.fas.fa-trophy 
+            |  #{i+1}등 #{rank[i].name} (#{rank[i].major})<br>#{rank[i].sumPoint}점
+        - else
+          p
+            |  #{i+1}등 #{rank[i].name}(#{rank[i].major}) #{rank[i].sumPoint}점
+        hr
+    //- hr.line
+    //- #now
+    //-   - for(var i=0;i<now.length;i++)
+    //-     - if(now[i].eventName == '부정행위 신고') continue;
+    //-     - if(now[i].location)
+    //-       p
+    //-         i.far.fa-clock
+    //-         |   [#{now[i].onTime}] #{now[i].name}님<br>
+    //-         i.fas.fa-map-marked-alt
+    //-         |   #{now[i].location}<br>
+    //-         i.fas.fa-running
+    //-         |   #{now[i].host} - #{now[i].eventName}<br>
+    //-         i.far.fa-star
+    //-         span   #{now[i].point}점
+    //-     - else
+    //-       p
+    //-         i.far.fa-clock
+    //-         |    [#{now[i].onTime}] #{now[i].name}님<br>
+    //-         i.fas.fa-running
+    //-         |    #{now[i].host} - #{now[i].eventName}<br>
+    //-         i.far.fa-star
+    //-         span   #{now[i].point}점 <br>
+    //-     hr
