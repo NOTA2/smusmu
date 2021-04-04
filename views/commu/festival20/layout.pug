@@ -48,7 +48,7 @@ html(lang='ko')
         a(href=`/commu/festival?kakaoId=${user.kakaoId}`)
           .sidebar-header
             img(src="/img/logo.png", alt="logo")
-            h3 2020 축제<br>특별 페이지
+            h3 2020 동화제<br>특별 페이지
         ul.list-unstyled.components
           li
             a(href='/')
@@ -57,19 +57,19 @@ html(lang='ko')
           li
             a(href=`/commu/festival/info?kakaoId=${user.kakaoId}`)
               i.fas.fa-exclamation-circle
-              |  2020 축제 설명
+              |  2020 동화제 설명
           li
             a(href=`/commu/festival/myinfo?kakaoId=${user.kakaoId}`)
               i.fas.fa-running
-              |  2020 축제 내 정보
-          li
-            a(href=`/commu/festival/record?kakaoId=${user.kakaoId}`)
-              i.fas.fa-medal
-              |  2020 축제 최종 랭킹
-          li
-            a(href=`/commu/festival/final?kakaoId=${user.kakaoId}`)
-              i.fas.fa-book
-              |  2020 축제 최종 결산
+              |  2020 동화제 내 정보
+          //- li
+          //-   a(href=`/commu/festival/record?kakaoId=${user.kakaoId}`)
+          //-     i.fas.fa-medal
+          //-     |  2020 동화제 최종 랭킹
+          //- li
+          //-   a(href=`/commu/festival/final?kakaoId=${user.kakaoId}`)
+          //-     i.fas.fa-book
+          //-     |  2020 동화제 최종 결산
       #content
         nav.navbar.navbar-expand-lg.navbar-light.bg-light
           .container-fluid

@@ -70,6 +70,7 @@ router.post('', function (req, res) {
 
           var st = new Date(event.startTime);
           var et = new Date(event.endTime);
+          d.setHours(d.getHours() + 9)
 
           if (st < d && et > d) { //행사 시간이 맞는 경우 (지금 QR코드가 유효한 상태)
             if (event.type == "학생 수익사업") { //수익사업인 경우 각 가격 구간별로 나눠져 있지만 하루에 한번만 참여가능하다.
@@ -98,8 +99,7 @@ router.post('', function (req, res) {
 
                   return res.json(message);
                 } else { ///행사 참여 정상적인 상황
-                  sql = `insert INTO festival_20_status(fid, uid, onTime) values(?, ?, now())`
-
+                  sql = `insert INTO festival_20_status(fid, uid, onTime) values(?, ?, date_add(now(), interval 9 hour))`
                   conn.query(sql, [event.id, user.id], (err, rows) => {
                     if (err) {
                       message.template.outputs[0].simpleText.text = '잠시 문제가 생겼어요. 다시 시도해주세요 😔 (QR코드 인식 버튼을 다시 눌러주세요)'
@@ -111,21 +111,21 @@ router.post('', function (req, res) {
 
                     message.template.outputs[1] = {
                       "basicCard": {
-                        "title": "내 정보와 록록록 현황을 확인해보세요! 😄",
+                        "title": "내 정보와 스탬프 현황을 확인해보세요! 😄",
                         "buttons": [{
                             "action": "webLink",
                             "label": "내 정보 & 점수 확인",
                             "webLinkUrl": `${homepage}/commu/festival/myinfo?kakaoId=${kakaoId}`
                           },
-                          {
-                            "action": "webLink",
-                            "label": "록록록 현황 확인",
-                            "webLinkUrl": `${homepage}/commu/festival/now?kakaoId=${kakaoId}`
-                          },{
-                            "action": "webLink",
-                            "label": "오늘의 행사 확인하기",
-                            "webLinkUrl": `${homepage}/commu/festival/today?kakaoId=${kakaoId}`
-                          }
+                          // {
+                          //   "action": "webLink",
+                          //   "label": "록록록 현황 확인",
+                          //   "webLinkUrl": `${homepage}/commu/festival/now?kakaoId=${kakaoId}`
+                          // },{
+                          //   "action": "webLink",
+                          //   "label": "오늘의 행사 확인하기",
+                          //   "webLinkUrl": `${homepage}/commu/festival/today?kakaoId=${kakaoId}`
+                          // }
                         ]
                       }
                     }
@@ -156,7 +156,7 @@ router.post('', function (req, res) {
 
                   return res.json(message);
                 } else { ///행사 참여 정상적인 상황
-                  sql = `insert INTO festival_20_status(fid, uid, onTime) values(?, ?, now())`
+                  sql = `insert INTO festival_20_status(fid, uid, onTime) values(?, ?, date_add(now(), interval 9 hour))`
 
                   conn.query(sql, [event.id, user.id], (err, rows) => {
                     if (err) {
@@ -169,21 +169,21 @@ router.post('', function (req, res) {
 
                     message.template.outputs[1] = {
                       "basicCard": {
-                        "title": "내 정보와 록록록 현황을 확인해보세요! 😄",
+                        "title": "내 정보와 스탬프 현황을 확인해보세요! 😄",
                         "buttons": [{
                             "action": "webLink",
                             "label": "내 정보 & 점수 확인",
                             "webLinkUrl": `${homepage}/commu/festival/myinfo?kakaoId=${kakaoId}`
                           },
-                          {
-                            "action": "webLink",
-                            "label": "록록록 현황 확인",
-                            "webLinkUrl": `${homepage}/commu/festival/now?kakaoId=${kakaoId}`
-                          },{
-                            "action": "webLink",
-                            "label": "오늘의 행사 확인하기",
-                            "webLinkUrl": `${homepage}/commu/festival/today?kakaoId=${kakaoId}`
-                          }
+                          // {
+                          //   "action": "webLink",
+                          //   "label": "록록록 현황 확인",
+                          //   "webLinkUrl": `${homepage}/commu/festival/now?kakaoId=${kakaoId}`
+                          // },{
+                          //   "action": "webLink",
+                          //   "label": "오늘의 행사 확인하기",
+                          //   "webLinkUrl": `${homepage}/commu/festival/today?kakaoId=${kakaoId}`
+                          // }
                         ]
                       }
                     }
@@ -194,8 +194,8 @@ router.post('', function (req, res) {
               })
             }
           } else { //행사시간이 아닌경우
-            st.setHours(st.getHours() + 1)
-            et.setHours(et.getHours() - 1)
+            st.setHours(st.getHours())
+            et.setHours(et.getHours())
             var stf = st.toFormat("HH24:MI");
             var etf = et.toFormat("HH24:MI");
             message.template.outputs[0].simpleText.text = `행사 시간이 아닙니다. 행사시간에 맞춰서 시도해주세요.\n\n`;

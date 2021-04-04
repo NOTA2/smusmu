@@ -39,7 +39,7 @@ router.get('/info', (req, res) => {
   res.render('commu/festival20/index', {
     user: req.user,
     info: {
-      title: '2020 축제',
+      title: '2020 동화제',
       titlehref: '/commu/festival',
       headbar: []
     }
@@ -205,7 +205,7 @@ WHERE majorId=?`
                     res.render('commu/festival20/myinfo', {
                       user: req.user,
                       info: {
-                        title: '록록록',
+                        title: '2020 동화제',
                         titlehref: '/commu/festival',
                         headbar: []
                       },
@@ -265,7 +265,7 @@ router.get('/record', (req, res) => {
     res.render('commu/festival20/record', {
       user: req.user,
       info: {
-        title: '록록록',
+        title: '2020 동화제',
         titlehref: '/commu/festival',
         headbar: []
       },
@@ -402,7 +402,7 @@ router.get('/final', (req, res) => {
                 res.render('commu/festival20/final', {
                   user: req.user,
                   info: {
-                    title: '록록록',
+                    title: '2020 동화제',
                     titlehref: '/commu/festival',
                     headbar: []
                   },
